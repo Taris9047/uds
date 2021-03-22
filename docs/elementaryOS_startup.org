@@ -1,0 +1,108 @@
+#+PROPERTY: header-args :tangle yes
+#+TITLE: elementary OS Setting up Hangul Input guide.
+#+AUTHOR: Taylor Shin
+
+* Things to do after installing elementary OS.
+
+This walkthrough adopted  [[https://averagelinuxuser.com/after-install-elementary-juno/][15 Things to do after installing elementary OS]] guide. But I've added and removed some aspects to fit my need. Such as not uninstalling the default browser which I am not very dislike of it due to clean interface and baseline functionality.
+
+This org file will get tangled into the same named shell script file without she-bang header.
+
+1.  Enable repo
+    #+begin_src sh
+    sudo apt install software-properties-common
+    #+end_src
+
+2.  Install tweak
+    #+begin_src sh
+    sudo add-apt-repository ppa:philip.scott/elementary-tweaks
+    sudo apt update
+    sudo apt install elementary-tweaks
+    #+end_src
+
+3.  Disable single click
+    Use Tweaks -> Files -> Single click
+
+4.  Enable good window top bar buttons!
+    Use Tweaks -> Appearance -> Layout -> OS X
+
+5.  Install multimedia codecs
+    #+begin_src sh
+    sudo apt install ubuntu-restricted-extras libavccodec-extra libdvd-pkg
+    #+end_src
+
+6.  Activate Night Light
+    Settings -> Displays -> Night Light
+
+7.  Install Drivers
+    #+begin_src sh
+    sudo ubuntu-drivers autoinstall
+    #+end_src
+
+8.  Enable tray icons for third party apps
+    This part is a bit tricky. You need to edit an xdg system file. Then install some 'old' launcher. Then, prevent some other file to run applet. Also, you need to log out then log in back to see if it's actually applied.
+
+    #+begin_src sh
+    sudo sed -i \
+        's/OnlyShowIn\=Unity\;GNOME\;/OnlyShowIn\=Unity\;GNOME\;Pantheon\;/' \
+        /etc/xdg/autostart/indicator-application.desktop
+    wget \
+        http://ppa.launchpad.net/elementary-os/stable/ubuntu/pool/main/w/wingpanel-indicator-ayatana/wingpanel-indicator-ayatana_2.0.3+r27+pkg17~ubuntu0.4.1.1_amd64.deb
+    sudo dpkg -i \
+        ./wingpanel-indicator-ayatana_2.0.3+r27+pkg17~ubuntu0.4.1.1_amd64.deb
+    sudo mv /etc/xdg/autostart/nm-applet.desktop \
+        /etc/xdg/autostart/nm-applet.desktop.old
+    rm -rf \
+        ./wingpanel-indicator-ayatana_2.0.3+r27+pkg17~ubuntu0.4.1.1_amd64.deb
+    #+end_src
+
+9.  Install Synaptic Package Manager
+    The defualt software center doesn't even have anything but their own selection. But you can use Ubuntu package sources since the distribution is based on Ubuntu 18.04. So, why not install Synaptic?
+    #+begin_src sh
+    sudo apt install synaptic
+    #+end_src
+
+10. Install Hangul Input Method
+    * Refer [[file:elementaryOS_hangul_input.org][Hangul input method install instruction for elementary OS]]
+
+
+* Some optional stuffs.
+1.  Install Firefox
+
+   Yeah, it's good to have a 'modern' and super functional browser. Some people hate Epiphany. But I disagree. In fact, all of Gnome apps aren't that bad as other people say. They are just minimal and simple. Why they praise Apple being minimal (even calls it 'minimalism': an impromptu stupid word.) but blame Gnome to be minimal?
+
+    #+begin_src sh
+    sudo apt install firefox
+    #+end_src
+
+2.  Install LibreOffice
+
+    #+begin_src sh
+    sudo apt install libreoffice libreoffice-gtk3 libreoffice-style-elementary
+    #+end_src
+    * Do not forget to set icon style to Elementary in Libreoffice options
+      Tools -> Options -> View -> Icon style
+
+3.  Install Clipped
+    This command actually does not work. Just search 'clipped' at the elementary OS' AppCenter.
+
+    #+begin_src sh
+    sudo apt install com.github.devidmhewitt.clipped
+    #+end_src
+    * Also make shortcut for it
+      Settings -> Keyboard -> Shortcuts (Make any key you want!)
+
+4.  Install GDebi
+    #+begin_src sh
+    sudo apt install gdebi
+    #+end_src
+
+5.  If laptop, install some TLP packages
+    Those packages reduces the number of background processes to save more battery life.
+
+    #+begin_src sh
+    sudo apt install tlp tlp-rdw
+    #+end_src
+
+6.  Install Emacs, no Doomemacs!
+    * Refer [[file:elementaryOS_running_emacs.org][Doomemacs install instruction on elementary OS]]

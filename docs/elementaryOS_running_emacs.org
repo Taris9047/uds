@@ -1,0 +1,41 @@
+#+PROPERTY: header-args :tangle yes
+#+TITLE: elementary OS Setting up Hangul Input guide.
+#+AUTHOR: Taylor Shin
+
+* Heads up Note
+This walkthrough is not designed for the 'long' way. Installing GccEmacs and setting the environment up is not in the scope of this script! If you want to take this 'grandeur' way, better work with the homebrew compilation scripts!
+
+* At first, installing 'new' emacs needs a repo.
+#+begin_src sh
+sudo add-apt-repository ppa:kellyk/emacs
+sudo apt-get update
+#+end_src
+
+* Then install 27.1 by...
+ #+begin_src sh
+ sudo apt-get install emacs27
+ #+end_src
+
+* Mods: Doomemacs can be installed with ../../bin/install_doomemacs.sh. But it needs newest git. We also need to add PPA for newest git.
+
+ #+begin_src sh
+ sudo add-apt-repository ppa:git-core/ppa
+ sudo apt-get update
+ sudo apt-get install -y git
+ #+end_src
+
+** Yeah, we are installing git again.
+
+* Then, the GTK+3 on elementary OS has a big big trouble. We need to set up some environment variable for emacs.
+** Add the line below to ~/.bashrc
+
+#+begin_src sh
+alias emacs='XLIB_SKIP_ARGB_VISUALS=1 emacs'
+#+end_src
+
+** Now we can use emacs normally...
+
+* Doomemacs stuff.
+** HOLD We need modern cmake and libtool to build vterm.
+*** Apparently, those old infrastructure prevents building vterm. You can still use eterm. SPC-o-e
+

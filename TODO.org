@@ -1,0 +1,60 @@
+* TODO Implement other platforms... namely Fedora, OS X, etc.
+** IDEA OS X? huh... I need MONEY! Now all those Apple computers I have are totally outdated and Apple cut down support. So, it will not happen anytime soon!
+
+* TODO Some automatic update checking system? Many open source projects implement rss feed to notify newer versions.
+** DONE At least version checking has been implemented.
+** IDEA Do we need any sub-project?
+
+* TODO Some web-based system using rails. (far fetched)
+** TODO We might need to implement or sketch up a GUI version of the script first.
+** IDEA Actually, we can implement some kind of Web(HTML2) based management interface with ruby.
+
+* KILL Implement FFMpeg?
+** OKAY There is a dedicated bash script for it. It works well at this moment and produces a statically linked ffmpeg which is not too bad.
+** OKAY The only drawback of such installation is file size. In fact, its performance is faster than dynamically linked version which is usual way of many linux package managers.
+
+* DONE Implement Gnuplot, ngspice, and probably.. Qt5?
+** DONE Gnuplot, ngspice done. Qt5 is under debate.
+** OKAY Qt5 can be installed via package managers or Web installation script. Both have pros and cons. If the distro is really old, Web install would be better. But Fedora or Manjaro doesn't need additional space caused by Web install.
+** OKAY Anyway, Web installed Qt5 can be adopted as local compile-install situation.
+
+* PROJ Uninstall feature implemented. A bit brute force way though...
+** Currently, list of files are gathered through comparison with prefix directory's file list between before/after installation.
+** This method is kind of brute force and prone to unexpected file change.
+** PROJ Therefore, we better figure out some other way to get the list of files.
+** IDEA Some people suggest making a dedicated directory for 'temporary' installation. But this might compromise module installation.
+
+* DONE Implemented Emacs install script
+** DONE Its dependencies needs to be implemented as well. Currently, all the other dependencies are installed with distro's package manager but that's not my style.
+** DONE Gnutls might be hectic to implement due to its own dependency. I'm not going to implement entire linux system.
+** DONE RHEL now can copmile emacs 27.1 to work with doomeamcs.
+** OKAY Arch based distro can work with doomemacs without too much hassle since they provide newest emacs 27.1 anyway.
+** DONE Gotta try Fedora, but it will work well.
+
+* PROJ Emacs native-compiler
+** DONE It works on Kubuntu (Ubuntu).
+** DONE emacs-nc works perfectly well on RHEL!!
+** KILL Fedora, Manjaro has their own repo (or additional repo) to install emacs-nc. So, don't bother with them.
+*** NO Apparently, they actually work well with source compilation. Even AUR is a source compile install. So, why would I care about them?
+** DONE After a lot of struggle, emacs-nc works perfectly well on RHEL. It feels far faster than regular emacs!
+*** DONE Also, gcc-jit works well on RHEL as well. Now we can consider emacs-nc is portable!
+*** DONE Of course, it takes more than 5-6 hours to compile everything! So, we better take gcc-jit from distro repos instead of compiling on system.
+** DONE Let's test them on Fedora and Mint 20.1! --> They work super fine!
+** DONE Manjaro even don't need any other additional packages to compile emacs-nc!! Cool!!
+
+* PROJ Frontend development started! <<Frontend>>
+** IDEA It will be written with most common interpreter. I believe Python would be the one since most of Linux or Unix systems ships with it. Good thing is python2 is already dead. We can concentrate into python3
+** IDEA GUI isn't really a thing as of now. But Python enables it. However, we need to push user to install additional packages for GUI (i.e. PyQt5). We do not want to use decades old Tk now. It's even deprecated.
+** TODO For now, let's implement the front end to perform install_prereq.sh and unix_dev_setup's jobs all in one.
+** TODO Delete current front end implementations after merge. Don't touch them!
+** TODO At least we need to make a database(?) system to determine which distro and which base is running. Then, we need to supply the list of prerequisite packages.
+** IDEA The database can just be text files for now. They don't really need too much care. Also, making it with JSON or some other DB will complicate the situation even more. -> Since we need to write DB interfacing code as well.
+
+* IDEA Maybe we may need to separate unix_dev_setup form settings?
+
+* Elementary OS
+** Wrote some instructions for initial set up after fresh install.
+*** TODO This may need some update on real machine.
+** TODO We will install Elementary OS on MacMini since it doesn't really have anything hardcore to do except some file server role. Also, it's Apple product.
+** TODO Still, we need to handle the install_prereq situation on this VM. Ubuntu 18.04 seems a bit different game than 20.04.
+*** PROJ This mission goes to the [[Frontend]] project!

@@ -1,0 +1,356 @@
+{
+  # GCC
+  "gcc": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz",
+    "type": "tarball",
+    "alt-names": ["gcc-10"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC"
+  },
+  "gcc-jit": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz",
+    "type": "tarball",
+    "alt-names": ["gccjit", "gcc-10-jit"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCCJit"
+  },
+  "gcc8": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.4.0/gcc-8.4.0.tar.gz",
+    "type": "tarball",
+    "alt-names": ["gcc-8"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC8"
+  },
+  "gcc9": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz",
+    "type": "tarball",
+    "alt-names": ["gcc-9"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC9"
+  },
+  "gcc4": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-4.8.5/gcc-4.8.5.tar.bz2",
+    "type": "tarball",
+    "alt-names": ["gcc-4"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC4"
+  },
+
+  # cmake
+  "cmake": {
+    "url": "https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5.tar.gz",
+    "type": "tarball",
+    "alt-names": ["CMake"],
+    "dependency": [],
+    "script": "install_cmake.rb",
+    "class": "InstCmake"
+  },
+
+  # Lua
+  "lua": {
+    "url": "https://www.lua.org/ftp/lua-5.4.2.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Lua"],
+    "dependency": [ "gcc" ],
+    "script": "install_lua.rb",
+    "class": "InstLua"
+  },
+
+  # Ruby
+  "ruby": {
+    "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.2.tar.gz",
+    "type": "tarball",
+    "alt-names": ["ruby2", "Ruby2"],
+    "dependency": ["gcc", "node"],
+    "script": "install_ruby.rb",
+    "class": "InstRuby"
+  },
+
+  # Ruby3
+  "ruby3": {
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.0.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Ruby3"],
+    "dependency": ["gcc"],
+    "script": "install_ruby3.rb",
+    "class": "InstRuby3"
+  },
+
+  # Python stuffs
+  "get_pip": {
+    "url": "https://bootstrap.pypa.io/get-pip.py",
+    "type": "python",
+    "alt-names": ["get-pip"],
+    "dependency": ["python3"],
+    "script": "install_python.rb",
+    "class": "N/A"
+  },
+  "python2": {
+    "url": "https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz",
+    "type": "tarball",
+    "alt-names": ["Python2"],
+    "dependency": ["gcc"],
+    "script": "install_python.rb",
+    "class": "InstPython2"
+  },
+  "python3": {
+    "url": "https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz",
+    "type": "tarball",
+    "alt-names": ["Python3"],
+    "dependency": ["gcc"],
+    "script": "install_python.rb",
+    "class": "InstPython3"
+  },
+
+  # PyPy repository
+  "pypy3": {
+    "url": "https://foss.heptapod.net/pypy/pypy",
+    "type": "mercurial",
+    "alt-names": ["pypy", "PyPy"],
+    "dependency": ["python3"],
+    "script": "install_pypy.rb",
+    "class": "InstPyPy3",
+    "bootstrap_bin_url": "https://downloads.python.org/pypy/pypy2.7-v7.3.3-linux64.tar.bz2"
+  },
+
+  # Node.JS
+  "node": {
+    "url": "https://nodejs.org/dist/v15.11.0/node-v15.11.0.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Node.JS", "node.js", "nodejs"],
+    "dependency": ["gcc"],
+    "script": "install_node.rb",
+    "class": "InstNode",
+    "bin_url": "https://nodejs.org/dist/v15.11.0/node-v15.11.0-linux-x64.tar.xz"
+  },
+  "node-lts": {
+    "url": "https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz",
+    "type": "tarball",
+    "alt-names": ["Node.JS-lts", "node.js-lts", "nodejs-lts"],
+    "dependency": ["gcc"],
+    "script": "install_node.rb",
+    "class": "InstNodeLTS",
+    "bin_url": "https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz"
+  },
+
+  # Boost
+  "boost": {
+    "url": "https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2",
+    "type": "tarball",
+    "alt-names": ["Boost"],
+    "dependency": ["gcc"],
+    "script": "install_boost.rb",
+    "class": "InstBoost"
+  },
+
+  # LLVM-Clang
+  "llvm": {
+    "url": "https://github.com/llvm/llvm-project.git",
+    "type": "git",
+    "alt-names": ["llvm-clang", "clang", "Clang", "LLVM-Clang"],
+    "dependency": [],
+    "script": "install_clang.rb",
+    "class": "InstClang"
+  },
+
+  # Rust
+  "rust": {
+    "url": "https://static.rust-lang.org/dist/rustc-1.50.0-src.tar.gz",
+    "type": "installer",
+    "alt-names": ["Rust"],
+    "dependency": [],
+    "script": "install_rust.rb",
+    "class": "InstRust"
+  },
+
+  # ROOT
+  "ROOT": {
+    "url": "https://github.com/root-project/root.git",
+    "type": "git",
+    "alt-names": ["root"],
+    "dependency": ["gcc", "python3"],
+    "script": "install_ROOT.rb",
+    "class": "InstROOT"
+  },
+
+  # MPICH
+  "mpich": {
+    "url": "http://www.mpich.org/static/downloads/3.4.1/mpich-3.4.1.tar.gz",
+    "type": "tarball",
+    "alt-names": ["MPICH"],
+    "dependency": ["gcc"],
+    "script": "install_mpich.rb",
+    "class": "InstMPICH"
+  },
+  "hydra": {
+    "url": "http://www.mpich.org/static/downloads/3.4.1/hydra-3.4.1.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Hydra"],
+    "dependency": ["gcc", "mpich"],
+    "script": "install_hydra.rb",
+    "class": "InstHydra"
+  },
+
+  # Emacs
+  "emacs": {
+    "url": "http://ftp.gnu.org/gnu/emacs/emacs-27.1.tar.xz",
+    "type": "tarball",
+    "alt-names": ["Emacs", "EMAC"],
+    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson"],
+    "script": "install_emacs.rb",
+    "class": "InstEmacs"
+  },
+  "emacs-nc": {
+    "url": "git://git.savannah.gnu.org/emacs.git",
+    "type": "git",
+    "alt-names": ["GccEmacs", "emacs-native-compiler"],
+    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson"],
+    "script": "install_emacs_nc.rb",
+    "class": "InstEmacsNC"
+  },
+
+  # GoLang
+  "golang-bootstrap": {
+    "url": "https://dl.google.com/go/go1.4-bootstrap-20171003.tar.gz",
+    "type": "tarball-bin",
+    "alt-names": [],
+    "dependency": [],
+    "script": "install_golang.rb",
+    "class": "InstGolang"
+  },
+  "golang": {
+    "url": "https://go.googlesource.com/go",
+    "type": "git",
+    "alt-names": ["go", "Golang"],
+    "dependency": ["gcc"],
+    "script": "install_golang.rb",
+    "class": "InstGolang"
+  },
+
+  # Julia
+  "julia": {
+    "url": "https://github.com/JuliaLang/julia.git",
+    "type": "git",
+    "alt-names": ["Julia"],
+    "dependency": ["gcc"],
+    "script": "install_julia.rb",
+    "class": "InstJulia"
+  },
+
+  # ngspice
+  "ngspice": {
+    "url": "https://sourceforge.net/projects/ngspice/files/ng-spice-rework/34/ngspice-34.tar.gz",
+    "type": "tarball",
+    "alt-names": ["spice", "NGSpice"],
+    "dependency": ["gcc"],
+    "script": "install_ngspice.rb",
+    "class": "InstNgspice"
+  },
+
+  # Gnuplot
+  "gnuplot": {
+    "url": "http://ftp.cstug.cz/pub/CTAN/graphics/gnuplot/5.2.6/gnuplot-5.2.6.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Gnuplot"],
+    "dependency": ["libpng", "libjpeg-turbo", "pdflib", "libgd" ,"lua"],
+    "script": "install_gnuplot.rb",
+    "class": "InstGnuplot"
+  },
+
+  # Libraries
+  #
+  # libpng
+  "libpng": {
+    "url": "http://prdownloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz",
+    "type": "tarball",
+    "alt-names": ["libpng-dev", "libpng-devel", "png-devel"],
+    "dependency": [],
+    "script": "libs/install_libpng.rb",
+    "class": "InstLibPNG"
+  },
+  # libjpeg
+  "libjpeg": {
+    "url": "https://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libjpeg-dev", "libjpeg-devel", "jpeg-devel"],
+    "dependency": [],
+    "script": "libs/install_libjpeg.rb",
+    "class": "InstLibJPEG"
+  },
+  # libjpeg-turbo
+  "libjpeg-turbo": {
+    "url": "https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6/libjpeg-turbo-2.0.6.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libjpeg-turbo-dev", "libjpeg-turbo-devel", "jpeg-turbo-devel"],
+    "dependency": [],
+    "script": "libs/install_libjpegturbo.rb",
+    "class": "InstLibJPEGTurbo"
+  },
+  # libtiff
+  "libtiff": {
+    "url": "https://download.osgeo.org/libtiff/tiff-4.2.0.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libtiff-dev", "libtiff-devel", "tiff-devel"],
+    "dependency": [],
+    "script": "libs/install_libtiff.rb",
+    "class": "InstLibTIFF"
+  },
+  # giflib
+  "giflib": {
+    "url": "https://sourceforge.net/projects/giflib/files/giflib-5.2.1.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libgif", "Giflib", "libgif-dev"],
+    "dependency": [],
+    "script": "libs/install_giflib.rb",
+    "class": "InstGiflib"
+  },
+  "libungif": {
+    "url": "https://sourceforge.net/projects/giflib/files/libungif-4.x/libungif-4.1.4/libungif-4.1.4.tar.bz2",
+    "type": "tarball",
+    "alt-names": [],
+    "dependency": [],
+    "script": "libs/install_libungif.rb",
+    "class": "InstLibungif"
+  },
+  # libjansson
+  "libjansson": {
+    "url": "https://digip.org/jansson/releases/jansson-2.13.1.tar.bz2",
+    "type": "tarball",
+    "alt-names": ["jansson-dev", "libjansson"],
+    "dependency": [],
+    "script": "libs/install_libjansson.rb",
+    "class": "InstLibJansson"
+  },
+  # PDFlib
+  "pdflib": {
+    "url": "https://www.pdflib.com/binaries/PDFlib/930/PDFlib-9.3.0-Linux-x86_64-C-C++.tar.gz",
+    "type": "tarball-bin",
+    "alt-names": ["pdflib-dev", "pdflib-devel"],
+    "dependency": [],
+    "script": "libs/install_pdflib.rb",
+    "class": "InstPDFLib"
+  },
+  # LibGD
+  "libgd": {
+    "url": "https://github.com/libgd/libgd/releases/download/gd-2.3.1/libgd-2.3.1.tar.xz",
+    "type": "tarball",
+    "alt-names": ["libgd-dev", "libgd-devel", "GD-devel"],
+    "dependency": ["libtiff", "libpng", "libjpeg-turbo", "libwebp"],
+    "script": "libs/install_libgd.rb",
+    "class": "InstLibGD"
+  },
+  # libwebp
+  "libwebp": {
+    "url": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.0.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libwebp-dev", "libwebp-devel"],
+    "dependency": ["libtiff", "libpng", "libjpeg-turbo"],
+    "script": "libs/install_libwebp.rb",
+    "class": "InstLibWebp"
+  }
+}
