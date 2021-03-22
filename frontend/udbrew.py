@@ -265,12 +265,6 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_linuxmint_20_1(self):
         self.install_prereq_ubuntu_20_04()
 
-    # pkgs=$( array_to_string "${Ubuntu_packages[@]}")
-    # gems=$( array_to_string "${Ruby_gems[@]}")
-    # sudo -H apt-get -y update && sudo apt-get -y upgrade
-    # sudo -H apt-get -y install $pkgs
-    # sudo -H /usr/bin/gem install $gems
-
     def install_with_dnf(self):
         print("Installing with dnf")
 

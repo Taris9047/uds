@@ -201,7 +201,7 @@
     "url": "http://ftp.gnu.org/gnu/emacs/emacs-27.1.tar.xz",
     "type": "tarball",
     "alt-names": ["Emacs", "EMAC"],
-    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson"],
+    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
     "script": "install_emacs.rb",
     "class": "InstEmacs"
   },
@@ -209,7 +209,7 @@
     "url": "git://git.savannah.gnu.org/emacs.git",
     "type": "git",
     "alt-names": ["GccEmacs", "emacs-native-compiler"],
-    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson"],
+    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
     "script": "install_emacs_nc.rb",
     "class": "InstEmacsNC"
   },
@@ -317,6 +317,16 @@
     "script": "libs/install_libungif.rb",
     "class": "InstLibungif"
   },
+  # Imagemagick
+  "imagemagick": {
+    "url": "https://www.imagemagick.org/download/releases/ImageMagick-7.0.11-0.tar.xz",
+    "type": "tarball",
+    "alt-names": ["Imagemagick", "ImageMagick-7"],
+    "dependency": [],
+    "script": "libs/install_imagemagick.rb",
+    "class": "InstImagemagick"
+  },
+
   # libjansson
   "libjansson": {
     "url": "https://digip.org/jansson/releases/jansson-2.13.1.tar.bz2",
