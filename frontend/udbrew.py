@@ -3,7 +3,33 @@
 import os
 import sys
 import re
+import argparse
 import subprocess as sbp
+
+
+### Run Console (Bash.. currently...) ###
+class RunCmd(object):
+    def __init__(self, shell_type="bash", verbose_mode=False):
+        # At this moment, just bash is supported! Let's see if it works out!
+        self.shell_type = shell_type
+        self.verbose_mode = verbose_mode
+
+    def Run(self, cmd="", env=""):
+        if not cmd:
+            return 0
+
+        if self.verbose_mode:
+            self.RunVerbose(cmd, env)
+        else:
+            self.RunSilent(cmd, env)
+
+    def RunVerbose(self, cmd="", env=""):
+        cmd_to_run = "{} {}".format(env, cmd)
+
+    def RunSilent(self, cmd="", env=""):
+        cmd_to_run = "{} {}".format(env, cmd)
+        sbp.run(cmd_to_run, shell=True, capture_output=True)
+
 
 ### Get distro crom /etc/os-release ###
 class GetDistro(object):
@@ -26,6 +52,9 @@ class GetDistro(object):
 
     def Name(self):
         return self.rel_data["NAME"]
+
+    def ID(self):
+        return self.rel_data["ID"]
 
     def Version(self):
         return self.rel_data["VERSION_ID"]
@@ -144,7 +173,7 @@ class GetPackages(DistroPkgMap):
 
     def GetPkgNames(self):
         if not os.path.exists(self.pkg_list_file):
-            raise FileNotExistError(
+            raise FileNotFoundError(
                 "Oh crap, {} is not found!".format(self.pkg_list_file)
             )
 
@@ -164,14 +193,9 @@ class InstallPrereqPkgs(GetPackages):
 
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()
-
-        self.distro_pkgman_map = {
-            "ubuntu": "apt",
-            "fedora": "dnf",
-            "rhel": "dnf",
-            "opensuse": "zypper",
-            "arch": "pacman",
-        }
+        self.inst_pkg_f_name = "install_prereq_{}_{}".format(
+            self.ID(), self.Version().replace(".", "_")
+        )
 
         self.InstallPackages()
 
@@ -179,9 +203,7 @@ class InstallPrereqPkgs(GetPackages):
         self.switcher()
 
     def switcher(self):
-        return getattr(
-            self, "install_with_{}".format(self.distro_pkgman_map[self.base])
-        )()
+        return getattr(self, self.inst_pkg_f_name)()
 
     # TODO Implement those dummys into greatness!!
     def install_with_apt(self):
@@ -196,6 +218,9 @@ class InstallPrereqPkgs(GetPackages):
     def install_with_dnf(self):
         print("Installing with dnf")
 
+    def install_prereq_rhel_8_3(self):
+        print("Installing Prereq. packages for RHEL8.3")
+
     def install_with_zypper(self):
         print("Installing with zypper")
 
@@ -203,20 +228,15 @@ class InstallPrereqPkgs(GetPackages):
         print("Syncing with Pacman!")
 
 
-### Help file
-def show_help():
-    print("<Put help message here>")
+class UDSBrew(object):
+    def __init__(self, args):
+        InstallPrereqPkgs()
 
-
-### The Main Function ###
-def main(ARGV):
-
-    # if not len(ARGV) > 2:
-    #     show_help()
-
-    InstallPrereqPkgs()
+    ### Help file
+    def show_help(self):
+        print("<Put help message here>")
 
 
 ### Calling main function ###
 if __name__ == "__main__":
-    main(sys.argv)
+    UDSBrew(sys.argv)
