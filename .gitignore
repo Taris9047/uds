@@ -2,3 +2,5 @@ workspace
 __pycache__
 build
 downloads
+pkginfo
+pkginfo/*

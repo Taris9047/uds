@@ -47,7 +47,7 @@ class InstEmacsNC < InstallStuff
       '--with-xwidgets',
       '--with-lcms2',
       '--with-giflib',
-      '--with-imagemagick',
+#      '--with-imagemagick',
       '--with-mailutils',
       '--with-pop',
       '--with-native-compilation',
