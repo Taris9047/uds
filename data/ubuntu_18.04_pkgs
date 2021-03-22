@@ -59,6 +59,7 @@ libcairo-dev
 libcerf-dev
 libotf-dev
 imagemagick
+libgtk-3-dev
 libltdl-dev
 libperl-dev
 libm17n-dev

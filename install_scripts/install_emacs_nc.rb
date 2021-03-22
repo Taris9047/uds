@@ -120,6 +120,7 @@ class InstEmacsNC < InstallStuff
 *** **** ***
 }      
     puts warn_txt
+    puts "\n\n"
     sleep (2)
 
     dl = Download.new(@source_url, @src_dir,

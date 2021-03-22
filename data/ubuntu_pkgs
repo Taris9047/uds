@@ -62,6 +62,8 @@ imagemagick
 libltdl-dev
 libperl-dev
 libm17n-dev
+libgtk-3-dev
+libwebkit2gtk-4.0-dev
 gcc-10
 g++-10
 libgccjit0
