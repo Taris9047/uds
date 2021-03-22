@@ -6,29 +6,69 @@ import re
 import argparse
 import subprocess as sbp
 
+# Gems list for system.
+gems_system_ruby = [
+    'json',
+    'ruby-progressbar',
+    'tty-spinner',
+    'lolcat',
+    'open3'
+]
 
 ### Run Console (Bash.. currently...) ###
 class RunCmd(object):
-    def __init__(self, shell_type="bash", verbose_mode=False):
+    def __init__(self, shell_type="bash", verbose=False):
         # At this moment, just bash is supported! Let's see if it works out!
         self.shell_type = shell_type
-        self.verbose_mode = verbose_mode
+        self.verbose = verbose
 
     def Run(self, cmd="", env=""):
         if not cmd:
             return 0
 
-        if self.verbose_mode:
-            self.RunVerbose(cmd, env)
+        if not env:
+            self.cmd_to_run = cmd
         else:
-            self.RunSilent(cmd, env)
+            self.cmd_to_run = "{} {}".format(env, cmd)
 
-    def RunVerbose(self, cmd="", env=""):
-        cmd_to_run = "{} {}".format(env, cmd)
+        if self.verbose:
+            result_log = self.RunVerbose()
+        else:
+            result_log = self.RunSilent()
 
-    def RunSilent(self, cmd="", env=""):
-        cmd_to_run = "{} {}".format(env, cmd)
-        sbp.run(cmd_to_run, shell=True, capture_output=True)
+        return result_log
+
+    def RunVerbose(self, cmd=None):
+        if cmd:
+            cmd_to_run = cmd
+        else:
+            cmd_to_run = self.cmd_to_run
+
+        log = ''
+        p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
+        for line in iter(p.stdout.readline, b''):
+            l = line.decode('ascii').strip()
+            print(l)
+            log += '{}{}'.format(l, os.linesep)
+        p.stdout.close()
+        p.wait()
+        return log
+
+
+    def RunSilent(self, cmd=None):
+        if cmd:
+            cmd_to_run = cmd
+        else:
+            cmd_to_run = self.cmd_to_run
+
+        log = ''
+        p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
+        for line in iter(p.stdout.readline, b''):
+            l = line.decode('ascii').strip()
+            log += '{}{}'.format(l, os.linesep)
+        p.stdout.close()
+        p.wait()
+        return log
 
 
 ### Get distro crom /etc/os-release ###
@@ -123,6 +163,14 @@ class Version(object):
     def __ge__(self, other):
         return self.ver_info >= other.ver_info
 
+    def to_str(self):
+        return '.'.join([ str(_) for _ in self.ver_info ])
+
+    def to_list_str(self):
+        return [ str(_) for _ in self.ver_info ]
+
+    def to_list(self):
+        return self.ver_info
 
 ### DistroPkgMap
 ###
@@ -130,7 +178,7 @@ class Version(object):
 ###
 class DistroPkgMap(GetDistro):
     def __init__(self):
-        super().__init__()
+        GetDistro.__init__(self)
 
     # Maps distro file with given distro information.
     #
@@ -139,7 +187,7 @@ class DistroPkgMap(GetDistro):
     def GetPackageFileName(self):
 
         if self.BaseDistro() == "ubuntu":
-            if self.Name() == "Linuxmint":
+            if self.Name() == "Linux Mint":
                 return "ubuntu_pkgs"
             elif self.Name() == "elementary OS":
                 return "ubuntu_18.04_pkgs"
@@ -161,7 +209,8 @@ class DistroPkgMap(GetDistro):
 ###
 class GetPackages(DistroPkgMap):
     def __init__(self):
-        super().__init__()
+        DistroPkgMap.__init__(self)
+
         this_dir = os.path.realpath(__file__)
         data_dir = os.path.realpath(
             os.path.join(os.path.dirname(this_dir), "..", "data")
@@ -178,7 +227,8 @@ class GetPackages(DistroPkgMap):
             )
 
         with open(self.pkg_list_file, "r") as fp:
-            self.pkg_list = fp.readlines()
+            pl = fp.readlines()
+            self.pkg_list = [_.strip() for _ in pl]
 
         return self.pkg_list
 
@@ -187,9 +237,10 @@ class GetPackages(DistroPkgMap):
 ###
 ### Actually installs packages using proper package manager.
 ###
-class InstallPrereqPkgs(GetPackages):
-    def __init__(self):
-        super().__init__()
+class InstallPrereqPkgs(GetPackages, RunCmd):
+    def __init__(self, verbose=True):
+        GetPackages.__init__(self)
+        RunCmd.__init__(self, shell_type='bash', verbose=verbose)
 
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()
@@ -205,9 +256,14 @@ class InstallPrereqPkgs(GetPackages):
     def switcher(self):
         return getattr(self, self.inst_pkg_f_name)()
 
-    # TODO Implement those dummys into greatness!!
-    def install_with_apt(self):
-        print("Installing with apt-get")
+    # Installation methods...
+    def install_prereq_ubuntu_20_04(self):
+        self.Run(cmd='sudo -H apt-get -y update')
+        self.Run(cmd='sudo apt-get -y upgrade')
+        self.Run(cmd='sudo apt-get -y install {}'.format(' '.join(self.pkgs_to_install)))
+
+    def install_prereq_linuxmint_20_1(self):
+        self.install_prereq_ubuntu_20_04()
 
     # pkgs=$( array_to_string "${Ubuntu_packages[@]}")
     # gems=$( array_to_string "${Ruby_gems[@]}")
@@ -228,9 +284,40 @@ class InstallPrereqPkgs(GetPackages):
         print("Syncing with Pacman!")
 
 
+class InstallSystemRubyGems(RunCmd):
+    def __init__(self, system_ruby='/usr/bin/ruby'):
+        RunCmd.__init__(self, verbose=True)
+        ruby_ver_str = self.RunSilent(cmd='{} --version'.format(system_ruby))
+        self.system_ruby_ver = Version(ruby_ver_str.split(' ')[1].split('p')[0])
+        self.new_ruby_ver = Version('2.7.0')
+        self.system_gem = system_ruby.replace('ruby','gem')
+
+        # Some gems cannot be installed on old version of ruby
+        self.gems_to_install_ver = {}
+        if self.system_ruby_ver >= self.new_ruby_ver:
+            self.gems_to_install = gems_system_ruby
+        else:
+            self.gems_to_install = gems_system_ruby
+            self.gems_to_install.remove('open3')
+            self.gems_to_install_ver['open3'] = '0.1.0'
+
+        self.install_system_ruby_gems()
+
+    def install_system_ruby_gems(self):
+        self.Run('sudo -H {} install {}'.format(
+            self.system_gem, ' '.join(self.gems_to_install)))
+        if len(list(self.gems_to_install_ver.keys())) > 0:
+            gems = list(self.gems_to_install_ver.keys())
+            vers = [ self.gems_to_install_ver[_] for _ in gems ]
+            for gem, ver in zip(gems, vers):
+                self.Run('sudo -H {} install {} -v {}'.format(
+                    self.system_gem, gem, ver))
+
+
 class UDSBrew(object):
     def __init__(self, args):
         InstallPrereqPkgs()
+        InstallSystemRubyGems()
 
     ### Help file
     def show_help(self):
