@@ -6,6 +6,8 @@ import re
 import argparse
 import subprocess as sbp
 
+version = ["0", "1", "0"]
+
 # Gems list for system.
 gems_system_ruby = ["json", "ruby-progressbar", "tty-spinner", "lolcat", "open3"]
 
@@ -345,12 +347,89 @@ class InstallSystemRubyGems(RunCmd):
 
 class UDSBrew(object):
     def __init__(self, args):
+
+        self.args = args
+        self.mode = ""
+
+        self.mode = "None"
+        self.parse_args()
+
+        if self.p_args.prerequisite:
+            self.InstallPrerequisiteStuffs()
+
+    def InstallPrerequisiteStuffs(self):
         InstallPrereqPkgs()
         InstallSystemRubyGems()
+        sys.exit(0)
+
+    def parse_args(self):
+        # InstallPrereqPkgs()
+        # InstallSystemRubyGems()
+        p = argparse.ArgumentParser(prog="unix_dev_setup")
+
+        p.add_argument(
+            "-i",
+            "--install",
+            metavar="<package_name>",
+            nargs="*",
+            default=[],
+            help="Installs given packages.",
+        )
+        p.add_argument(
+            "-u",
+            "--uninstall",
+            metavar="<package_name>",
+            nargs="*",
+            default=[],
+            help="Uninstalls given packages.",
+        )
+
+        p.add_argument(
+            "-pr",
+            "--prerequisite",
+            action="store_true",
+            default=False,
+            help="Installs prerequisite packages depending on system's Linux distribution.",
+        )
+        p.add_argument(
+            "-v",
+            action="store_true",
+            dest="version",
+            default=False,
+            help="Show version",
+        )
+        p.add_argument(
+            "-l",
+            "--list",
+            action="store_true",
+            default=False,
+            help="List available packages",
+        )
+        p.add_argument(
+            "-o",
+            "--options",
+            metavar="<options>",
+            nargs="*",
+            choices=["sgcc", "verbose"],
+            default=[],
+            help="Installation options.",
+        )
+
+        if len(self.args) > 1:
+            self.p_args = p.parse_args(self.args[1:])
+        else:
+            p.print_help()
+            sys.exit(1)
 
     ### Help file
     def show_help(self):
         print("<Put help message here>")
+        sys.exit(0)
+
+    ### Show version
+    def show_version(self):
+        print(f"unix_dev_setup {'.'.join(version)}")
+        sys.exit(0)
 
 
 ### Calling main function ###
