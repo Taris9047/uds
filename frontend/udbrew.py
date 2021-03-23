@@ -46,6 +46,7 @@ class RunCmd(object):
         for line in iter(p.stdout.readline, b""):
             l = line.decode("ascii").strip()
             print(l)
+            sys.stdout.flush()
             log += "{}{}".format(l, os.linesep)
         p.stdout.close()
         p.wait()
@@ -183,8 +184,11 @@ class DistroPkgMap(GetDistro):
         self.distro_to_pkgfile_map = {
             "ubuntu": {
                 "Linuxmint_20.1": "ubuntu_20.04_pkgs",
-                "Ubuntu_20.04": "ubuntu_20.04_pkgs",
                 "elementary_5.1": "ubuntu_18.04_pkgs",
+            },
+            "debian": {
+                "ubuntu_20.04": "ubuntu_20.04_pkgs",
+                "ubuntu_20.10": "ubuntu_20.10_pkgs",
             },
             "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
             "arch": {
@@ -199,7 +203,6 @@ class DistroPkgMap(GetDistro):
         distro_id = self.ID()
         try:
             ver_split = self.Version().split(".")
-            
             if len(ver_split) >= 2:
                 ver_major = ver_split[0]
                 ver_minor = ver_split[1]
@@ -277,19 +280,19 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_with_apt(self):
         self.Run(cmd="sudo -H apt-get -y update")
         self.Run(cmd="sudo -H apt-get -y upgrade")
-        self.Run(cmd=f"sudo -H apt-get -y install {self.pkgs_to_instll}")
+        self.Run(cmd=f"sudo -H apt-get -y install {' '.join(self.pkgs_to_install)}")
 
-    def install_prereq_ubuntu_20_04(self):
+    def install_prereq_ubuntu_20(self):
         self.install_with_apt()
 
-    def install_prereq_ubuntu_18_04(self):
+    def install_prereq_ubuntu_18(self):
         self.install_with_apt()
 
     def install_prereq_linuxmint_20(self):
-        self.install_prereq_ubuntu_20_04()
+        self.install_prereq_ubuntu_20()
 
     def install_prereq_elementary_5(self):
-        self.install_prereq_ubuntu_18_04()
+        self.install_prereq_ubuntu_18()
 
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
