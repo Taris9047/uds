@@ -260,7 +260,6 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     # Installation methods...
     #
-
     def install_with_apt(self):
         self.Run(cmd="sudo -H apt-get -y update")
         self.Run(cmd="sudo apt-get -y upgrade")
@@ -296,9 +295,18 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_with_zypper(self):
         print("Installing with zypper")
+        self.Run("sudo -H zypper refresh")
+        self.Run("sudo -H zypper update")
+        self.Run(f"sudo -H zypper install {' '.join(self.pkgs_to_install)}")
+
+    def install_prereq_openSUSE_15(self):
+        self.Run("sudo -H zypper install --type pattern devel_basis")
+        self.Run("sudo -H zypper install --type pattern devel_C_C++")
+        self.install_with_zypper()
 
     def install_with_pacman(self):
         print("Syncing with Pacman!")
+        self.Run(f"sudo -H pacman -Syyu --noconfirm {' '.join(self.pkgs_to_install)}")
 
 
 class InstallSystemRubyGems(RunCmd):
