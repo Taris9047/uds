@@ -187,6 +187,9 @@ class DistroPkgMap(GetDistro):
                 "elementary_5.1": "ubuntu_18.04_pkgs",
             },
             "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
+            "arch": {
+                "rolling": "arch_pkgs"
+            }
         }
 
     # Maps distro file with given distro information.
@@ -194,14 +197,18 @@ class DistroPkgMap(GetDistro):
     def GetPackageFileName(self):
         base = self.BaseDistro()
         distro_id = self.ID()
-        ver_split = self.Version().split(".")
-        if len(ver_split) >= 2:
-            ver_major = ver_split[0]
-            ver_minor = ver_split[1]
-            distro_key = f"{distro_id}_{ver_major}.{ver_minor}"
-        else:
-            ver_major = self.Version()
-            distro_key = f"{distro_id}_{ver_major}"
+        try:
+            ver_split = self.Version().split(".")
+            
+            if len(ver_split) >= 2:
+                ver_major = ver_split[0]
+                ver_minor = ver_split[1]
+                distro_key = f"{distro_id}_{ver_major}.{ver_minor}"
+            else:
+                ver_major = self.Version()
+                distro_key = f"{distro_id}_{ver_major}"
+        except KeyError:
+            distro_key='rolling'
 
         return self.distro_to_pkgfile_map[base][distro_key]
 
@@ -249,8 +256,13 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()
         # We don't really need whole version. Just major
-        major_ver = self.Version().split(".")[0]
-        self.inst_pkg_f_name = "install_prereq_{}_{}".format(self.ID(), major_ver)
+        if self.base != "arch":
+            major_ver = self.Version().split(".")[0]
+            self.inst_pkg_func_name = \
+                f"install_prereq_{self.ID()}_{major_ver}"
+        else:
+            self.inst_pkg_func_name = \
+                "install_with_pacman"
 
         self.InstallPackages()
 
@@ -258,14 +270,14 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.switcher()
 
     def switcher(self):
-        return getattr(self, self.inst_pkg_f_name)()
+        return getattr(self, self.inst_pkg_func_name)()
 
     # Installation methods...
     #
     def install_with_apt(self):
         self.Run(cmd="sudo -H apt-get -y update")
-        self.Run(cmd="sudo apt-get -y upgrade")
-        self.Run(cmd=f"sudo apt-get -y install {self.pkgs_to_instll}")
+        self.Run(cmd="sudo -H apt-get -y upgrade")
+        self.Run(cmd=f"sudo -H apt-get -y install {self.pkgs_to_instll}")
 
     def install_prereq_ubuntu_20_04(self):
         self.install_with_apt()
@@ -310,6 +322,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         print("Syncing with Pacman!")
         self.Run(f"sudo -H pacman -Syyu --noconfirm {' '.join(self.pkgs_to_install)}")
 
+        
 
 class InstallSystemRubyGems(RunCmd):
     def __init__(self, system_ruby="/usr/bin/ruby"):
