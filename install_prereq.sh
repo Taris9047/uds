@@ -43,11 +43,11 @@ fi
 
 echo "Current linux distribution seems $MODE based one."
 
-readarray -t Debian_packages < "$SCRIPTPATH/data/ubuntu_pkgs"
-readarray -t Ubuntu_packages < "$SCRIPTPATH/data/ubuntu_pkgs"
+readarray -t Debian_packages < "$SCRIPTPATH/data/ubuntu_20.04_pkgs"
+readarray -t Ubuntu_packages < "$SCRIPTPATH/data/ubuntu_20.04_pkgs"
 readarray -t Ubuntu_1804_packages < "$SCRIPTPATH/data/ubuntu_18.04_pkgs"
-readarray -t Fedora_packages < "$SCRIPTPATH/data/fedora_pkgs"
-readarray -t RHEL_packages < "$SCRIPTPATH/data/rhel_pkgs"
+readarray -t Fedora_packages < "$SCRIPTPATH/data/fedora_33_pkgs"
+readarray -t RHEL_packages < "$SCRIPTPATH/data/rhel_8_pkgs"
 readarray -t Arch_packages < "$SCRIPTPATH/data/arch_pkgs"
 
 Ruby_gems=( \

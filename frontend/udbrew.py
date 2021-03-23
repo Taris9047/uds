@@ -15,6 +15,7 @@ gems_system_ruby = [
     'open3'
 ]
 
+
 ### Run Console (Bash.. currently...) ###
 class RunCmd(object):
     def __init__(self, shell_type="bash", verbose=False):
@@ -180,26 +181,51 @@ class DistroPkgMap(GetDistro):
     def __init__(self):
         GetDistro.__init__(self)
 
+        # TODO Populate this part as much as possible...
+        #   this part inevitably involves a lot of case study...
+        #   
+        self.distro_to_pkgfile_map = {
+            'ubuntu':{
+                'Linuxmint_20.1':'ubuntu_20.04_pkgs',
+                'Ubuntu_20.04':'ubuntu_20.04_pkgs',
+                'elementary_5.1':'ubuntu_18.04_pkgs'
+            },
+            'fedora':{
+                'rhel_8.3':'rhel_8_pkgs',
+                'fedora_33':'fedora_33_pkgs'
+            }
+        }
+        
     # Maps distro file with given distro information.
     #
-    # TODO This is crappy preliminary code. Must re-write.
-    #
     def GetPackageFileName(self):
+        base = self.BaseDistro()
+        distro_id = self.ID()
+        ver_split = self.Version().split('.')
+        if len(ver_split) > 2:
+            ver_major = ver_split[0]
+            ver_minor = ver_split[1]
+            distro_key = f"{distro_id}_{ver_major}.{ver_minor}"
+        else:
+            ver_major = [self.Version()]
+            distro_key = f"{distro_id}_{ver_major}"
 
-        if self.BaseDistro() == "ubuntu":
-            if self.Name() == "Linux Mint":
-                return "ubuntu_pkgs"
-            elif self.Name() == "elementary OS":
-                return "ubuntu_18.04_pkgs"
+        return self.distro_to_pkgfile_map[base][distro_key]
+        
+        # if self.BaseDistro() == "ubuntu":
+        #     if self.Name() == "Linux Mint":
+        #         return "ubuntu_pkgs"
+        #     elif self.Name() == "elementary OS":
+        #         return "ubuntu_18.04_pkgs"
 
-        elif self.BaseDistro() == "fedora":
-            if self.Name() == "Red Hat Enterprise Linux":
-                return "rhel_pkgs"
-            else:
-                return "fedora_pkgs"
+        # elif self.BaseDistro() == "fedora":
+        #     if self.Name() == "Red Hat Enterprise Linux":
+        #         return "rhel_pkgs"
+        #     else:
+        #         return "fedora_pkgs"
 
-        elif self.BaseDistro() == "arch":
-            return "arch_pkgs"
+        # elif self.BaseDistro() == "arch":
+        #     return "arch_pkgs"
 
 
 ### GetPackages ###
@@ -244,9 +270,11 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()
-        self.inst_pkg_f_name = "install_prereq_{}_{}".format(
-            self.ID(), self.Version().replace(".", "_")
-        )
+        # We don't really need whole version. Just major
+        major_ver = self.Version().split('.')[0]
+        self.inst_pkg_f_name = \
+            "install_prereq_{}_{}".format(
+            self.ID(), major_ver)
 
         self.InstallPackages()
 
@@ -257,18 +285,29 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         return getattr(self, self.inst_pkg_f_name)()
 
     # Installation methods...
-    def install_prereq_ubuntu_20_04(self):
+    #
+
+    def install_with_apt(self):
         self.Run(cmd='sudo -H apt-get -y update')
         self.Run(cmd='sudo apt-get -y upgrade')
         self.Run(cmd='sudo apt-get -y install {}'.format(' '.join(self.pkgs_to_install)))
-
-    def install_prereq_linuxmint_20_1(self):
+        
+    def install_prereq_ubuntu_20_04(self):
+        self.install_with_apt()
+        
+    def install_prereq_ubuntu_18_04(self):
+        self.install_with_apt()
+        
+    def install_prereq_linuxmint_20(self):
         self.install_prereq_ubuntu_20_04()
+
+    def install_prereq_elementary_5(self):
+        self.install_prereq_ubuntu_18_04()
 
     def install_with_dnf(self):
         print("Installing with dnf")
 
-    def install_prereq_rhel_8_3(self):
+    def install_prereq_rhel_8(self):
         print("Installing Prereq. packages for RHEL8.3")
 
     def install_with_zypper(self):
