@@ -7,13 +7,7 @@ import argparse
 import subprocess as sbp
 
 # Gems list for system.
-gems_system_ruby = [
-    'json',
-    'ruby-progressbar',
-    'tty-spinner',
-    'lolcat',
-    'open3'
-]
+gems_system_ruby = ["json", "ruby-progressbar", "tty-spinner", "lolcat", "open3"]
 
 
 ### Run Console (Bash.. currently...) ###
@@ -45,16 +39,15 @@ class RunCmd(object):
         else:
             cmd_to_run = self.cmd_to_run
 
-        log = ''
+        log = ""
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
-        for line in iter(p.stdout.readline, b''):
-            l = line.decode('ascii').strip()
+        for line in iter(p.stdout.readline, b""):
+            l = line.decode("ascii").strip()
             print(l)
-            log += '{}{}'.format(l, os.linesep)
+            log += "{}{}".format(l, os.linesep)
         p.stdout.close()
         p.wait()
         return log
-
 
     def RunSilent(self, cmd=None):
         if cmd:
@@ -62,11 +55,11 @@ class RunCmd(object):
         else:
             cmd_to_run = self.cmd_to_run
 
-        log = ''
+        log = ""
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
-        for line in iter(p.stdout.readline, b''):
-            l = line.decode('ascii').strip()
-            log += '{}{}'.format(l, os.linesep)
+        for line in iter(p.stdout.readline, b""):
+            l = line.decode("ascii").strip()
+            log += "{}{}".format(l, os.linesep)
         p.stdout.close()
         p.wait()
         return log
@@ -165,13 +158,14 @@ class Version(object):
         return self.ver_info >= other.ver_info
 
     def to_str(self):
-        return '.'.join([ str(_) for _ in self.ver_info ])
+        return ".".join([str(_) for _ in self.ver_info])
 
     def to_list_str(self):
-        return [ str(_) for _ in self.ver_info ]
+        return [str(_) for _ in self.ver_info]
 
     def to_list(self):
         return self.ver_info
+
 
 ### DistroPkgMap
 ###
@@ -183,49 +177,31 @@ class DistroPkgMap(GetDistro):
 
         # TODO Populate this part as much as possible...
         #   this part inevitably involves a lot of case study...
-        #   
+        #
         self.distro_to_pkgfile_map = {
-            'ubuntu':{
-                'Linuxmint_20.1':'ubuntu_20.04_pkgs',
-                'Ubuntu_20.04':'ubuntu_20.04_pkgs',
-                'elementary_5.1':'ubuntu_18.04_pkgs'
+            "ubuntu": {
+                "Linuxmint_20.1": "ubuntu_20.04_pkgs",
+                "Ubuntu_20.04": "ubuntu_20.04_pkgs",
+                "elementary_5.1": "ubuntu_18.04_pkgs",
             },
-            'fedora':{
-                'rhel_8.3':'rhel_8_pkgs',
-                'fedora_33':'fedora_33_pkgs'
-            }
+            "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
         }
-        
+
     # Maps distro file with given distro information.
     #
     def GetPackageFileName(self):
         base = self.BaseDistro()
         distro_id = self.ID()
-        ver_split = self.Version().split('.')
-        if len(ver_split) > 2:
+        ver_split = self.Version().split(".")
+        if len(ver_split) >= 2:
             ver_major = ver_split[0]
             ver_minor = ver_split[1]
             distro_key = f"{distro_id}_{ver_major}.{ver_minor}"
         else:
-            ver_major = [self.Version()]
+            ver_major = self.Version()
             distro_key = f"{distro_id}_{ver_major}"
 
         return self.distro_to_pkgfile_map[base][distro_key]
-        
-        # if self.BaseDistro() == "ubuntu":
-        #     if self.Name() == "Linux Mint":
-        #         return "ubuntu_pkgs"
-        #     elif self.Name() == "elementary OS":
-        #         return "ubuntu_18.04_pkgs"
-
-        # elif self.BaseDistro() == "fedora":
-        #     if self.Name() == "Red Hat Enterprise Linux":
-        #         return "rhel_pkgs"
-        #     else:
-        #         return "fedora_pkgs"
-
-        # elif self.BaseDistro() == "arch":
-        #     return "arch_pkgs"
 
 
 ### GetPackages ###
@@ -266,15 +242,13 @@ class GetPackages(DistroPkgMap):
 class InstallPrereqPkgs(GetPackages, RunCmd):
     def __init__(self, verbose=True):
         GetPackages.__init__(self)
-        RunCmd.__init__(self, shell_type='bash', verbose=verbose)
+        RunCmd.__init__(self, shell_type="bash", verbose=verbose)
 
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()
         # We don't really need whole version. Just major
-        major_ver = self.Version().split('.')[0]
-        self.inst_pkg_f_name = \
-            "install_prereq_{}_{}".format(
-            self.ID(), major_ver)
+        major_ver = self.Version().split(".")[0]
+        self.inst_pkg_f_name = "install_prereq_{}_{}".format(self.ID(), major_ver)
 
         self.InstallPackages()
 
@@ -288,16 +262,16 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     #
 
     def install_with_apt(self):
-        self.Run(cmd='sudo -H apt-get -y update')
-        self.Run(cmd='sudo apt-get -y upgrade')
-        self.Run(cmd='sudo apt-get -y install {}'.format(' '.join(self.pkgs_to_install)))
-        
+        self.Run(cmd="sudo -H apt-get -y update")
+        self.Run(cmd="sudo apt-get -y upgrade")
+        self.Run(cmd=f"sudo apt-get -y install {self.pkgs_to_instll}")
+
     def install_prereq_ubuntu_20_04(self):
         self.install_with_apt()
-        
+
     def install_prereq_ubuntu_18_04(self):
         self.install_with_apt()
-        
+
     def install_prereq_linuxmint_20(self):
         self.install_prereq_ubuntu_20_04()
 
@@ -305,10 +279,20 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_prereq_ubuntu_18_04()
 
     def install_with_dnf(self):
-        print("Installing with dnf")
+        self.Run("sudo -H dnf -y update")
+        self.Run(f"sudo -H dnf -y install {' '.join(self.pkgs_to_install)}")
 
     def install_prereq_rhel_8(self):
-        print("Installing Prereq. packages for RHEL8.3")
+        print("Installing Prereq. packages for RHEL8")
+        self.Run("sudo -H dnf -y update")
+        self.Run("sudo -H dnf -y install dnf-plugins-core")
+        self.Run(
+            'sudo -H subscription-manager repos --enable "codeready-builder-for-rhel-8-$(arch)-rpms"'
+        )
+        self.Run(
+            "sudo -H dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+        )
+        self.install_with_dnf()
 
     def install_with_zypper(self):
         print("Installing with zypper")
@@ -318,12 +302,12 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
 
 class InstallSystemRubyGems(RunCmd):
-    def __init__(self, system_ruby='/usr/bin/ruby'):
+    def __init__(self, system_ruby="/usr/bin/ruby"):
         RunCmd.__init__(self, verbose=True)
-        ruby_ver_str = self.RunSilent(cmd='{} --version'.format(system_ruby))
-        self.system_ruby_ver = Version(ruby_ver_str.split(' ')[1].split('p')[0])
-        self.new_ruby_ver = Version('2.7.0')
-        self.system_gem = system_ruby.replace('ruby','gem')
+        ruby_ver_str = self.RunSilent(cmd="{} --version".format(system_ruby))
+        self.system_ruby_ver = Version(ruby_ver_str.split(" ")[1].split("p")[0])
+        self.new_ruby_ver = Version("2.7.0")
+        self.system_gem = system_ruby.replace("ruby", "gem")
 
         # Some gems cannot be installed on old version of ruby
         self.gems_to_install_ver = {}
@@ -331,20 +315,24 @@ class InstallSystemRubyGems(RunCmd):
             self.gems_to_install = gems_system_ruby
         else:
             self.gems_to_install = gems_system_ruby
-            self.gems_to_install.remove('open3')
-            self.gems_to_install_ver['open3'] = '0.1.0'
+            self.gems_to_install.remove("open3")
+            self.gems_to_install_ver["open3"] = "0.1.0"
 
         self.install_system_ruby_gems()
 
     def install_system_ruby_gems(self):
-        self.Run('sudo -H {} install {}'.format(
-            self.system_gem, ' '.join(self.gems_to_install)))
+        self.Run(
+            "sudo -H {} install {}".format(
+                self.system_gem, " ".join(self.gems_to_install)
+            )
+        )
         if len(list(self.gems_to_install_ver.keys())) > 0:
             gems = list(self.gems_to_install_ver.keys())
-            vers = [ self.gems_to_install_ver[_] for _ in gems ]
+            vers = [self.gems_to_install_ver[_] for _ in gems]
             for gem, ver in zip(gems, vers):
-                self.Run('sudo -H {} install {} -v {}'.format(
-                    self.system_gem, gem, ver))
+                self.Run(
+                    "sudo -H {} install {} -v {}".format(self.system_gem, gem, ver)
+                )
 
 
 class UDSBrew(object):
