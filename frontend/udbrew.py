@@ -183,7 +183,7 @@ class DistroPkgMap(GetDistro):
         #
         self.distro_to_pkgfile_map = {
             "ubuntu": {
-                "Linuxmint_20.1": "ubuntu_20.04_pkgs",
+                "linuxmint_20.1": "ubuntu_20.04_pkgs",
                 "elementary_5.1": "ubuntu_18.04_pkgs",
             },
             "debian": {
@@ -191,9 +191,7 @@ class DistroPkgMap(GetDistro):
                 "ubuntu_20.10": "ubuntu_20.10_pkgs",
             },
             "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
-            "arch": {
-                "rolling": "arch_pkgs"
-            }
+            "arch": {"rolling": "arch_pkgs"},
         }
 
     # Maps distro file with given distro information.
@@ -211,7 +209,7 @@ class DistroPkgMap(GetDistro):
                 ver_major = self.Version()
                 distro_key = f"{distro_id}_{ver_major}"
         except KeyError:
-            distro_key='rolling'
+            distro_key = "rolling"
 
         return self.distro_to_pkgfile_map[base][distro_key]
 
@@ -261,11 +259,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         # We don't really need whole version. Just major
         if self.base != "arch":
             major_ver = self.Version().split(".")[0]
-            self.inst_pkg_func_name = \
-                f"install_prereq_{self.ID()}_{major_ver}"
+            self.inst_pkg_func_name = f"install_prereq_{self.ID()}_{major_ver}"
         else:
-            self.inst_pkg_func_name = \
-                "install_with_pacman"
+            self.inst_pkg_func_name = "install_with_pacman"
 
         self.InstallPackages()
 
@@ -325,7 +321,6 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         print("Syncing with Pacman!")
         self.Run(f"sudo -H pacman -Syyu --noconfirm {' '.join(self.pkgs_to_install)}")
 
-        
 
 class InstallSystemRubyGems(RunCmd):
     def __init__(self, system_ruby="/usr/bin/ruby"):
