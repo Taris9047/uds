@@ -1,0 +1,72 @@
+* VM Check
+According to [[https://my.oops.org/192?category=18][Anyoung Linux]], we can use some C code to determine whether the current machine is VM or not. This can be done checking some CPUID code.
+
+This code seems pretty interesting and probably be useful later. I have made some modification to express some echoing. But the functionality stays the same. I'll make it silent, as the original code was, later.
+
+#+begin_src c :tangle vm_check.c
+/* Copied and Pasted from
+ * https://my.oops.org/192?category=18
+ * 
+ */
+
+#include <stdio.h>
+#include <string.h>
+
+// https://stackoverflow.com/questions/6491566/getting-the-machine-serial-number-and-cpu-id-using-c-c-in-linux
+static inline void cpuid (unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx)
+{
+    /* ecx is often an input as well as an output. */
+    asm volatile (
+        "cpuid"
+            : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
+            : "0" (*eax), "2" (*ecx)
+    );
+}
+
+// https://kb.vmware.com/s/article/1009458
+int cpuid_check (void) {
+    unsigned int eax, ebx, ecx, edx;
+    char hyper_vendor_id[13];
+    //cpuid(0x1, &eax, &ebx, &ecx, &edx);
+    eax = 0x1;
+    cpuid (&eax, &ebx, &ecx, &edx);
+
+    // bit 31 of ecx is set
+    // 0x8000000 10000 0000 0000 0000 0000 0000 0000 0000
+    if ( ecx >= 0x80000000 ) {
+        //cpuid(0x40000000, &eax, &ebx, &ecx, &edx);
+        eax = 0x40000000;
+        cpuid (&eax, &ebx, &ecx, &edx);
+        memcpy (hyper_vendor_id + 0, &ebx, 4);
+        memcpy (hyper_vendor_id + 4, &ecx, 4);
+        memcpy (hyper_vendor_id + 8, &edx, 4);
+        hyper_vendor_id[12] = '\0';
+
+        //printf ("This is GuesVM %s\n");
+        //printf ("##################### %s\n", hyper_vendor_id);
+
+        // VMwareVMware
+        if ( ! strncmp (hyper_vendor_id, "VMware", 6) )
+            return 0;               // Success - running under VMware
+        // XenVMMXenVMM
+        else if ( ! strncmp (hyper_vendor_id, "XenVM", 5) )
+            return 0;               // Success - running under Xen
+    }
+
+    return 1;
+}
+
+int main (int argc, char** argv) {
+    int cpuid = 0;
+    char str_vm[8] = "VM Guest";
+    char str_physical[8] = "Physical";
+    
+    // if guest vm return 0 and case others, return 1
+    cpuid = cpuid_check ();
+
+    if (!cpuid) printf("%d %s\n", cpuid, str_vm);
+    else printf("%d %s\n", cpuid, str_physical);
+    return cpuid;
+}
+
+#+end_src
