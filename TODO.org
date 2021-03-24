@@ -9,10 +9,6 @@
 ** TODO We might need to implement or sketch up a GUI version of the script first.
 ** IDEA Actually, we can implement some kind of Web(HTML2) based management interface with ruby.
 
-* KILL Implement FFMpeg?
-** OKAY There is a dedicated bash script for it. It works well at this moment and produces a statically linked ffmpeg which is not too bad.
-** OKAY The only drawback of such installation is file size. In fact, its performance is faster than dynamically linked version which is usual way of many linux package managers.
-
 * DONE Implement Gnuplot, ngspice, and probably.. Qt5?
 ** DONE Gnuplot, ngspice done. Qt5 is under debate.
 ** OKAY Qt5 can be installed via package managers or Web installation script. Both have pros and cons. If the distro is really old, Web install would be better. But Fedora or Manjaro doesn't need additional space caused by Web install.
@@ -46,15 +42,23 @@
 ** IDEA It will be written with most common interpreter. I believe Python would be the one since most of Linux or Unix systems ships with it. Good thing is python2 is already dead. We can concentrate into python3
 ** IDEA GUI isn't really a thing as of now. But Python enables it. However, we need to push user to install additional packages for GUI (i.e. PyQt5). We do not want to use decades old Tk now. It's even deprecated.
 ** TODO For now, let's implement the front end to perform install_prereq.sh and unix_dev_setup's jobs all in one.
-** TODO Delete current front end implementations after merge. Don't touch them!
+** DONE Delete current front end implementations after merge. Don't touch them!
+CLOSED: [2021-03-24 Wed 10:16]
 ** TODO At least we need to make a database(?) system to determine which distro and which base is running. Then, we need to supply the list of prerequisite packages.
 ** IDEA The database can just be text files for now. They don't really need too much care. Also, making it with JSON or some other DB will complicate the situation even more. -> Since we need to write DB interfacing code as well.
+** IDEA Holy cow, should we just implement this with C?
 
 * IDEA Maybe we may need to separate unix_dev_setup form settings?
 
-* Elementary OS
-** Wrote some instructions for initial set up after fresh install.
-*** TODO This may need some update on real machine.
-** TODO We will install Elementary OS on MacMini since it doesn't really have anything hardcore to do except some file server role. Also, it's Apple product.
-** TODO Still, we need to handle the install_prereq situation on this VM. Ubuntu 18.04 seems a bit different game than 20.04.
-*** PROJ This mission goes to the [[Frontend]] project!
+* DONE Elementary OS
+CLOSED: [2021-03-24 Wed 10:23]
+** DONE Wrote some instructions for initial set up after fresh install.
+CLOSED: [2021-03-24 Wed 10:23]
+*** DONE This may need some update on real machine.
+CLOSED: [2021-03-24 Wed 10:17]
+** DONE We will install Elementary OS on MacMini since it doesn't really have anything hardcore to do except some file server role. Also, it's Apple product.
+CLOSED: [2021-03-24 Wed 10:23]
+** DONE Still, we need to handle the install_prereq situation on this VM. Ubuntu 18.04 seems a bit different game than 20.04.
+CLOSED: [2021-03-24 Wed 10:23]
+** DONE I've already implemented elementary OS on the old MacBook Air 2012 and it's working very well. I guess we can close all the concerns now.
+CLOSED: [2021-03-24 Wed 10:23]
