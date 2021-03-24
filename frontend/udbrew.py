@@ -88,16 +88,28 @@ class GetDistro(object):
         return self.rel_data[info_key]
 
     def Name(self):
-        return self.rel_data["NAME"]
+        try:
+            return self.rel_data["NAME"]
+        except KeyError:
+            return ""
 
     def ID(self):
-        return self.rel_data["ID"]
+        try:
+            return self.rel_data["ID"]
+        except KeyError:
+            return ""
 
     def Version(self):
-        return self.rel_data["VERSION_ID"]
+        try:
+            return self.rel_data["VERSION_ID"]
+        except KeyError:
+            return ""
 
     def BaseDistro(self):
-        return self.rel_data["ID_LIKE"]
+        try:
+            return self.rel_data["ID_LIKE"]
+        except KeyError:
+            return ""
 
 
 ### Version Parsor ###
