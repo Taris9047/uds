@@ -6,5 +6,5 @@ pkginfo
 pkginfo/*
 vm_check
 .auctex*
-pkginfo
+./pkginfo
 pkginfo/*
