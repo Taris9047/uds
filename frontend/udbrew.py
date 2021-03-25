@@ -44,8 +44,9 @@ class RunCmd(object):
         log = ""
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
         for line in iter(p.stdout.readline, b""):
-            l = line.decode("ascii").strip()
-            print(l)
+            l = line.decode("utf-8").strip()
+            if l: 
+                print(l)
             sys.stdout.flush()
             log += "{}{}".format(l, os.linesep)
         p.stdout.close()
@@ -61,7 +62,7 @@ class RunCmd(object):
         log = ""
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
         for line in iter(p.stdout.readline, b""):
-            l = line.decode("ascii").strip()
+            l = line.decode("utf-8").strip()
             log += "{}{}".format(l, os.linesep)
         p.stdout.close()
         p.wait()
@@ -205,6 +206,9 @@ class DistroPkgMap(GetDistro):
             "suse opensuse": {
               "opensuse-leap_15.2": "opensuse_15_pkgs",
             },
+            "rhel fedora": {
+              "centos_8": "rhel_8_pkgs",
+            },
             "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
             "arch": {"rolling": "arch_pkgs"},
         }
@@ -320,6 +324,13 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run(
             "sudo -H dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
         )
+        self.install_with_dnf()
+        
+    def install_prereq_centos_8(self):
+        print("Installing CentOS repos.")
+        self.Run("sudo -H dnf -y install epel-release")
+        self.Run("sudo -H dnf config-manager --set-enabled powertools")
+        self.Run("sudo -H dnf -y groupinstall \"Development Tools\" \"Additional Development\"")
         self.install_with_dnf()
 
     def install_with_zypper(self):
