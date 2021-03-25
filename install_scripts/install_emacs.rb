@@ -35,6 +35,7 @@ class InstEmacs < InstallStuff
       # This may not work.. on 27
       '--with-modules',
       '--with-xft',
+      '--with-otf',
       '--with-file-notification=inotify',
       '--with-x=yes',
       '--with-x-toolkit=gtk3',
@@ -44,10 +45,9 @@ class InstEmacs < InstallStuff
 #      '--with-imagemagick',
       '--with-mailutils',
       '--with-pop',
-      '--with-native-compilation',
       '--with-mailutils',
       '--with-pop',
-    #  '--with-xwidgets'    # needs webkitgtk4-dev
+      '--with-xwidgets'    # needs webkitgtk4-dev
     ]
 
     @env["CC"] = "gcc"

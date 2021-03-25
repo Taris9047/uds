@@ -41,6 +41,7 @@ class InstEmacsNC < InstallStuff
     @conf_options += [
       '--with-modules',
       '--with-xft',
+      '--with-otf',
       '--with-file-notification=inotify',
       '--with-x=yes',
       '--with-x-toolkit=gtk3',
@@ -51,7 +52,7 @@ class InstEmacsNC < InstallStuff
       '--with-mailutils',
       '--with-pop',
       '--with-native-compilation',
-    #  '--with-xwidgets'    # needs webkitgtk4-dev
+      '--with-xwidgets'    # needs webkitgtk4-dev
     ]
 
     # TODO: Implement more elegant way to find out jit enabled gcc
