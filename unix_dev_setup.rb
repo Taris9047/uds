@@ -1,9 +1,5 @@
 #!/usr/bin/env ruby
 
-# TODO: Gotta make it with 'class'
-# --> Too much stuff happening here!
-#
-
 require 'fileutils'
 require 'tty-spinner'
 require_relative './utils/utils.rb'
