@@ -202,6 +202,9 @@ class DistroPkgMap(GetDistro):
                 "ubuntu_20.04": "ubuntu_20.04_pkgs",
                 "ubuntu_20.10": "ubuntu_20.10_pkgs",
             },
+            "suse opensuse": {
+              "opensuse-leap_15.2": "opensuse_15_pkgs",
+            },
             "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
             "arch": {"rolling": "arch_pkgs"},
         }
@@ -281,6 +284,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.switcher()
 
     def switcher(self):
+        self.inst_pkg_func_name = self.inst_pkg_func_name.replace('-', '_')
         return getattr(self, self.inst_pkg_func_name)()
 
     # Installation methods...
@@ -324,7 +328,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run("sudo -H zypper update")
         self.Run(f"sudo -H zypper install {' '.join(self.pkgs_to_install)}")
 
-    def install_prereq_openSUSE_15(self):
+    def install_prereq_opensuse_leap_15(self):
         self.Run("sudo -H zypper install --type pattern devel_basis")
         self.Run("sudo -H zypper install --type pattern devel_C_C++")
         self.install_with_zypper()
