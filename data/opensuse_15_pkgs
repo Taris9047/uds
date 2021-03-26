@@ -52,4 +52,7 @@ glew-devel
 graphviz-devel 
 doxygen 
 unicode-emoji 
-ninja 
+emojione-color-font
+OpenMoji-Color
+ninja
+
