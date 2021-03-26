@@ -203,13 +203,17 @@ class DistroPkgMap(GetDistro):
                 "ubuntu_20.04": "ubuntu_20.04_pkgs",
                 "ubuntu_20.10": "ubuntu_20.10_pkgs",
             },
-            "suse opensuse": {
+            "suse": {
               "opensuse-leap_15.2": "opensuse_15_pkgs",
             },
-            "rhel fedora": {
-              "centos_8": "rhel_8_pkgs",
+            "rhel": {
+                "centos_8": "rhel_8_pkgs",
+                "almalinux_8.3": "rhel_8_pkgs",
             },
-            "fedora": {"rhel_8.3": "rhel_8_pkgs", "fedora_33": "fedora_33_pkgs"},
+            "fedora": {
+                "rhel_8.3": "rhel_8_pkgs", 
+                "fedora_33": "fedora_33_pkgs",
+            },
             "arch": {"rolling": "arch_pkgs"},
         }
 
@@ -217,6 +221,10 @@ class DistroPkgMap(GetDistro):
     #
     def GetPackageFileName(self):
         base = self.BaseDistro()
+        
+        if len(base.split(' ')) > 1:
+            base = base.split(' ')[0]
+        
         distro_id = self.ID()
         try:
             ver_split = self.Version().split(".")
@@ -332,6 +340,10 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run("sudo -H dnf config-manager --set-enabled powertools")
         self.Run("sudo -H dnf -y groupinstall \"Development Tools\" \"Additional Development\"")
         self.install_with_dnf()
+        
+    def install_prereq_almalinux_8(self):
+        print("Almalinux detected! Activating CentOS repo!")
+        self.install_prereq_centos_8()
 
     def install_with_zypper(self):
         print("Installing with zypper")
@@ -401,8 +413,7 @@ class UDSBrew(object):
         sys.exit(0)
 
     def parse_args(self):
-        # InstallPrereqPkgs()
-        # InstallSystemRubyGems()
+
         p = argparse.ArgumentParser(prog="unix_dev_setup")
 
         p.add_argument(
