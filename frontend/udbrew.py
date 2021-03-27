@@ -426,7 +426,19 @@ class UDSBrew(RunCmd):
                 default=False,
                 help="Prefers system gcc instead of homebrewed one.",
             )
-            p_args_inst.add_argument("pkgs_to_install", nargs="*", default=[])
+            p_args_inst.add_argument(
+                "-q",
+                "-quiet",
+                action="store_true",
+                default=False,
+                help="Prefers not so verbose.",
+            )
+            p_args_inst.add_argument(
+                "pkgs_to_install",
+                nargs="*",
+                default=[],
+                help="Installation options which will be fed into the ruby backend.",
+            )
 
             parsed_inst_args = p_args_inst.parse_args(self.p_args.install)
 
@@ -434,8 +446,12 @@ class UDSBrew(RunCmd):
             if parsed_inst_args.system_gcc:
                 opt_sgcc = "-sgcc"
 
+            opt_verbose = "-v"
+            if parsed_inst_args.quiet:
+                opt_verbose = ""
+
             for pkg in parsed_inst_args.pkgs_to_install:
-                self.Run(f"ruby ./unix_dev_setup -v {opt_sgcc} {pkg}")
+                self.Run(f"ruby ./unix_dev_setup {opt_verbose} {opt_sgcc} {pkg}")
 
             sys.exit(0)
 
