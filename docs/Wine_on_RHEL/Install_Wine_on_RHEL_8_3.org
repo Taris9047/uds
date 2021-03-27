@@ -1,0 +1,87 @@
+#+TITLE: Install Wine On Rhel 8 3
+#+AUTHOR: Taylor Shin
+#+STARTUP: showeverything
+#+PROPERTY: header-args :tangle-mode
+
+* Let's install Wine (currently version 6.5) on RHEL.
+** Main motivation
+We need to run some Windows tools on Linux since not many of Windows simulation tools are ported or written for UNIX system or similar ones.
+Since those simulators are not very graphics intensive, they are supposed to be easier to run than most of Steam games.
+
+Let's start installing Wine emulator at first.
+
+** Initial Set-Up with DNF
+As we know, building everything from ground is not a solid way to go, especially on somewhat established environment such as RHEL or CentOS. However, those distributions do not provide state-of-art Wine in their repositories for some weird reason. Stability? What stability do you need with a Windows emulator?
+
+So, it is obvious we need to set up some method to actually 'compile' Wine codes. But compiling every single line of codes of dependency libraries is a time-consuming and head bonking job. These steps are adopted from [[https://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/][Techmint.com's guide]].
+
+Thus, let's start with installing some baseline libraries...
+
+The shell script starts with she-bang.
+#+begin_src shell :tangle Wine_on_RHEL.sh
+#!/usr/bin/env bash
+CWD="$(pwd -P)"
+#+end_src
+
+Now, the baseline libraries...
+#+begin_src shell :tangle Wine_on_RHEL.sh
+sudo -H dnf -y install gcc libX11-devel freetype-devel zlib-devel libxcb-devel libxslt-devel libgcrypt-devel libxml2-devel gnutls-devel libpng-devel libjpeg-turbo-devel libtiff-devel dbus-devel fontconfig-devel
+#+end_src
+
+** Downloading Wine
+
+Ok, we can download Wine source code from the official [[https://www.winehq.org/][Wine web site]].
+#+begin_src shell :tangle Wine_on_RHEL.sh
+mkdir -pv ./downloads
+wget https://dl.winehq.org/wine/source/6.x/wine-6.5.tar.xz -O ./downloads/wine-6.5.tar.xz
+#+end_src
+
+#+RESULTS:
+: mkdir: created directory './downloads'
+
+Now, extract the tarball!
+#+begin_src shell :tangle Wine_on_RHEL.sh
+if [ ! -d "$CWD/src" ]; then
+    mkdir -pv ./src
+fi
+tar xvf ./downloads/wine-6.5.tar.xz -C ./src/
+WINE_SRC_DIR="$CWD/src/wine-6.5"
+#+end_src
+
+** Compiling Wine
+As usual, we will install Wine on the Homebrew directory (default is $HOME/.local) so that we can manage it locally.
+
+#+begin_src shell :tangle Wine_on_RHEL.sh
+WINE_BUILD_DIR="$CWD/build/wine-6.5-build"
+if [ ! -d "$CWD/build" ]; then
+    mkdir -pv "$CWD/build"
+fi
+mkdir -pv "$WINE_BUILD_DIR"
+#+end_src
+
+Now we need to supply correct environmental variables to the configure script. We'll just use my favorite rice up stuff.
+
+#+begin_src shell :tangle Wine_on_RHEL.sh
+CC="gcc" CXX="g++" CFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" CXXFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" cd "$WINE_BUILD_DIR" && "$WINE_SRC_DIR/configure" \
+	--prefix="$HOME/.local" \
+	--enable-win64 && cd "$CWD"
+#+end_src
+
+#+RESULTS:
+
+Once everything's configured, let's do the usual stuff!
+
+#+begin_src shell :tangle Wine_on_RHEL.sh
+cd "$WINE_BUILD_DIR" && make -j 4 && make install
+cd "$CWD"
+#+end_src
+
+#+RESULTS:
+
+Then clean up everything! (Not mandatory)
+#+begin_src shell :tangle Wine_on_RHEL.sh
+rm -rf ./download ./src ./build
+#+end_src
+
+** Closing up
+If the compilation does not confront more hiccups, it will end up wine executable at =$HOME/.local/bin=. Now let's try to install LTSpice with it!
