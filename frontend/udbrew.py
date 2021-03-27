@@ -45,7 +45,7 @@ class RunCmd(object):
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
         for line in iter(p.stdout.readline, b""):
             l = line.decode("utf-8").strip()
-            if l: 
+            if l:
                 print(l)
             sys.stdout.flush()
             log += "{}{}".format(l, os.linesep)
@@ -204,14 +204,14 @@ class DistroPkgMap(GetDistro):
                 "ubuntu_20.10": "ubuntu_20.10_pkgs",
             },
             "suse": {
-              "opensuse-leap_15.2": "opensuse_15_pkgs",
+                "opensuse-leap_15.2": "opensuse_15_pkgs",
             },
             "rhel": {
                 "centos_8": "rhel_8_pkgs",
                 "almalinux_8.3": "rhel_8_pkgs",
             },
             "fedora": {
-                "rhel_8.3": "rhel_8_pkgs", 
+                "rhel_8.3": "rhel_8_pkgs",
                 "fedora_33": "fedora_33_pkgs",
             },
             "arch": {"rolling": "arch_pkgs"},
@@ -221,10 +221,10 @@ class DistroPkgMap(GetDistro):
     #
     def GetPackageFileName(self):
         base = self.BaseDistro()
-        
-        if len(base.split(' ')) > 1:
-            base = base.split(' ')[0]
-        
+
+        if len(base.split(" ")) > 1:
+            base = base.split(" ")[0]
+
         distro_id = self.ID()
         try:
             ver_split = self.Version().split(".")
@@ -296,7 +296,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.switcher()
 
     def switcher(self):
-        self.inst_pkg_func_name = self.inst_pkg_func_name.replace('-', '_')
+        self.inst_pkg_func_name = self.inst_pkg_func_name.replace("-", "_")
         return getattr(self, self.inst_pkg_func_name)()
 
     # Installation methods...
@@ -333,14 +333,16 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
             "sudo -H dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
         )
         self.install_with_dnf()
-        
+
     def install_prereq_centos_8(self):
         print("Installing CentOS repos.")
         self.Run("sudo -H dnf -y install epel-release")
         self.Run("sudo -H dnf config-manager --set-enabled powertools")
-        self.Run("sudo -H dnf -y groupinstall \"Development Tools\" \"Additional Development\"")
+        self.Run(
+            'sudo -H dnf -y groupinstall "Development Tools" "Additional Development"'
+        )
         self.install_with_dnf()
-        
+
     def install_prereq_almalinux_8(self):
         print("Almalinux detected! Activating CentOS repo!")
         self.install_prereq_centos_8()
@@ -395,17 +397,55 @@ class InstallSystemRubyGems(RunCmd):
                 )
 
 
-class UDSBrew(object):
+class UDSBrew(RunCmd):
     def __init__(self, args):
+        RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.args = args
-        self.mode = ""
-
-        self.mode = "None"
         self.parse_args()
 
         if self.p_args.prerequisite:
             self.InstallPrerequisiteStuffs()
+
+        if self.p_args.clean:
+            self.Run(f"ruby ./unix_dev_setup clean")
+            sys.exit(0)
+
+        if self.p_args.purge:
+            self.Run(f"ruby ./unix_dev_setup purge")
+            sys.exit(0)
+
+        if self.p_args.install is not []:
+            pkgs_to_install = set(self.p_args.install)
+
+            p_args_inst = argparse.ArgumentParser()
+            p_args_inst.add_argument(
+                "-sgcc",
+                "--system_gcc",
+                action="store_true",
+                default=False,
+                help="Prefers system gcc instead of homebrewed one.",
+            )
+            p_args_inst.add_argument("pkgs_to_install", nargs="*", default=[])
+
+            parsed_inst_args = p_args_inst.parse_args(self.p_args.install)
+
+            opt_sgcc = ""
+            if parsed_inst_args.system_gcc:
+                opt_sgcc = "-sgcc"
+
+            for pkg in parsed_inst_args.pkgs_to_install:
+                self.Run(f"ruby ./unix_dev_setup -v {opt_sgcc} {pkg}")
+
+            sys.exit(0)
+
+        if self.p_args.uninstall is not []:
+            pkgs_to_uninstall = set(self.p_args.uninstall)
+
+            for pkg in pkgs_to_uninstall:
+                self.Run(f"ruby ./unix_dev_setup -v {pkg}")
+
+            sys.exit(0)
 
     def InstallPrerequisiteStuffs(self):
         InstallPrereqPkgs()
@@ -431,6 +471,18 @@ class UDSBrew(object):
             nargs="*",
             default=[],
             help="Uninstalls given packages.",
+        )
+        p.add_argument(
+            "--clean",
+            action="store_true",
+            default=False,
+            help="Clean up current pkginfo and work directories to start anew. But not deleting already installed packages.",
+        )
+        p.add_argument(
+            "--purge",
+            action="store_true",
+            default=False,
+            help="Cleans up every single craps!! To start anew!!!",
         )
 
         p.add_argument(
