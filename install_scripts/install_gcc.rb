@@ -30,10 +30,10 @@ $gcc_env = {
   "CC" => "gcc",
   "CXX" => "g++",
   "CFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe -fPIC",
-  "C_INCLUDE_PATH" => "{prefix}/include",
+  # "C_INCLUDE_PATH" => "{prefix}/include",
   "CXXFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe -fPIC",
-  "CPLUS_INCLUDE_PATH" => "{prefix}/include",
-  "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
+  # "CPLUS_INCLUDE_PATH" => "{prefix}/include",
+  # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
 }
 
 class InstGCC < InstallStuff
@@ -84,10 +84,10 @@ class InstGCC < InstallStuff
 
     # Replace '{prefix}' on configure parameters.
     @conf_options.each_with_index do |co, ind|
-      if co.include?'{prefix}'
+      if co.include? '{prefix}'
         @conf_options[ind] = co.gsub('{prefix}', @prefix)
       end
-      if co.include?'{target_arch}'
+      if co.include? '{target_arch}'
         @conf_options[ind] = co.gsub('{target_arch}', @os_type)
       end
     end
@@ -250,7 +250,7 @@ class InstGCC8 < InstGCC
       "CXX" => "g++",
       "CFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe",
       "CXXFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe",
-      "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
+      # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
     }
 
   end
@@ -284,7 +284,7 @@ class InstGCC9 < InstGCC
       "CXX" => "g++",
       "CFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe",
       "CXXFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe",
-      "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
+      # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
     }
 
   end
@@ -331,7 +331,7 @@ class InstGCC4 < InstGCC
       "CXX" => "g++",
       "CFLAGS" => "-w -O2 -std=gnu89 -fgnu89-inline -fomit-frame-pointer -pipe",
       "CXXFLAGS" => "-w -O2 -std=gnu++11 -fomit-frame-pointer -pipe",
-      "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
+      # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
     }
 
 
@@ -342,10 +342,10 @@ class InstGCC4 < InstGCC
 
     # Replace '{prefix}' on configure parameters.
     @conf_options.each_with_index do |co, ind|
-      if co.include?'{prefix}'
+      if co.include? '{prefix}'
         @conf_options[ind] = co.gsub('{prefix}', @prefix)
       end
-      if co.include?'{target_arch}'
+      if co.include?  '{target_arch}'
         @conf_options[ind] = co.gsub('{target_arch}', @os_type)
       end
     end
