@@ -116,6 +116,7 @@ sudo -H dnf install libXfixes-devel.{x86_64,i686} -y 2>&1 >>$log
 
 #+RESULTS: prereq_pkgs_manual_install
 
+Package installation part can be summarized as...
 #+begin_src shell :tangle prereq_pkgs.sh :noweb yes
 <<preambles>>
 <<prereq_pkgs>>
