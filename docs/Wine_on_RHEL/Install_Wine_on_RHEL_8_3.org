@@ -17,12 +17,12 @@ So, it is obvious we need to set up some method to actually 'compile' Wine codes
 
 Thus, let's start with installing some baseline libraries...
 
-The Wine version will not be so state-of-art since we need to ensure other important packages to catch up: such as Wine-mono and Wine-gecko.
+The Wine version will not be so state-of-art since we need to ensure other important packages to catch up: such as [[https://wiki.winehq.org/Mono][Wine-mono]] and [[https://wiki.winehq.org/Gecko][Wine-gecko]].
 
 Wine version:
 #+NAME: ver_string
 #+begin_src string
-5.0.4
+6.0
 #+end_src
 
 The preamble part is here:
