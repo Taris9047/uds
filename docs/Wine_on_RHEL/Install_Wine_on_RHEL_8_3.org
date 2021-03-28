@@ -24,10 +24,10 @@ Let's install not so extremely new version of wine: 5.0.4
 #+begin_src shell :tangle Wine_on_RHEL.sh
 #!/usr/bin/env bash -e
 CWD="$(pwd -P)"
-if [ ! -d "$CWD/workspace" ]; then
-	mkdir -pv "$CWD/workspace"
+if [ ! -d "${CWD}/workspace" ]; then
+	mkdir -pv "${CWD}/workspace"
 fi
-WORKSPACE="$CWD/workspace"
+WORKSPACE="${CWD}/workspace"
 WINE_VER="5.0.4"
 WINE_VER_MAJOR=$(echo ${WINE_VER} | cut -d'.' -f1)
 WINE_VER_URL=$(echo ${WINE_VER} | cut -d'.' -f1,2)
