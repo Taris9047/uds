@@ -1,0 +1,16 @@
+#+TITLE: WinePak_Install
+#+AUTHOR: Taylor Shin
+
+* Oh crap.. Installing wine sux...
+** There's yet another approach! flatpaking Windows Apps!
+#+begin_src shell :tangle WinePak_Install.sh
+#!/usr/bin/env bash
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --if-not-exists winepak https://dl.winepak.org/repo/winepak.flatpakrepo
+flatpak install winepak tld.domain.Application
+#+end_src
+
+#+RESULTS:
+
+* Key expired in last June!!
+Well, that was a good try!

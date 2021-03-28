@@ -4,3 +4,6 @@ src
 src/*
 build
 build/*
+workspace
+workspace/*
+*.msi*
