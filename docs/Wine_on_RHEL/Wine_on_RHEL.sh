@@ -10,8 +10,12 @@ WINE_VER_URL=$(echo ${WINE_VER} | cut -d'.' -f1,2)
 
 log="$(mktemp -t install-wine.XXXXXX.log)"
 
+echo "Installing prerequisite packages..."
+
 sudo -H dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y 2>&1 >>$log
-# sudo -H dnf config-manager --set-enable PowerTools 2>&1 >>$log
+sudo -H subscription-manager repos --enable "codeready-builder-for-rhel-8-x86_64-rpms"
+# sudo -H dnf config-manager --set-enable PowerTools 2>&1 >>$log # CentOS8
+
 sudo -H rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro 2>&1 >>$log
 sudo -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm -y 2>&1 >>$log
 sudo -H dnf clean all 2>&1 >>$log
@@ -29,8 +33,8 @@ sudo -H dnf install glibc-devel libstdc++-devel icoutils openal-soft-devel preli
 
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.i686.rpm -y 2>&1 >>$log
-sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-0.3.6-4.el7.i686.rpm -y 2>&1 >>$log
-sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-devel-0.3.6-4.el7.i686.rpm -y 2>&1 >>$log
+sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-0.3.6-9.el7.i686.rpm -y 2>&1 >>$log
+sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-devel-0.3.6-9.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-4.8.7-8.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/libmng-1.0.10-14.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-x11-4.8.7-8.el7.i686.rpm -y 2>&1 >>$log
@@ -86,7 +90,7 @@ cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -mar
 	--prefix="$HOME/.local" --with-wine64="${WINE_BUILD_DIR_64}" && cd "$CWD"
 
 cd "${WINE_BUILD_DIR_32}" && make -j 4 && make install
-cd "${WINE_BUILD_DIR_64}" && make insntall
+cd "${WINE_BUILD_DIR_64}" && make install
 
 # wget https://dl.winehq.org/wine/wine-mono/6.0.0/wine-mono-6.0.0-x86.msi -O "$DOWNLOADS/wine-mono-6.0.0-x86.msi"
 # wine msiexec /i $DOWNLOADS/wine-mono-6.0.0-x86.msi

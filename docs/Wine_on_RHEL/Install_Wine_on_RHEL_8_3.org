@@ -38,8 +38,12 @@ log="$(mktemp -t install-wine.XXXXXX.log)"
 Now, the baseline libraries...
 #+NAME: prereq_pkgs
 #+begin_src shell :tangle Wine_on_RHEL.sh
+echo "Installing prerequisite packages..."
+
 sudo -H dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y 2>&1 >>$log
-# sudo -H dnf config-manager --set-enable PowerTools 2>&1 >>$log
+sudo -H subscription-manager repos --enable "codeready-builder-for-rhel-8-x86_64-rpms"
+# sudo -H dnf config-manager --set-enable PowerTools 2>&1 >>$log # CentOS8
+
 sudo -H rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro 2>&1 >>$log
 sudo -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm -y 2>&1 >>$log
 sudo -H dnf clean all 2>&1 >>$log
@@ -50,6 +54,8 @@ sudo -H dnf remove wine wine-* -y 2>&1 >>$log
 sudo -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y 2>&1 >>$log
 sudo -H dnf install glibc-devel.{i686,x86_64} libgcc.{i686,x86_64} libX11-devel.{i686,x86_64} freetype-devel.{i686,x86_64} gnutls-devel.{i686,x86_64} libxml2-devel.{i686,x86_64} libjpeg-turbo-devel.{i686,x86_64} libpng-devel.{i686,x86_64} libXrender-devel.{i686,x86_64} alsa-lib-devel.{i686,x86_64} glib2-devel.{i686,x86_64} libSM-devel.{i686,x86_64} -y 2>&1 >>$log
 #+end_src
+
+#+RESULTS: prereq_pkgs
 
 Some packages needs custom repo installation. They were available on RHEL 7 or CentOS 7 but discontinued on 8. This is why many institutions do not migrate easily.
 
@@ -68,8 +74,8 @@ sudo -H dnf install glibc-devel libstdc++-devel icoutils openal-soft-devel preli
 
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.i686.rpm -y 2>&1 >>$log
-sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-0.3.6-4.el7.i686.rpm -y 2>&1 >>$log
-sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-devel-0.3.6-4.el7.i686.rpm -y 2>&1 >>$log
+sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-0.3.6-9.el7.i686.rpm -y 2>&1 >>$log
+sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-devel-0.3.6-9.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-4.8.7-8.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/libmng-1.0.10-14.el7.i686.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-x11-4.8.7-8.el7.i686.rpm -y 2>&1 >>$log
@@ -162,7 +168,7 @@ Once everything's configured, let's do the usual stuff!
 
 #+begin_src shell :tangle Wine_on_RHEL.sh
 cd "${WINE_BUILD_DIR_32}" && make -j 4 && make install
-cd "${WINE_BUILD_DIR_64}" && make insntall
+cd "${WINE_BUILD_DIR_64}" && make install
 #+end_src
 
 
