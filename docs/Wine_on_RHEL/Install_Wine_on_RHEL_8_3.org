@@ -1,37 +1,50 @@
-#+TITLE: Install Wine On RHEL 8_3
+#+TITLE: Install Wine On RHEL 8.3
 #+AUTHOR: Taylor Shin
+#+OPTIONS: toc:2
 #+STARTUP: showeverything
 
-* Let's install Wine (currently version 6.2) on RHEL.
+* Wine on RHEL
 ** Main motivation
-We need to run some Windows tools on Linux since not many of Windows simulation tools are ported or written for UNIX system or similar ones.
-Since those simulators are not very graphics intensive, they are supposed to be easier to run than most of Steam games.
+We need to run some Windows tools on Linux since not a lot of Windows simulation tools are ported or written for UNIX system or similar OS.
+Good thing is, those circuit simulators are not so graphics intensive. Thus, they must be easier to run than most of Steam games.
 
-Let's start installing Wine emulator at first.
+Let's start installing Wine emulator, then!!
 
 ** Initial Set-Up with DNF
-As we know, building everything from ground is not a solid way to go, especially on somewhat established environment such as RHEL or CentOS. However, those distributions do not provide state-of-art Wine in their repositories for some weird reason. Stability? What stability do you need with a Windows emulator?
+As we know, building everything from scratch is not a solid way to go, especially on somewhat established environment such as RHEL or CentOS. However, those distributions do not provide state-of-art Wine in their repositories for some weird reason. Stability? What stability do you need with a Windows emulator?
 
 So, it is obvious we need to set up some method to actually 'compile' Wine codes. But compiling every single line of codes of dependency libraries is a time-consuming and head bonking job. These steps are adopted from [[https://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/][Techmint.com's guide]] and [[https://github.com/zma/usefulscripts/blob/master/script/install-wine-i686-centos8.sh][SysTutorials.com]].
 
 Thus, let's start with installing some baseline libraries...
 
-Let's install not so extremely new version of wine: 5.0.4
+The Wine version will not be so state-of-art since we need to ensure other important packages to catch up: such as Wine-mono and Wine-gecko.
+
+Wine version:
+#+NAME: ver_string
+#+begin_src string
+5.0.4
+#+end_src
 
 The preamble part is here:
 #+NAME: preambles
-#+begin_src shell :tangle Wine_on_RHEL.sh
+#+begin_src shell :tangle Wine_on_RHEL.sh :noweb yes
 #!/usr/bin/env bash -e
 CWD="$(pwd -P)"
 if [ ! -d "${CWD}/workspace" ]; then
 	mkdir -pv "${CWD}/workspace"
 fi
 WORKSPACE="${CWD}/workspace"
-WINE_VER="5.0.4"
+WINE_VER="<<ver_string>>"
 WINE_VER_MAJOR=$(echo ${WINE_VER} | cut -d'.' -f1)
 WINE_VER_URL=$(echo ${WINE_VER} | cut -d'.' -f1,2)
 
 log="$(mktemp -t install-wine.XXXXXX.log)"
+
+# Checking for wget
+if [ ! -x "$(command -v wget)" ]; then
+	echo "Oops! wget is a must!!"
+	exit 1
+fi
 #+end_src
 
 Now, the baseline libraries... This takes a lot of time. Also, there is a bit of diffeerence between RHEL8 and CentOS.
@@ -55,9 +68,7 @@ sudo -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y 2>&1 >>$
 sudo -H dnf install glibc-devel.{i686,x86_64} libgcc.{i686,x86_64} libX11-devel.{i686,x86_64} freetype-devel.{i686,x86_64} gnutls-devel.{i686,x86_64} libxml2-devel.{i686,x86_64} libjpeg-turbo-devel.{i686,x86_64} libpng-devel.{i686,x86_64} libXrender-devel.{i686,x86_64} alsa-lib-devel.{i686,x86_64} glib2-devel.{i686,x86_64} libSM-devel.{i686,x86_64} -y 2>&1 >>$log
 #+end_src
 
-#+RESULTS: prereq_pkgs
-
-Some packages needs custom repo installation. They were available on RHEL 7 or CentOS 7 but discontinued on 8. This is why many institutions do not migrate easily.
+Some packages needs custom repo installation. They were available on RHEL 7 or CentOS 7 but discontinued on 8. This is why many institutions do not migrate to newest distributions easily.
 
 1. isdn4k-utils-devel.i686
 2. pkgconfig.i686
@@ -67,6 +78,7 @@ Some packages needs custom repo installation. They were available on RHEL 7 or C
 They will be installed manually...
 #+NAME: prereq_pkgs_manual_install
 #+begin_src shell :tangle Wine_on_RHEL.sh
+echo "Installing some edge case 32bit packages..."
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/prelink-0.5.0-9.el7.x86_64.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.x86_64.rpm -y 2>&1 >>$log
 sudo -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.x86_64.rpm -y 2>&1 >>$log
@@ -91,6 +103,7 @@ sudo -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-devel-20
 
 sudo -H dnf install glibc-devel.i686 dbus-devel.i686 freetype-devel.i686 pulseaudio-libs-devel.i686 libX11-devel.i686 mesa-libGLU-devel.i686 libICE-devel.i686 libXext-devel.i686 libXcursor-devel.i686 libXi-devel.i686 libXxf86vm-devel.i686 libXrender-devel.i686 libXinerama-devel.i686 libXcomposite-devel.i686 libXrandr-devel.i686 mesa-libGL-devel.i686 mesa-libOSMesa-devel.i686 libxml2-devel.i686 zlib-devel.i686 gnutls-devel.i686 ncurses-devel.i686 sane-backends-devel.i686 libv4l-devel.i686 libgphoto2-devel.i686 libexif-devel.i686 lcms2-devel.i686 gettext-devel.i686 isdn4k-utils-devel.i686 cups-devel.i686 fontconfig-devel.i686 gsm-devel.i686 libjpeg-turbo-devel.i686 libtiff-devel.i686 unixODBC.i686 openldap-devel.i686 alsa-lib-devel.i686 audiofile-devel.i686 freeglut-devel.i686 giflib-devel.i686 gstreamer1-devel.i686 gstreamer1-plugins-base-devel.i686 libXmu-devel.i686 libXxf86dga-devel.i686 libieee1284-devel.i686 libpng-devel.i686 librsvg2-devel.i686 libstdc++-devel.i686 libusb-devel.i686 unixODBC-devel.i686 qt-devel.i686 libpcap-devel.i686 -y 2>&1 >>$log
 
+echo "Resolving conflicts..."
 sudo -H dnf clean all 2>&1 >>$log
 sudo -H dnf update --best --allowerasing -y 2>&1 >>$log
 sudo -H dnf builddep wine -y 2>&1 >>$log
@@ -112,35 +125,37 @@ sudo -H dnf install libXfixes-devel.{x86_64,i686} -y 2>&1 >>$log
 #+RESULTS:
 
 ** Downloading Wine
-
 Ok, we can download Wine source code from the official [[https://www.winehq.org/][Wine web site]].
 #+begin_src shell :tangle Wine_on_RHEL.sh
-DOWNLOADS="$WORKSPACE/downloads"
+DOWNLOADS="${WORKSPACE}/downloads"
 if [ ! -d "$DOWNLOADS" ]; then
 	mkdir -pv "${DOWNLOADS}"
 fi
-wget "http://dl.winehq.org/wine/source/${WINE_VER_URL}/wine-${WINE_VER}.tar.xz" -O "$DOWNLOADS/wine-$WINE_VER.tar.xz"
+wget "http://dl.winehq.org/wine/source/${WINE_VER_URL}/wine-${WINE_VER}.tar.xz" -O "${DOWNLOADS}/wine-${WINE_VER}.tar.xz" 2>&1 >>$log
 #+end_src
+
+#+RESULTS:
 
 Now, extract the tarball!
 #+begin_src shell :tangle Wine_on_RHEL.sh
-if [ ! -d "$WORKSPACE/src" ]; then
-	mkdir -pv "$WORKSPACE/src"
+SRC_DIR="${WORKSPACE}/src"
+if [ ! -d "${SRC_DIR}" ]; then
+	mkdir -pv "${SRC_DIR}"
 fi
-tar xf "$DOWNLOADS/wine-${WINE_VER}.tar.xz" -C "$WORKSPACE/src/"
-WINE_SRC_DIR="$CWD/workspace/src/wine-${WINE_VER}"
+tar xf "${DOWNLOADS}/wine-${WINE_VER}.tar.xz" -C "${SRC_DIR}"
+WINE_SRC_DIR="${SRC_DIR}/wine-${WINE_VER}"
 #+end_src
 
 ** Compiling Wine
-As usual, we will install Wine on the Homebrew directory (default is $HOME/.local) so that we can manage it locally. We will compile 64 bit first to give reference to 32 bit configuration. After all, Windows runs both 32 bit and 64 bit core simultaneously, which makes compatibility with Linux or any UNIX like OS.
+As usual, we will install Wine on the Homebrew directory (default is =$HOME/.local=) so that we can manage it locally. We will compile 64 bit first to give reference to 32 bit configuration. After all, Windows runs both 32 bit and 64 bit core simultaneously, which makes compatibility with Linux or any UNIX like OS.
 
-Good thing is, we are running this script on RHEL or CentOS or their clones. Ubuntu has some trouble with separating 64 bit and 32 bit libraries. In fact, Ubuntu does not even have lib64 system directory but rather put everything into just lib, even in 64 bit OS. This is not a bad thing since everything is migrating to 64 bit architecture. We do not want to provide additional packages for deprecated 32 bit architectures.
+Good thing is, we are running this script on RHEL or CentOS or their clones. Ubuntu has some trouble with separating 64bit and 32bit libraries. In fact, Ubuntu does not even have =lib64= system directory but rather put everything into just =lib=, even in 64bit OS. This is not a bad thing since everything is migrating to 64bit architecture. We do not want to provide additional packages for deprecated 32bit architectures.
 
-I believe WineHq will find out how to mitigate this problem once almost all Linux distributions drop 32 bit support. Legacy codes always cause trouble.
+I believe [[https://www.winehq.org/][WineHq]] will find out how to mitigate this problem once almost all Linux distributions dropped 32bit support. Legacy codes always cause trouble, anyway.
 
 #+begin_src shell :tangle Wine_on_RHEL.sh
-WINE_BUILD_DIR_32="$WORKSPACE/build/wine-${WINE_VER}-i686-build"
-WINE_BUILD_DIR_64="$WORKSPACE/build/wine-${WINE_VER}-x86_64-build"
+WINE_BUILD_DIR_32="${WORKSPACE}/build/wine-${WINE_VER}-i686-build"
+WINE_BUILD_DIR_64="${WORKSPACE}/build/wine-${WINE_VER}-x86_64-build"
 if [ ! -d "$WORKSPACE/build" ]; then
 	mkdir -pv "$WORKSPACE/build"
 fi
@@ -150,35 +165,34 @@ mkdir -pv "$WINE_BUILD_DIR_64"
 
 Let's compile 64 bit Wine first...
 #+begin_src shell :tangle Wine_on_RHEL.sh
-echo "Building 64 bit Wine..."
-cd "$WINE_BUILD_DIR_64" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
-	--prefix="$HOME/.local" --enable-win64 && cd "$CWD"
+echo "Configuring 64 bit Wine..."
+cd "$WINE_BUILD_DIR_64" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "${WINE_SRC_DIR}/configure" \
+	--prefix="$HOME/.local" --enable-win64 && cd "$CWD" 2>&1 >>$log
 #+end_src
 
 Let's just compile 64 bit wine.
 #+begin_src shell :tangle Wine_on_RHEL.sh
-cd "${WINE_BUILD_DIR_64}" && make -j4 && cd "${CWD}"
+echo "Building 64 bit Wine (Wine64)..."
+cd "${WINE_BUILD_DIR_64}" && make -j4 && cd "${CWD}" 2>&1 >>$log
 #+end_src
 
-Now we need to supply correct environmental variables to the configure script. We'll just use my favorite rice up stuff. Note that gcc and g++ must be able to compile with -m32 flag, or 32bit capable.
+Now we need to supply correct environmental variables to the configure script. We'll just use my favorite rice up stuff. Note that gcc and g++ must be able to compile with =-m32= flag, or 32bit capable. We are sticking to the system gcc since installing those =i686= packages ensure 32bit code cross compilation.
 
 #+begin_src shell :tangle Wine_on_RHEL.sh
-echo "Building 32 bit Wine..."
-cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib" "$WINE_SRC_DIR/configure" \
-	--prefix="$HOME/.local" --with-wine64="${WINE_BUILD_DIR_64}" && cd "$CWD"
+echo "Configuring 32 bit Wine..."
+cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib" "${WINE_SRC_DIR}/configure" \
+	--prefix="$HOME/.local" --with-wine64="${WINE_BUILD_DIR_64}" && cd "$CWD" 2>&1 >>$log
 #+end_src
 
 Once everything's configured, let's do the usual stuff!
 
 #+begin_src shell :tangle Wine_on_RHEL.sh
-cd "${WINE_BUILD_DIR_32}" && make -j 4 && make install
-cd "${WINE_BUILD_DIR_64}" && make install
+echo "Building 32 bit Wine... and Installing it into prefix directory."
+cd "${WINE_BUILD_DIR_32}" && make -j 4 && make install 2>&1 >>$log
+cd "${WINE_BUILD_DIR_64}" && make install 2>&1 >>$log
 #+end_src
 
-
-
 ** Wine Gecko and Mono
-
 >>> Disabled for now. <<<
 --> Wine actually tries to install them automatically.
 
@@ -202,17 +216,32 @@ And Wine Gecko
 
 
 ** Closing up
-If the compilation does not confront more hiccups, it will end up wine executable at =$HOME/.local/bin=. Now let's try to install LTSpice with it!
+If the compilation does not confront more hiccups, it will end up wine executable at =$HOME/.local/bin=. Now let's try to install [[https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html][LTSpice]] with it!
 
 Then clean up everything! (Not mandatory)
 #+begin_src shell :tangle Wine_on_RHEL.sh
-rm -rf "$WORKSPACE"
+#rm -rf "${WORKSPACE}"
+#echo "Cleaned up all the build craps! Consider installing Winetricks."
 #+end_src
 
-Also, consider installing Winetricks!
+Checking up installed wine.
+#+begin_src shell :tangle Wine_on_RHEL.sh
+echo "Checking the installation results..."
+echo "Wine 32 bit is..."
+file "$(command -v wine)"
+echo "Wine 32 bit version is:"
+wine --version
+echo
+echo "Wine 64 bit is..."
+file "$(command -v wine64)"
+echo "Wine 64 bit version is:"
+wine64 --version
+#+end_src
 
-** Winetricks
-Apparently, installing wine itself isn't really enough. We need to install more stuffs such as Windows fonts and Visual Studio Runtime, blah blah stuffs. So, Installing Winetricks is a must!
+Also, consider installing Winetricks! It will help you install all the interesting packages easily.
+
+* Winetricks
+Apparently, installing wine itself isn't really enough. We need to install more stuffs such as Windows fonts and Visual Studio .Net Runtime, blah blah stuffs. So, Installing [[https://wiki.winehq.org/Winetricks][Winetricks]] is a must!
 
 #+begin_src shell :tangle Winetricks.sh
 #!/usr/bin/env bash -e
@@ -224,3 +253,4 @@ wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetric
 chmod +x "$CWD/workspace/downloads/winetricks"
 cp "$CWD/workspace/downloads/winetricks" "$HOME/.local/bin/winetricks"
 #+end_src
+
