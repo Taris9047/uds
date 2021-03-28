@@ -21,6 +21,7 @@ sudo -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-r
 sudo -H dnf clean all 2>&1 >>$log
 sudo -H dnf update --best --allowerasing -y 2>&1 >>$log
 
+echo "Removing wine from official repo."
 sudo -H dnf remove wine wine-* -y 2>&1 >>$log
 
 sudo -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y 2>&1 >>$log
@@ -80,13 +81,13 @@ mkdir -pv "$WINE_BUILD_DIR_32"
 mkdir -pv "$WINE_BUILD_DIR_64"
 
 echo "Building 64 bit Wine..."
-cd "$WINE_BUILD_DIR_64" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" CXXFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
+cd "$WINE_BUILD_DIR_64" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
 	--prefix="$HOME/.local" --enable-win64 && cd "$CWD"
 
 cd "${WINE_BUILD_DIR_64}" && make -j4 && cd "${CWD}"
 
 echo "Building 32 bit Wine..."
-cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" CXXFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
+cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib" "$WINE_SRC_DIR/configure" \
 	--prefix="$HOME/.local" --with-wine64="${WINE_BUILD_DIR_64}" && cd "$CWD"
 
 cd "${WINE_BUILD_DIR_32}" && make -j 4 && make install

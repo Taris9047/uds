@@ -12,14 +12,13 @@ Let's start installing Wine emulator at first.
 ** Initial Set-Up with DNF
 As we know, building everything from ground is not a solid way to go, especially on somewhat established environment such as RHEL or CentOS. However, those distributions do not provide state-of-art Wine in their repositories for some weird reason. Stability? What stability do you need with a Windows emulator?
 
-So, it is obvious we need to set up some method to actually 'compile' Wine codes. But compiling every single line of codes of dependency libraries is a time-consuming and head bonking job. These steps are adopted from [[https://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/][Techmint.com's guide]].
+So, it is obvious we need to set up some method to actually 'compile' Wine codes. But compiling every single line of codes of dependency libraries is a time-consuming and head bonking job. These steps are adopted from [[https://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/][Techmint.com's guide]] and [[https://github.com/zma/usefulscripts/blob/master/script/install-wine-i686-centos8.sh][SysTutorials.com]].
 
 Thus, let's start with installing some baseline libraries...
 
-The shell script starts with she-bang.
-
 Let's install not so extremely new version of wine: 5.0.4
 
+The preamble part is here:
 #+NAME: preambles
 #+begin_src shell :tangle Wine_on_RHEL.sh
 #!/usr/bin/env bash -e
@@ -35,7 +34,7 @@ WINE_VER_URL=$(echo ${WINE_VER} | cut -d'.' -f1,2)
 log="$(mktemp -t install-wine.XXXXXX.log)"
 #+end_src
 
-Now, the baseline libraries...
+Now, the baseline libraries... This takes a lot of time. Also, there is a bit of diffeerence between RHEL8 and CentOS.
 #+NAME: prereq_pkgs
 #+begin_src shell :tangle Wine_on_RHEL.sh
 echo "Installing prerequisite packages..."
@@ -49,6 +48,7 @@ sudo -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-r
 sudo -H dnf clean all 2>&1 >>$log
 sudo -H dnf update --best --allowerasing -y 2>&1 >>$log
 
+echo "Removing wine from official repo."
 sudo -H dnf remove wine wine-* -y 2>&1 >>$log
 
 sudo -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y 2>&1 >>$log
@@ -132,7 +132,11 @@ WINE_SRC_DIR="$CWD/workspace/src/wine-${WINE_VER}"
 #+end_src
 
 ** Compiling Wine
-As usual, we will install Wine on the Homebrew directory (default is $HOME/.local) so that we can manage it locally.
+As usual, we will install Wine on the Homebrew directory (default is $HOME/.local) so that we can manage it locally. We will compile 64 bit first to give reference to 32 bit configuration. After all, Windows runs both 32 bit and 64 bit core simultaneously, which makes compatibility with Linux or any UNIX like OS.
+
+Good thing is, we are running this script on RHEL or CentOS or their clones. Ubuntu has some trouble with separating 64 bit and 32 bit libraries. In fact, Ubuntu does not even have lib64 system directory but rather put everything into just lib, even in 64 bit OS. This is not a bad thing since everything is migrating to 64 bit architecture. We do not want to provide additional packages for deprecated 32 bit architectures.
+
+I believe WineHq will find out how to mitigate this problem once almost all Linux distributions drop 32 bit support. Legacy codes always cause trouble.
 
 #+begin_src shell :tangle Wine_on_RHEL.sh
 WINE_BUILD_DIR_32="$WORKSPACE/build/wine-${WINE_VER}-i686-build"
@@ -147,7 +151,7 @@ mkdir -pv "$WINE_BUILD_DIR_64"
 Let's compile 64 bit Wine first...
 #+begin_src shell :tangle Wine_on_RHEL.sh
 echo "Building 64 bit Wine..."
-cd "$WINE_BUILD_DIR_64" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" CXXFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
+cd "$WINE_BUILD_DIR_64" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
 	--prefix="$HOME/.local" --enable-win64 && cd "$CWD"
 #+end_src
 
@@ -160,7 +164,7 @@ Now we need to supply correct environmental variables to the configure script. W
 
 #+begin_src shell :tangle Wine_on_RHEL.sh
 echo "Building 32 bit Wine..."
-cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" CXXFLAGS="-O3 -march=native -fomit-frame-pointer -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib -Wl,-rpath=$HOME/.local/lib64" "$WINE_SRC_DIR/configure" \
+cd "$WINE_BUILD_DIR_32" && CC="/usr/bin/gcc" CXX="/usr/bin/g++" CFLAGS="-O3 -march=native -pipe" CXXFLAGS="-O3 -march=native -pipe" LDFLAGS="-Wl,-rpath=$HOME/.local/lib" "$WINE_SRC_DIR/configure" \
 	--prefix="$HOME/.local" --with-wine64="${WINE_BUILD_DIR_64}" && cd "$CWD"
 #+end_src
 

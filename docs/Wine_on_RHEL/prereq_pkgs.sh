@@ -20,6 +20,7 @@ sudo -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-r
 sudo -H dnf clean all 2>&1 >>$log
 sudo -H dnf update --best --allowerasing -y 2>&1 >>$log
 
+echo "Removing wine from official repo."
 sudo -H dnf remove wine wine-* -y 2>&1 >>$log
 
 sudo -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y 2>&1 >>$log
