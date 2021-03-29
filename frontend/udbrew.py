@@ -252,7 +252,7 @@ class GetPackages(DistroPkgMap):
 
         this_dir = os.path.realpath(__file__)
         data_dir = os.path.realpath(
-            os.path.join(os.path.dirname(this_dir), "..", "data")
+            os.path.join(os.path.dirname(this_dir), ".", "data")
         )
         pkg_list_data_fname = self.GetPackageFileName()
 
