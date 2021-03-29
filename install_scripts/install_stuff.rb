@@ -79,7 +79,7 @@ class InstallStuff < RunConsole
       env_txt += "#{k}: #{flag}\n"
     end
     
-    info_txt = %{
+    info_txt = %Q{
 >> Installation Destination:
 #{@prefix}
 

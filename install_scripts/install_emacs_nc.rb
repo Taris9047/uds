@@ -72,7 +72,7 @@ class InstEmacsNC < InstallStuff
     elsif UTILS.which("gcc-#{$newest_gcc_ver}")
       @env["CC"] = "gcc-#{$newest_gcc_ver}"
     else
-      @env["CC"] = 'gcc'
+      @env["CC"] = UTILS.which('gcc')
     end
     if UTILS.which('g++-jit')
       @env["CXX"] = 'g++-jit'
@@ -81,11 +81,11 @@ class InstEmacsNC < InstallStuff
     elsif UTILS.which("gcc-#{$newest_gcc_ver}")
       @env["CXX"] = "gcc-#{$newest_gcc_ver}"
     else
-      @env["CXX"] = 'g++'
+      @env["CXX"] = UTILS.which('g++')
     end
-
+    puts UTILS.which('gcc')
     # Detect whether current gcc has libgccjit capability.
-    @gcc_prefix = File.realpath(File.join(File.dirname(UTILS.which(@env["CC"])), '..'))
+    @gcc_prefix = File.realpath(File.join(File.dirname(@env["CC"]), '..'))
 
     if gcc_jit_found
       @env["C_INCLUDE_PATH"] = "#{@gcc_prefix}/include:"+@env["C_INCLUDE_PATH"]
@@ -97,7 +97,9 @@ class InstEmacsNC < InstallStuff
       # further since they keep them in pretty peculiar places.
       search_result = `find #{@gcc_prefix} | grep libgccjit`
       if search_result.include? 'libgccjit'
-        @env["LDFLAGS"] += " "+["-Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"].join(' ')
+        @env["CFLAGS"] += " -I#{File.join(@prefix,'include')}"
+        @env["CXXFLAGS"] += " -I#{File.join(@prefix,'include')}"
+        @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
         libgccjit_found = true
         return libgccjit_found
       end
@@ -149,11 +151,17 @@ class InstEmacsNC < InstallStuff
       inst_cmd = "make install"
     end
 
+    env = []
+    @env.keys.each do |k|
+      env += ["#{k}=\"#{@env[k]}\""]
+    end
+
     # Ok let's roll!!
     cmds = [
       "cd #{src_clone_folder}", "&&",
       "./autogen.sh", "&&",
       "cd #{src_build_folder}", "&&",
+      env.join(' '),
       File.join(src_clone_folder,"configure"), opts.join(" "), "&&",
       "nice make -j#{@Processors.to_s}", "&&",
       inst_cmd

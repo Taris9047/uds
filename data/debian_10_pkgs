@@ -64,6 +64,7 @@ libperl-dev
 libm17n-dev
 libgtk-3-dev
 libwebkit2gtk-4.0-dev
+libjansson-dev
 libgccjit0
 libgccjit-8-dev
 texinfo

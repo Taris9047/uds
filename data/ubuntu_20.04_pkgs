@@ -68,6 +68,7 @@ gcc-10
 g++-10
 libgccjit0
 libgccjit-10-dev
+libjansson-dev
 texinfo
 clang
 libgnutls*-dev
