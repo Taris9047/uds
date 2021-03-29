@@ -431,7 +431,7 @@ class UDSBrew(RunCmd):
             )
             p_args_inst.add_argument(
                 "-q",
-                "-quiet",
+                "--quiet",
                 action="store_true",
                 default=False,
                 help="Prefers not so verbose.",
@@ -453,6 +453,10 @@ class UDSBrew(RunCmd):
             if parsed_inst_args.quiet:
                 opt_verbose = ""
 
+            if len(parsed_inst_args.pkgs_to_install) == 0:
+                print("Missing packages to install!!")
+                sys.exit(0)
+                
             for pkg in parsed_inst_args.pkgs_to_install:
                 self.Run(f"ruby ./unix_dev_setup {opt_verbose} {opt_sgcc} {pkg}")
 
