@@ -45,8 +45,7 @@ class RunCmd(object):
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
         for line in iter(p.stdout.readline, b""):
             l = line.decode("utf-8").strip()
-            if l:
-                print(l)
+            sys.stdout.buffer.write(line)
             sys.stdout.flush()
             log += "{}{}".format(l, os.linesep)
         p.stdout.close()
@@ -110,7 +109,7 @@ class GetDistro(object):
         try:
             return self.rel_data["ID_LIKE"]
         except KeyError:
-            return ""
+            return self.ID()
 
 
 ### Version Parsor ###
@@ -202,6 +201,7 @@ class DistroPkgMap(GetDistro):
             "debian": {
                 "ubuntu_20.04": "ubuntu_20.04_pkgs",
                 "ubuntu_20.10": "ubuntu_20.10_pkgs",
+                "debian_10": "debian_10_pkgs",
             },
             "suse": {
                 "opensuse-leap_15.2": "opensuse_15_pkgs",
@@ -310,6 +310,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_with_apt()
 
     def install_prereq_ubuntu_18(self):
+        self.install_with_apt()
+        
+    def install_prereq_debian_10(self):
         self.install_with_apt()
 
     def install_prereq_linuxmint_20(self):
