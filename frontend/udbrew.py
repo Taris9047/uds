@@ -226,14 +226,15 @@ class DistroPkgMap(GetDistro):
         distro_id = self.ID()
         try:
             ver_split = self.Version().split(".")
+            int(ver_split[0])
             if len(ver_split) >= 2:
                 ver_major = ver_split[0]
                 ver_minor = ver_split[1]
                 distro_key = f"{distro_id}_{ver_major}.{ver_minor}"
             else:
-                ver_major = self.Version()
+                ver_major = ver_split[0]
                 distro_key = f"{distro_id}_{ver_major}"
-        except KeyError:
+        except ValueError:
             distro_key = "rolling"
 
         return self.distro_to_pkgfile_map[base][distro_key]
@@ -309,7 +310,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_prereq_ubuntu_18(self):
         self.install_with_apt()
-        
+
     def install_prereq_debian_10(self):
         self.install_with_apt()
 
@@ -384,14 +385,12 @@ class InstallSystemRubyGems(RunCmd):
         self.install_system_ruby_gems()
 
     def install_system_ruby_gems(self):
-        self.Run(
-            f"sudo -H {self.system_gem} install {' '.join(self.gems_to_install)}")
+        self.Run(f"sudo -H {self.system_gem} install {' '.join(self.gems_to_install)}")
         if len(list(self.gems_to_install_ver.keys())) > 0:
             gems = list(self.gems_to_install_ver.keys())
             vers = [self.gems_to_install_ver[_] for _ in gems]
             for gem, ver in zip(gems, vers):
-                self.Run(
-                    f"sudo -H {self.system_gem} install {gem} -v {ver}")
+                self.Run(f"sudo -H {self.system_gem} install {gem} -v {ver}")
 
 
 class UDSBrew(RunCmd):
@@ -399,7 +398,7 @@ class UDSBrew(RunCmd):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.find_out_version()
-        
+
         self.args = args
         self.parse_args()
 
@@ -454,11 +453,11 @@ class UDSBrew(RunCmd):
                 opt_verbose = ""
 
             pkgs_to_install = set(parsed_inst_args.pkgs_to_install)
-            
+
             if len(pkgs_to_install) == 0:
                 print("Missing packages to install!!")
                 sys.exit(0)
-            
+
             for pkg in pkgs_to_install:
                 self.Run(f"ruby ./unix_dev_setup {opt_verbose} {opt_sgcc} {pkg}")
 
@@ -559,23 +558,26 @@ class UDSBrew(RunCmd):
     ### finds unix_dev_setup.rb to extract version info.
     ###
     def find_out_version(self):
-        uds_backend = './unix_dev_setup.rb'
-        if os.path.exists('./unix_dev_setup'):
-            uds_backend = './unix_dev_setup'
+        uds_backend = "./unix_dev_setup.rb"
+        if os.path.exists("./unix_dev_setup"):
+            uds_backend = "./unix_dev_setup"
 
         self.version = None
-            
-        with open(uds_backend, 'r') as fp:
+
+        with open(uds_backend, "r") as fp:
             while True:
                 l = fp.readline()
-                if '$version' in l:
-                    ver = l.split('=')[-1]
+                if "$version" in l:
+                    ver = l.split("=")[-1]
                     self.version = eval(ver)
                     break
 
             if not self.version:
                 print("Unable to obtain version information from backend!!")
-                print("> Care to check up whether we have unix_dev_setup in the same path?")
+                print(
+                    "> Care to check up whether we have unix_dev_setup in the same path?"
+                )
+
 
 ### Calling main function ###
 if __name__ == "__main__":
