@@ -42,10 +42,10 @@ class RunCmd(object):
         log = ""
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
         for line in iter(p.stdout.readline, b""):
-            l = line.decode("utf-8").strip()
+            ln = line.decode("utf-8").strip()
             sys.stdout.buffer.write(line)
             sys.stdout.flush()
-            log += "{}{}".format(l, os.linesep)
+            log += "{}{}".format(ln, os.linesep)
         p.stdout.close()
         p.wait()
         return log
@@ -59,8 +59,8 @@ class RunCmd(object):
         log = ""
         p = sbp.Popen(cmd_to_run, shell=True, stdout=sbp.PIPE)
         for line in iter(p.stdout.readline, b""):
-            l = line.decode("utf-8").strip()
-            log += "{}{}".format(l, os.linesep)
+            ln = line.decode("utf-8").strip()
+            log += "{}{}".format(ln, os.linesep)
         p.stdout.close()
         p.wait()
         return log
@@ -76,10 +76,10 @@ class GetDistro(object):
             rinfo_str = fp.read()
 
         self.rel_data = {}
-        for l in rinfo_str.split(os.linesep):
-            if not l:
+        for ln in rinfo_str.split(os.linesep):
+            if not ln:
                 continue
-            label, item = l.split("=")
+            label, item = ln.split("=")
             self.rel_data[label] = item.replace('"', "")
 
     def __getitem__(self, info_key):
