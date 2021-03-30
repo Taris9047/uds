@@ -3,6 +3,7 @@ flex
 bison 
 zlib1g 
 zlib1g-dev 
+policykit-1-gnome
 openssl 
 libssl-dev 
 libsqlite3-dev 

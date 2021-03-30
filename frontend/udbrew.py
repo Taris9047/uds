@@ -6,8 +6,6 @@ import re
 import argparse
 import subprocess as sbp
 
-version = ["0", "1", "0"]
-
 # Gems list for system.
 gems_system_ruby = ["json", "ruby-progressbar", "tty-spinner", "lolcat", "open3"]
 
@@ -387,23 +385,21 @@ class InstallSystemRubyGems(RunCmd):
 
     def install_system_ruby_gems(self):
         self.Run(
-            "sudo -H {} install {}".format(
-                self.system_gem, " ".join(self.gems_to_install)
-            )
-        )
+            f"sudo -H {self.system_gem} install {' '.join(self.gems_to_install)}")
         if len(list(self.gems_to_install_ver.keys())) > 0:
             gems = list(self.gems_to_install_ver.keys())
             vers = [self.gems_to_install_ver[_] for _ in gems]
             for gem, ver in zip(gems, vers):
                 self.Run(
-                    "sudo -H {} install {} -v {}".format(self.system_gem, gem, ver)
-                )
+                    f"sudo -H {self.system_gem} install {gem} -v {ver}")
 
 
 class UDSBrew(RunCmd):
     def __init__(self, args):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
+        self.find_out_version()
+        
         self.args = args
         self.parse_args()
 
@@ -418,7 +414,11 @@ class UDSBrew(RunCmd):
             self.Run(f"ruby ./unix_dev_setup purge")
             sys.exit(0)
 
-        if self.p_args.install is not []:
+        if self.p_args.version:
+            self.show_version()
+            sys.exit(0)
+
+        if len(self.p_args.install) > 0:
             pkgs_to_install = set(self.p_args.install)
 
             p_args_inst = argparse.ArgumentParser()
@@ -453,16 +453,18 @@ class UDSBrew(RunCmd):
             if parsed_inst_args.quiet:
                 opt_verbose = ""
 
-            if len(parsed_inst_args.pkgs_to_install) == 0:
+            pkgs_to_install = set(parsed_inst_args.pkgs_to_install)
+            
+            if len(pkgs_to_install) == 0:
                 print("Missing packages to install!!")
                 sys.exit(0)
-                
-            for pkg in parsed_inst_args.pkgs_to_install:
+            
+            for pkg in pkgs_to_install:
                 self.Run(f"ruby ./unix_dev_setup {opt_verbose} {opt_sgcc} {pkg}")
 
             sys.exit(0)
 
-        if self.p_args.uninstall is not []:
+        if len(self.p_args.uninstall) > 0:
             pkgs_to_uninstall = set(self.p_args.uninstall)
 
             for pkg in pkgs_to_uninstall:
@@ -507,7 +509,6 @@ class UDSBrew(RunCmd):
             default=False,
             help="Cleans up every single craps!! To start anew!!!",
         )
-
         p.add_argument(
             "-pr",
             "--prerequisite",
@@ -517,6 +518,7 @@ class UDSBrew(RunCmd):
         )
         p.add_argument(
             "-v",
+            "--version",
             action="store_true",
             dest="version",
             default=False,
@@ -543,18 +545,37 @@ class UDSBrew(RunCmd):
             self.p_args = p.parse_args(self.args[1:])
         else:
             p.print_help()
-            sys.exit(1)
+            sys.exit(0)
 
     ### Help file
     def show_help(self):
         print("<Put help message here>")
-        sys.exit(0)
 
     ### Show version
     def show_version(self):
-        print(f"unix_dev_setup {'.'.join(version)}")
-        sys.exit(0)
+        print(f"unix_dev_setup {'.'.join(self.version)}")
 
+    ### Set Version ###
+    ### finds unix_dev_setup.rb to extract version info.
+    ###
+    def find_out_version(self):
+        uds_backend = './unix_dev_setup.rb'
+        if os.path.exists('./unix_dev_setup'):
+            uds_backend = './unix_dev_setup'
+
+        self.version = None
+            
+        with open(uds_backend, 'r') as fp:
+            while True:
+                l = fp.readline()
+                if '$version' in l:
+                    ver = l.split('=')[-1]
+                    self.version = eval(ver)
+                    break
+
+            if not self.version:
+                print("Unable to obtain version information from backend!!")
+                print("> Care to check up whether we have unix_dev_setup in the same path?")
 
 ### Calling main function ###
 if __name__ == "__main__":
