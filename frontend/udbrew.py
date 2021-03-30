@@ -393,6 +393,98 @@ class InstallSystemRubyGems(RunCmd):
                 self.Run(f"sudo -H {self.system_gem} install {gem} -v {ver}")
 
 
+### Installs Some pre-built editors ###
+###
+### Sublie-text, Atom, VSCode, etc.
+###
+class InstallEditors(GetDistro, RunCmd):
+
+    pkgman_to_name_map = {
+        'apt': ['ubuntu', 'debian', 'elementary OS'],
+        'dnf': ['fedora', 'Red Hat Enterprise Linux', 'CentOS Linux'],
+        'zypper': ['openSUSE Leap'],
+        'pacman': ['Manjaro Linux', 'Arch Linux']
+    }
+    
+    def __init__(self, list_of_editors_to_install=None):
+        GetDistro.__init__(self)
+        RunCmd.__init__(self, shell_type="bash", verbose=True)
+        if not list_of_editors_to_install:
+            print("Nothing to do!")
+            sys.exit(0)
+
+        # Let's determine what kind of package manager this distro is
+        # based on.
+        name = self.rel_data["Name"]
+        pkg_mans = self.pkgman_to_name_map.keys()
+
+        pkgman = None
+        for pm in pkg_mans:
+            if name in self.pkgman_to_name_map[pm]:
+                pkgman = str(pm)
+                break
+
+        editors_to_inst = []
+        for edi in list_of_editors_to_install:
+            if edi.lower() == 'sublime-text':
+                editors_to_inst.append('subl')
+            elif edi.lower() == 'atom':
+                editors_to_inst.append(edi.lower())
+            elif edi.lower() == 'vscode':
+                editors_to_inst.append('vscode')
+
+        self.methods_to_run = []
+        for edi in editors_to_inst:
+            self.methods_to_run.append(f'install_{edi}_{pkgman}')
+
+        self.RunInstall()
+
+    def RunInstall(self):
+        for method in self.methods_to_run:
+            self.switcher(method)
+
+    def switcher(self, method_to_run):
+        return getattr(self, method_to_run)()
+
+    ### Now those Installation methods... ###
+    ### As this moment, we can install...
+    ### sublime_text, atom, vscode
+    ###
+    ### with apt, dnf, and pacman
+    ###
+    ### TODO Fill out those dummies!!
+    def install_subl_apt(self):
+        self.Run("")
+
+    def install_subl_dnf(self):
+        self.Run("")
+
+    def install_subl_pacman(self):
+        self.Run("")
+
+    def install_atom_apt(self):
+        self.Run("")
+
+    def install_atom_dnf(self):
+        self.Run("")
+        
+    def install_atom_pacman(self):
+        self.Run("")
+        
+    def install_vscode_apt(self):
+        self.Run("")
+
+    def install_vscode_dnf(self):
+        self.Run("")
+
+    def install_vscode_pacman(self):
+        self.Run("")
+        
+
+### Front End main class ###
+###
+### Organizes all the dirty jobs.
+### 
 class UDSBrew(RunCmd):
     def __init__(self, args):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
@@ -415,6 +507,10 @@ class UDSBrew(RunCmd):
 
         if self.p_args.version:
             self.show_version()
+            sys.exit(0)
+
+        if len(self.p_args.editor) > 0:
+            InstallEditors(self.p_args.editor)
             sys.exit(0)
 
         if len(self.p_args.install) > 0:
@@ -538,6 +634,15 @@ class UDSBrew(RunCmd):
             choices=["sgcc", "verbose"],
             default=[],
             help="Installation options.",
+        )
+        p.add_argument(
+            "-ed",
+            "--editors",
+            metavar="<external_editor>",
+            nargs="?",
+            choices=["sublime-text", "vscode", "atom"],
+            default=[],
+            help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom."
         )
 
         if len(self.args) > 1:
