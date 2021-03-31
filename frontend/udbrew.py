@@ -435,7 +435,7 @@ class InstallEditors(GetDistro, RunCmd):
 
         # Let's determine what kind of package manager this distro is
         # based on.
-        name = self.rel_data["Name"]
+        name = self.rel_data["ID"]
         pkg_mans = self.pkgman_to_name_map.keys()
 
         pkgman = None
@@ -449,7 +449,7 @@ class InstallEditors(GetDistro, RunCmd):
             if edi.lower() == "sublime-text":
                 editors_to_inst.append("subl")
             elif edi.lower() == "atom":
-                editors_to_inst.append(edi.lower())
+                editors_to_inst.append("atom")
             elif edi.lower() == "vscode":
                 editors_to_inst.append("vscode")
 
@@ -467,17 +467,20 @@ class InstallEditors(GetDistro, RunCmd):
         return getattr(self, method_to_run)()
 
     def program_exists(self, program=None):
-        if not program:
-            return False
+        def is_exe(fpath):
+            return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
-        try:
-            sbp.call([program])
-            return True
-        except OSError as e:
-            if e.errno == os.errno.ENOENT:
-                return False
+        fpath, fname = os.path.split(program)
+        if fpath:
+            if is_exe(program):
+                return True
+        else:
+            for path in os.environ["PATH"].split(os.pathsep):
+                exe_file = os.path.join(path, program)
+                if is_exe(exe_file):
+                    return True
 
-        return True
+        return False
 
     ### Now those Installation methods... ###
     ### As this moment, we can install...
@@ -497,7 +500,7 @@ class InstallEditors(GetDistro, RunCmd):
 
         else:
             print("Updating Sublime Text ...")
-            self.Run("apt-get -y update && sudo apt-get -y upgrade")
+            self.Run("sudo apt-get -y update && sudo apt-get -y upgrade")
 
     def install_subl_dnf(self):
         if not self.program_exists("subl"):
@@ -552,7 +555,10 @@ class InstallEditors(GetDistro, RunCmd):
 
     def install_atom_dnf(self):
         print("Installilng Atom ...")
-        self.Run("")
+
+        self.Run(
+            "sudo dnf install -y $(curl -sL \"https://api.github.com/repos/atom/atom/releases/latest\" | grep \"https.*atom.x86_64.rpm\" | cut -d '\"' -f 4); ATOM_INSTALLED_VERSION=\$(rpm -qi atom | grep \"Version\" | cut -d ':' -f 2 | cut -d ' ' -f 2); ATOM_LATEST_VERSION=$(curl -sL \"https://api.github.com/repos/atom/atom/releases/latest\" | grep -E \"https.*atom-amd64.tar.gz\" | cut -d '\"' -f 4 | cut -d '/' -f 8 | sed 's/v//g'); if [[ $ATOM_INSTALLED_VERSION < $ATOM_LATEST_VERSION ]]; then sudo dnf install -y https://github.com/atom/atom/releases/download/v${ATOM_LATEST_VERSION}/atom.x86_64.rpm;fi"
+        )
 
     def install_atom_pacman(self):
         print("Installilng Atom ...")
@@ -647,8 +653,8 @@ class UDSBrew(RunCmd):
             self.show_version()
             sys.exit(0)
 
-        if len(self.p_args.editor) > 0:
-            InstallEditors(self.p_args.editor)
+        if len(self.p_args.editors) > 0:
+            InstallEditors(self.p_args.editors)
             sys.exit(0)
 
         if len(self.p_args.install) > 0:
@@ -777,7 +783,7 @@ class UDSBrew(RunCmd):
             "-ed",
             "--editors",
             metavar="<external_editor>",
-            nargs="?",
+            nargs="*",
             choices=["sublime-text", "vscode", "atom"],
             default=[],
             help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom.",
