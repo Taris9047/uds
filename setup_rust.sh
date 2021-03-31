@@ -4,7 +4,7 @@ rust_pkgs=( \
   "exa" \
   "bat" \
   "rm-improved" \
-  "diskonaut" \
+#  "diskonaut" \
   "lsd" \
   "cargo-update" \
   "starship" \
@@ -13,12 +13,12 @@ rust_pkgs=( \
   "procs" \
   "du-dust" \
   "ripgrep" \
-  "hyperfine" \
-  "eureka" \
+#  "hyperfine" \
+#  "eureka" \
   "ddh" \
-  "gitui" \
+#  "gitui" \
   "ytop" \
-  "grex" \
+#  "grex" \
   "zoxide" \
   "broot" \
 )
