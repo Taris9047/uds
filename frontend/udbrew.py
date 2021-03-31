@@ -421,7 +421,7 @@ class InstallEditors(GetDistro, RunCmd):
 
     pkgman_to_name_map = {
         "apt": ["ubuntu", "debian", "elementary OS"],
-        "dnf": ["fedora", "Red Hat Enterprise Linux", "CentOS Linux"],
+        "dnf": ["fedora", "rhel", "Red Hat Enterprise Linux", "CentOS Linux"],
         "zypper": ["openSUSE Leap"],
         "pacman": ["Manjaro Linux", "Arch Linux"],
     }
@@ -448,10 +448,8 @@ class InstallEditors(GetDistro, RunCmd):
         for edi in list_of_editors_to_install:
             if edi.lower() == "sublime-text":
                 editors_to_inst.append("subl")
-            elif edi.lower() == "atom":
-                editors_to_inst.append("atom")
-            elif edi.lower() == "vscode":
-                editors_to_inst.append("vscode")
+            else:
+                editors_to_inst.append(edi.lower())
 
         self.methods_to_run = []
         for edi in editors_to_inst:
@@ -556,9 +554,14 @@ class InstallEditors(GetDistro, RunCmd):
     def install_atom_dnf(self):
         print("Installilng Atom ...")
 
-        self.Run(
-            "sudo dnf install -y $(curl -sL \"https://api.github.com/repos/atom/atom/releases/latest\" | grep \"https.*atom.x86_64.rpm\" | cut -d '\"' -f 4); ATOM_INSTALLED_VERSION=\$(rpm -qi atom | grep \"Version\" | cut -d ':' -f 2 | cut -d ' ' -f 2); ATOM_LATEST_VERSION=$(curl -sL \"https://api.github.com/repos/atom/atom/releases/latest\" | grep -E \"https.*atom-amd64.tar.gz\" | cut -d '\"' -f 4 | cut -d '/' -f 8 | sed 's/v//g'); if [[ $ATOM_INSTALLED_VERSION < $ATOM_LATEST_VERSION ]]; then sudo dnf install -y https://github.com/atom/atom/releases/download/v${ATOM_LATEST_VERSION}/atom.x86_64.rpm;fi"
-        )
+        cmds = [
+            'sudo dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d \'"\' -f 4);',
+            "ATOM_INSTALLED_VERSION=$(rpm -qi atom | grep \"Version\" | cut -d ':' -f 2 | cut -d ' ' -f 2);",
+            "ATOM_LATEST_VERSION=$(curl -sL \"https://api.github.com/repos/atom/atom/releases/latest\" | grep -E \"https.*atom-amd64.tar.gz\" | cut -d '\"' -f 4 | cut -d '/' -f 8 | sed 's/v//g');",
+            "if [[ $ATOM_INSTALLED_VERSION < $ATOM_LATEST_VERSION ]]; then sudo dnf install -y https://github.com/atom/atom/releases/download/v${ATOM_LATEST_VERSION}/atom.x86_64.rpm;fi",
+        ]
+
+        self.Run(cmds)
 
     def install_atom_pacman(self):
         print("Installilng Atom ...")
@@ -784,7 +787,7 @@ class UDSBrew(RunCmd):
             "--editors",
             metavar="<external_editor>",
             nargs="*",
-            choices=["sublime-text", "vscode", "atom"],
+            choices=["sublime-text", "subl", "vscode", "atom"],
             default=[],
             help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom.",
         )
