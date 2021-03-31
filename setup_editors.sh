@@ -96,7 +96,7 @@ install_atom_apt ()
     sudo apt-get -y update && sudo apt-get -y install atom
   else
     echo '>>> Updating Atom ... '
-    sudo apt-get -y update && sudo apt-get -y install atom
+    sudo apt-get -y update && sudo apt-get -y upgrade
   fi
 }
 install_atom_dnf ()

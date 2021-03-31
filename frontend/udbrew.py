@@ -539,8 +539,17 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo zypper refresh && sudo zypper update")
 
     def install_atom_apt(self):
-        print("Installilng Atom ...")
-        self.Run("")
+        if not self.program_exists("atom"):
+            print("Installilng Atom ...")
+            cmds = [
+                "sudo apt-get update && sudo apt-get install -y software-properties-common apt-transport-https wget",
+                "wget -q https://packagecloud.io/AtomEditor/atom/gpgkey -O- | sudo apt-key add -",
+                'sudo add-apt-repository "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main"',
+                "sudo apt-get -y update && sudo apt-get -y install atom",
+            ]
+            self.Run(cmds)
+        else:
+            self.Run("sudo apt-get -y update && sudo apt-get -y upgrade")
 
     def install_atom_dnf(self):
         print("Installilng Atom ...")
@@ -548,27 +557,67 @@ class InstallEditors(GetDistro, RunCmd):
 
     def install_atom_pacman(self):
         print("Installilng Atom ...")
-        self.Run("")
+        print("Care to search in Snap or Flatpak?")
 
     def install_atom_zypper(self):
-        print("Installilng Atom ...")
-        self.Run("")
+        if not self.program_exists("atom"):
+            print("Installilng Atom ...")
+            cmds = [
+                "sudo sh -c 'echo -e \"[Atom]\nname=Atom Editor\nbaseurl=https://packagecloud.io/AtomEditor/atom/el/7/\$basearch\nenabled=1\ntype=rpm-md\ngpgcheck=0\nrepo_gpgcheck=1\ngpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey\" > /etc/zypp/repos.d/atom.repo'",
+                "sudo zypper --gpg-auto-import-keys refresh",
+                "sudo zypper install atom",
+            ]
+            self.Run(cmds)
+        else:
+            self.Run("sudo zypper refresh && sudo zypper update")
 
     def install_vscode_apt(self):
-        print("Installilng Visual Studio Code ...")
-        self.Run("")
+        if not self.program_exists("code"):
+            print("Installilng Visual Studio Code ...")
+            cmds = [
+                "get -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg",
+                "sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/",
+                "sudo sh -c 'echo \"deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main\" > /etc/apt/sources.list.d/vscode.list'",
+                "sudo apt-get -y install apt-transport-https",
+                "sudo apt-get -y update && sudo apt-get -y install code",
+                "rm -rf ./packages.microsoft.gpg",
+            ]
+            self.Run(cmds)
+        else:
+            print("Updating Visual Studio Code ...")
+            self.Run("")
 
     def install_vscode_dnf(self):
-        print("Installilng Visual Studio Code ...")
-        self.Run("")
+        if not self.program_exists("code"):
+            print("Installilng Visual Studio Code ...")
+            cmds = [
+                "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
+                "sudo sh -c 'echo -e \"[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\" > /etc/yum.repos.d/vscode.repo'",
+                "sudo dnf -y check-update && sudo dnf -y install code",
+            ]
+
+            self.Run(cmds)
+        else:
+            print("Updating Visual Studio Code ...")
+            self.Run("sudo dnf -y update")
 
     def install_vscode_pacman(self):
         print("Installilng Visual Studio Code ...")
-        self.Run("")
+        print("AUR is needed, check up here:")
+        print("https://linuxhint.com/install_visual_studio_code_arch_linux/")
 
     def install_vscode_pacman(self):
-        print("Installilng Visual Studio Code ...")
-        self.Run("")
+        if not self.program_exists("code"):
+            print("Installilng Visual Studio Code ...")
+            cmds = [
+                "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
+                "sudo zypper addrepo https://packages.microsoft.com/yumrepos/vscode vscode",
+                "sudo zypper refresh && sudo zypper install code",
+            ]
+            self.Run(cmds)
+        else:
+            print("Updating Visual Studio Code ...")
+            self.Run("sudo zypper refresh && sudo zypper update")
 
 
 ### Front End main class ###
