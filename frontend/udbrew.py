@@ -17,7 +17,27 @@ class RunCmd(object):
         self.shell_type = shell_type
         self.verbose = verbose
 
-    def Run(self, cmd="", env=""):
+    def Run(self, cmd=None, env=None):
+        if isinstance(cmd, str):
+            return self.RunACmd(cmd, env)
+
+        elif isinstance(cmd, list) and (not env or isinstance(env, str)):
+            logs = []
+            for cm in cmd:
+                log = self.RunACmd(cm, env)
+                logs.append(log)
+
+            return logs
+
+        elif isinstance(cmd, list) and isinstance(env, list):
+            logs = []
+            for cm, ev in zip(cmd, env):
+                log = self.RunACmd(cm, ev)
+                logs.append(log)
+
+            return logs
+
+    def RunACmd(self, cmd=None, env=None):
         if not cmd:
             return 0
 
@@ -400,12 +420,12 @@ class InstallSystemRubyGems(RunCmd):
 class InstallEditors(GetDistro, RunCmd):
 
     pkgman_to_name_map = {
-        'apt': ['ubuntu', 'debian', 'elementary OS'],
-        'dnf': ['fedora', 'Red Hat Enterprise Linux', 'CentOS Linux'],
-        'zypper': ['openSUSE Leap'],
-        'pacman': ['Manjaro Linux', 'Arch Linux']
+        "apt": ["ubuntu", "debian", "elementary OS"],
+        "dnf": ["fedora", "Red Hat Enterprise Linux", "CentOS Linux"],
+        "zypper": ["openSUSE Leap"],
+        "pacman": ["Manjaro Linux", "Arch Linux"],
     }
-    
+
     def __init__(self, list_of_editors_to_install=None):
         GetDistro.__init__(self)
         RunCmd.__init__(self, shell_type="bash", verbose=True)
@@ -426,16 +446,16 @@ class InstallEditors(GetDistro, RunCmd):
 
         editors_to_inst = []
         for edi in list_of_editors_to_install:
-            if edi.lower() == 'sublime-text':
-                editors_to_inst.append('subl')
-            elif edi.lower() == 'atom':
+            if edi.lower() == "sublime-text":
+                editors_to_inst.append("subl")
+            elif edi.lower() == "atom":
                 editors_to_inst.append(edi.lower())
-            elif edi.lower() == 'vscode':
-                editors_to_inst.append('vscode')
+            elif edi.lower() == "vscode":
+                editors_to_inst.append("vscode")
 
         self.methods_to_run = []
         for edi in editors_to_inst:
-            self.methods_to_run.append(f'install_{edi}_{pkgman}')
+            self.methods_to_run.append(f"install_{edi}_{pkgman}")
 
         self.RunInstall()
 
@@ -446,6 +466,19 @@ class InstallEditors(GetDistro, RunCmd):
     def switcher(self, method_to_run):
         return getattr(self, method_to_run)()
 
+    def program_exists(self, program=None):
+        if not program:
+            return False
+
+        try:
+            sbp.call([program])
+            return True
+        except OSError as e:
+            if e.errno == os.errno.ENOENT:
+                return False
+
+        return True
+
     ### Now those Installation methods... ###
     ### As this moment, we can install...
     ### sublime_text, atom, vscode
@@ -454,37 +487,94 @@ class InstallEditors(GetDistro, RunCmd):
     ###
     ### TODO Fill out those dummies!!
     def install_subl_apt(self):
-        self.Run("")
+        if not self.program_exists("subl"):
+            print("Installilng Sublime Text ...")
+            cmds = [
+                "wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -",
+                'echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list',
+                "sudo apt-get -y update && sudo apt-get -y install sublime-text sublime-merge",
+            ]
+            self.Run(cmds)
+
+        else:
+            print("Updating Sublime Text ...")
+            self.Run("apt-get -y update && sudo apt-get -y upgrade")
 
     def install_subl_dnf(self):
-        self.Run("")
+        if not self.program_exists("subl"):
+            print("Installilng Sublime Text ...")
+            cmds = [
+                "sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg",
+                "sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo",
+                "sudo dnf install -y sublime-text sublime-merge",
+            ]
+            self.Run(cmds)
+        else:
+            print(">>> Updating Sublimt Text ...")
+            self.Run("sudo dnf -y update")
 
     def install_subl_pacman(self):
-        self.Run("")
+        if not self.program_exists("subl"):
+            print("Installilng Sublime Text ...")
+            cmds = [
+                "curl -O https://download.sublimetext.com/sublimehq-pub.gpg && sudo pacman-key --add sublimehq-pub.gpg && sudo pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg",
+                'echo -e "\n[sublime-text]\nServer = https://download.sublimetext.com/arch/stable/x86_64" | sudo tee -a /etc/pacman.conf',
+                "sudo pacman -Syyu sublime-test sublime-merge",
+            ]
+            self.Run(cmds)
+        else:
+            self.Run("sudo pacman -Syyu")
+
+    def install_subl_zypper(self):
+        if not self.program_exists("subl"):
+            print("Installilng Sublime Text ...")
+            cmds = [
+                "sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg",
+                "sudo zypper addrepo -g -f https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo",
+                "sudo zypper install sublime-text sublime-merge",
+            ]
+
+            self.Run(cmds)
+        else:
+            self.Run("sudo zypper refresh && sudo zypper update")
 
     def install_atom_apt(self):
+        print("Installilng Atom ...")
         self.Run("")
 
     def install_atom_dnf(self):
+        print("Installilng Atom ...")
         self.Run("")
-        
+
     def install_atom_pacman(self):
+        print("Installilng Atom ...")
         self.Run("")
-        
+
+    def install_atom_zypper(self):
+        print("Installilng Atom ...")
+        self.Run("")
+
     def install_vscode_apt(self):
+        print("Installilng Visual Studio Code ...")
         self.Run("")
 
     def install_vscode_dnf(self):
+        print("Installilng Visual Studio Code ...")
         self.Run("")
 
     def install_vscode_pacman(self):
+        print("Installilng Visual Studio Code ...")
         self.Run("")
-        
+
+    def install_vscode_pacman(self):
+        print("Installilng Visual Studio Code ...")
+        self.Run("")
+
 
 ### Front End main class ###
 ###
 ### Organizes all the dirty jobs.
-### 
+###
 class UDSBrew(RunCmd):
     def __init__(self, args):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
@@ -642,7 +732,7 @@ class UDSBrew(RunCmd):
             nargs="?",
             choices=["sublime-text", "vscode", "atom"],
             default=[],
-            help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom."
+            help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom.",
         )
 
         if len(self.args) > 1:
