@@ -483,9 +483,8 @@ class InstallEditors(GetDistro, RunCmd):
     ### As this moment, we can install...
     ### sublime_text, atom, vscode
     ###
-    ### with apt, dnf, and pacman
+    ### with apt, dnf, zypper, and pacman
     ###
-    ### TODO Fill out those dummies!!
     def install_subl_apt(self):
         if not self.program_exists("subl"):
             print("Installilng Sublime Text ...")
