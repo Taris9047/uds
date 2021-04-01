@@ -365,6 +365,15 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         )
         self.install_with_dnf()
 
+    def install_prereq_fedora_33(self):
+        print("Installing Fedora packages!!")
+        cmds = [
+            "sudo -H dnf -y update",
+            'sudo -H dnf -y groupinstall "Development Tools" "Additional Development"',
+        ]
+        self.Run(cmds)
+        self.install_with_dnf()
+
     def install_prereq_almalinux_8(self):
         print("Almalinux detected! Activating CentOS repo!")
         self.install_prereq_centos_8()
@@ -625,13 +634,12 @@ class InstallEditors(GetDistro, RunCmd):
                 "makepkg -s",
                 "sudo pacman -U visual-studio-code-bin-*.pkg.tar.*",
                 f"cd {cwd}",
-                f"rm -rf {cwd}/.vscode_src"
+                f"rm -rf {cwd}/.vscode_src",
             ]
-            self.Run(' && '.join(cmds) )
+            self.Run(" && ".join(cmds))
         else:
             print("Updating Visual Studio Code ...")
             self.Run("sudo -H pacman -Syyu")
-
 
     def install_vscode_zypper(self):
         if not self.program_exists("code"):
