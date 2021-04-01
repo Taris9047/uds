@@ -80,6 +80,7 @@ libselinux1-dev
 libjansson-dev
 libsystemd-dev
 libgtk2.0-dev
+fonts-symbola
 texinfo
 clang
 libgnutls*-dev

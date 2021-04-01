@@ -82,6 +82,7 @@ automake
 vim
 ttf-bitstream-vera
 subversion
+fonts-symbola
 git
 wget
 curl
