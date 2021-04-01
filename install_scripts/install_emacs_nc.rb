@@ -62,6 +62,23 @@ class InstEmacsNC < InstallStuff
   end # initialize
 
   def detect_libgccjit
+    # Here, we are looking for gcc JIT compiler.
+    #
+    # We have gcc-jit package to install. But since it installs jit enabled
+    # gcc into somewhere distant other than main gcc, we need to provide
+    # additional library and include paths. If we detect brewed gcc jit compiler
+    # from the path, we will tag gcc_jit_found as true.
+    #
+    # But then again, we can also install jit library from package managers.
+    # Many Linux distributions supply this version of compiler but many of them
+    # are not based on newest gcc. But then again, compiling gcc-jit takes
+    # huge amount of time. So, sometimes we would rather stick to package
+    # manager provided gcc-jit.
+    #
+    # In this case, we will search system directory and
+    # tag libgccjit_found as true.
+    # 
+    
     gcc_jit_found = false
     libgccjit_found = false
     @gcc_prefix = @prefix
@@ -85,7 +102,7 @@ class InstEmacsNC < InstallStuff
     else
       @env["CXX"] = UTILS.which('g++')
     end
-    puts UTILS.which('gcc')
+
     # Detect whether current gcc has libgccjit capability.
     @gcc_prefix = File.realpath(File.join(File.dirname(@env["CC"]), '..'))
 
@@ -93,14 +110,14 @@ class InstEmacsNC < InstallStuff
       @env["C_INCLUDE_PATH"] = "#{@gcc_prefix}/include:"+@env["C_INCLUDE_PATH"]
       @env["CPLUS_INCLUDE_PATH"] = "#{@gcc_prefix}/include:"+@env["CPLUS_INCLUDE_PATH"]
       @env["LDFLAGS"] = "-Wl,-rpath=#{@gcc_prefix}/lib -Wl,-rpath=#{@gcc_prefix}/lib64 "+@env["LDFLAGS"]
-      return true
+      return gcc_jit_found
     else
       # Since we are working with system installed gcc, we can browse it even
       # further since they keep them in pretty peculiar places.
       search_result = `find #{@gcc_prefix} | grep libgccjit`
       if search_result.include? 'libgccjit'
-        @env["CFLAGS"] += " -I#{File.join(@gcc_prefix,'include')}"
-        @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix,'include')}"
+        @env["CFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
+        @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
         @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
         libgccjit_found = true
         return libgccjit_found
