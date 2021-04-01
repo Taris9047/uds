@@ -71,10 +71,12 @@ class UnixDevSetup
     self.main_title
 
     # Directories
-    @work_dir_root = File.join(@current_dir, 'workspace')
+    # @work_dir_root = File.join(@current_dir, 'workspace')
+    @work_dir_root = File.join(def_prefix, 'UDS_Cellar')
     @work_dir_path = File.join(@work_dir_root, 'build')
     @source_dir_path = File.join(@work_dir_root, 'download')
-    @pkginfo_dir_path = File.join(@current_dir, 'pkginfo')
+    # @pkginfo_dir_path = File.join(@current_dir, 'pkginfo')
+    @pkginfo_dir_path = File.join(ENV["HOME"], '.uds_pkginfo')
     @work_dir_log = File.join(@work_dir_root, 'log')
     @prefix_dir_path = def_prefix
     @inst_script_dir=$def_inst_script_dir
