@@ -65,8 +65,9 @@ class InstEmacsNC < InstallStuff
     gcc_jit_found = false
     libgccjit_found = false
     @gcc_prefix = @prefix
-    if UTILS.which('gcc-jit')
-      @env["CC"] = 'gcc-jit'
+    gcc_jit_path = UTILS.which('gcc-jit')
+    if File.exists? gcc_jit_path
+      @env["CC"] = gcc_jit_path
       gcc_jit_found = true
       libgccjit_found = true
     elsif UTILS.which("gcc-#{$newest_gcc_ver}")
@@ -74,8 +75,9 @@ class InstEmacsNC < InstallStuff
     else
       @env["CC"] = UTILS.which('gcc')
     end
-    if UTILS.which('g++-jit')
-      @env["CXX"] = 'g++-jit'
+    gpp_jit_path = UTILS.which('g++-jit')
+    if File.exists? gpp_jit_path
+      @env["CXX"] = gpp_jit_path
       gcc_jit_found = true
       libgccjit_found = true
     elsif UTILS.which("gcc-#{$newest_gcc_ver}")
@@ -97,8 +99,8 @@ class InstEmacsNC < InstallStuff
       # further since they keep them in pretty peculiar places.
       search_result = `find #{@gcc_prefix} | grep libgccjit`
       if search_result.include? 'libgccjit'
-        @env["CFLAGS"] += " -I#{File.join(@prefix,'include')}"
-        @env["CXXFLAGS"] += " -I#{File.join(@prefix,'include')}"
+        @env["CFLAGS"] += " -I#{File.join(@gcc_prefix,'include')}"
+        @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix,'include')}"
         @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
         libgccjit_found = true
         return libgccjit_found
