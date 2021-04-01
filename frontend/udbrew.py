@@ -365,6 +365,15 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         )
         self.install_with_dnf()
 
+    def install_prereq_fedora_33(self):
+        print("Installing Fedora packages!!")
+        cmds = [
+            "sudo -H dnf -y update",
+            'sudo -H dnf -y groupinstall "Development Tools" "Additional Development"',
+        ]
+        self.Run(cmds)
+        self.install_with_dnf()
+
     def install_prereq_almalinux_8(self):
         print("Almalinux detected! Activating CentOS repo!")
         self.install_prereq_centos_8()
@@ -423,7 +432,7 @@ class InstallEditors(GetDistro, RunCmd):
         "apt": ["ubuntu", "debian", "elementary OS"],
         "dnf": ["fedora", "rhel", "Red Hat Enterprise Linux", "CentOS Linux"],
         "zypper": ["openSUSE Leap"],
-        "pacman": ["Manjaro Linux", "Arch Linux"],
+        "pacman": ["manjaro", "Arch Linux"],
     }
 
     def __init__(self, list_of_editors_to_install=None):
@@ -564,8 +573,12 @@ class InstallEditors(GetDistro, RunCmd):
         self.Run(cmds)
 
     def install_atom_pacman(self):
-        print("Installilng Atom ...")
-        print("Care to search in Snap or Flatpak?")
+        if not self.program_exists("atom"):
+            print("Installilng Atom ...")
+            self.Run("sudo -H pacman -Syyu atom")
+        else:
+            print("Updating Atom ...")
+            self.Run("sudo -H pacman -Syyu")
 
     def install_atom_zypper(self):
         if not self.program_exists("atom"):
@@ -610,11 +623,25 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo dnf -y update")
 
     def install_vscode_pacman(self):
-        print("Installilng Visual Studio Code ...")
-        print("AUR is needed, check up here:")
-        print("https://linuxhint.com/install_visual_studio_code_arch_linux/")
+        if not self.program_exists("code"):
+            print("Installilng Visual Studio Code ...")
+            cwd = os.getcwd()
+            cmds = [
+                "sudo pacman -Syyu git",
+                f"mkdir -pv {cwd}/.vscode_src",
+                f"cd {cwd}/.vscode_src && git clone https://AUR.archlinux.org/visual-studio-code-bin.git",
+                f"cd {cwd}/.vscode_src/visual-studio-code-bin",
+                "makepkg -s",
+                "sudo pacman -U visual-studio-code-bin-*.pkg.tar.*",
+                f"cd {cwd}",
+                f"rm -rf {cwd}/.vscode_src",
+            ]
+            self.Run(" && ".join(cmds))
+        else:
+            print("Updating Visual Studio Code ...")
+            self.Run("sudo -H pacman -Syyu")
 
-    def install_vscode_pacman(self):
+    def install_vscode_zypper(self):
         if not self.program_exists("code"):
             print("Installilng Visual Studio Code ...")
             cmds = [
