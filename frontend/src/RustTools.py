@@ -60,12 +60,13 @@ class InstallRustTools(RunCmd):
             self.InstallPackages()
 
     def InstallNew(self):
+        env_script = os.path.join(self.default_cargo_path, '..', 'env')
         print("Looks like we do not have Rust on the system! Installing Rust!!")
         self.Run("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y")
         print("Updating environment!")
-        self.Run("source $HOME/.bashrc")
+        self.Run(f"source {env_script}")
         self.InstallPackages()
-        print("Check up your $HOME/.bashrc to check up if additional cargo env line added.")
+        print(f"Check up your {os.environ["HOME"]}/.bashrc or .zshrc to check up if additional cargo env line added.")
 
     def InstallPackages(self):
         self.Run(f"{self.cargo_exec} install {' '.join(self.pkgs_to_install)}")
