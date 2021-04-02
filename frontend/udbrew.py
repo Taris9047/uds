@@ -5,11 +5,11 @@ import sys
 
 import argparse
 
+from src.Utils import RunCmd
 from src.Editors import InstallEditors
 from src.RubyGems import InstallSystemRubyGems
 from src.Prerequisites import InstallPrereqPkgs
-from src.Utils import RunCmd, Version
-# from src.RustTools import InstallRustTools # not implemented yet.
+from src.RustTools import InstallRustTools
 
 ### Front End main class ###
 ###
@@ -26,6 +26,10 @@ class UDSBrew(RunCmd):
 
         if self.p_args.prerequisite:
             self.InstallPrerequisiteStuffs()
+
+        if self.p_args.rust_tools:
+            InstallRustTools()
+            sys.exit(0)
 
         if self.p_args.clean:
             self.Run(f"ruby ./unix_dev_setup clean")
@@ -173,6 +177,13 @@ class UDSBrew(RunCmd):
             choices=["sublime-text", "subl", "vscode", "atom"],
             default=[],
             help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom.",
+        )
+        p.add_argument(
+            "-rust",
+            "--rust_tools",
+            action="store_true",
+            default=False,
+            help="Installs super useful utilities written by Rust"
         )
 
         if len(self.args) > 1:
