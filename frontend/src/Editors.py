@@ -2,7 +2,7 @@
 
 ### Installs Some pre-built editors ###
 ###
-from .Utils import RunCmd
+from .Utils import RunCmd, program_exists
 from .DistroDetect import GetDistro
 
 import os
@@ -57,22 +57,6 @@ class InstallEditors(GetDistro, RunCmd):
     def switcher(self, method_to_run):
         return getattr(self, method_to_run)()
 
-    def program_exists(self, program=None):
-        def is_exe(fpath):
-            return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-
-        fpath, fname = os.path.split(program)
-        if fpath:
-            if is_exe(program):
-                return True
-        else:
-            for path in os.environ["PATH"].split(os.pathsep):
-                exe_file = os.path.join(path, program)
-                if is_exe(exe_file):
-                    return True
-
-        return False
-
     ### Now those Installation methods... ###
     ### As this moment, we can install...
     ### sublime_text, atom, vscode
@@ -80,7 +64,7 @@ class InstallEditors(GetDistro, RunCmd):
     ### with apt, dnf, zypper, and pacman
     ###
     def install_subl_apt(self):
-        if not self.program_exists("subl"):
+        if not program_exists("subl"):
             print("Installilng Sublime Text ...")
             cmds = [
                 "wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -",
@@ -94,7 +78,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo apt-get -y update && sudo apt-get -y upgrade")
 
     def install_subl_dnf(self):
-        if not self.program_exists("subl"):
+        if not program_exists("subl"):
             print("Installilng Sublime Text ...")
             cmds = [
                 "sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg",
@@ -107,7 +91,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo dnf -y update")
 
     def install_subl_pacman(self):
-        if not self.program_exists("subl"):
+        if not program_exists("subl"):
             print("Installilng Sublime Text ...")
             cmds = [
                 "curl -O https://download.sublimetext.com/sublimehq-pub.gpg && sudo pacman-key --add sublimehq-pub.gpg && sudo pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg",
@@ -119,7 +103,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo pacman -Syyu")
 
     def install_subl_zypper(self):
-        if not self.program_exists("subl"):
+        if not program_exists("subl"):
             print("Installilng Sublime Text ...")
             cmds = [
                 "sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg",
@@ -132,7 +116,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo zypper refresh && sudo zypper update")
 
     def install_atom_apt(self):
-        if not self.program_exists("atom"):
+        if not program_exists("atom"):
             print("Installilng Atom ...")
             cmds = [
                 "sudo apt-get update && sudo apt-get install -y software-properties-common apt-transport-https wget",
@@ -157,7 +141,7 @@ class InstallEditors(GetDistro, RunCmd):
         self.Run(cmds)
 
     def install_atom_pacman(self):
-        if not self.program_exists("atom"):
+        if not program_exists("atom"):
             print("Installilng Atom ...")
             self.Run("sudo -H pacman -Syyu atom")
         else:
@@ -165,7 +149,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo -H pacman -Syyu")
 
     def install_atom_zypper(self):
-        if not self.program_exists("atom"):
+        if not program_exists("atom"):
             print("Installilng Atom ...")
             cmds = [
                 "sudo sh -c 'echo -e \"[Atom]\nname=Atom Editor\nbaseurl=https://packagecloud.io/AtomEditor/atom/el/7/\$basearch\nenabled=1\ntype=rpm-md\ngpgcheck=0\nrepo_gpgcheck=1\ngpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey\" > /etc/zypp/repos.d/atom.repo'",
@@ -177,7 +161,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo zypper refresh && sudo zypper update")
 
     def install_vscode_apt(self):
-        if not self.program_exists("code"):
+        if not program_exists("code"):
             print("Installilng Visual Studio Code ...")
             cmds = [
                 "curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -",
@@ -191,7 +175,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("")
 
     def install_vscode_dnf(self):
-        if not self.program_exists("code"):
+        if not program_exists("code"):
             print("Installilng Visual Studio Code ...")
             cmds = [
                 "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
@@ -205,7 +189,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo dnf -y update")
 
     def install_vscode_pacman(self):
-        if not self.program_exists("code"):
+        if not program_exists("code"):
             print("Installilng Visual Studio Code ...")
             cwd = os.getcwd()
             cmds = [
@@ -224,7 +208,7 @@ class InstallEditors(GetDistro, RunCmd):
             self.Run("sudo -H pacman -Syyu")
 
     def install_vscode_zypper(self):
-        if not self.program_exists("code"):
+        if not program_exists("code"):
             print("Installilng Visual Studio Code ...")
             cmds = [
                 "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
