@@ -1,17 +1,21 @@
-#/usr/bin/env python3
+#!/usr/bin/env python3
 
 # Handles Ruby installation part
 
 from .Utils import RunCmd, Version
 
 # Gems list for system.
-gems_system_ruby = ["json", "ruby-progressbar", "tty-spinner", "lolcat", "open3"]
+gems_system_ruby = [
+    "json", "ruby-progressbar", "tty-spinner", "lolcat", "open3"
+]
+
 
 class InstallSystemRubyGems(RunCmd):
     def __init__(self, system_ruby="/usr/bin/ruby"):
         RunCmd.__init__(self, verbose=True)
         ruby_ver_str = self.RunSilent(cmd="{} --version".format(system_ruby))
-        self.system_ruby_ver = Version(ruby_ver_str.split(" ")[1].split("p")[0])
+        self.system_ruby_ver = \
+            Version(ruby_ver_str.split(" ")[1].split("p")[0])
         self.new_ruby_ver = Version("2.7.0")
         self.system_gem = system_ruby.replace("ruby", "gem")
 

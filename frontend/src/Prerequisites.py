@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
+# Handles prerequisite package (using system's package manager) installation
+
 from .DistroDetect import GetPackages
 from .Utils import RunCmd
 
-# Handles prerequisite package (using system's package manager) installation
 
 ### InstallPkgs ###
 ###
 ### Actually installs packages using proper package manager.
 ###
-
 class InstallPrereqPkgs(GetPackages, RunCmd):
     def __init__(self, verbose=True):
         GetPackages.__init__(self)

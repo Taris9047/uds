@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 # Handles Rust installation.
+from .Utils import RunCmd
+import os
 
 Rust_packages = [
     "exa",
@@ -25,9 +27,6 @@ Rust_packages = [
     "broot",
 ]
 
-import os
-
-from .Utils import RunCmd
 
 class InstallRustTools(RunCmd):
     def __init__(self, reinstall_pkgs=False, default_cargo_path=None):
@@ -35,7 +34,8 @@ class InstallRustTools(RunCmd):
 
         self.default_cargo_path = None
         if not default_cargo_path:
-            self.default_cargo_path = os.path.join(os.getenv('HOME'), '.cargo', 'bin')
+            self.default_cargo_path = \
+                os.path.join(os.getenv('HOME'), '.cargo', 'bin')
         else:
             self.default_cargo_path = default_cargo_path
 
@@ -65,6 +65,7 @@ class InstallRustTools(RunCmd):
         print("Updating environment!")
         self.Run("source $HOME/.bashrc")
         self.InstallPackages()
+        print("Check up your $HOME/.bashrc to check up if additional cargo env line added.")
 
     def InstallPackages(self):
         self.Run(f"{self.cargo_exec} install {' '.join(self.pkgs_to_install)}")

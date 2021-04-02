@@ -2,12 +2,11 @@
 
 ### Installs Some pre-built editors ###
 ###
+from .Utils import RunCmd
+from .DistroDetect import GetDistro
 
 import os
 import sys
-
-from .Utils import RunCmd
-from .DistroDetect import GetDistro
 
 ### Sublie-text, Atom, VSCode, etc.
 ###
