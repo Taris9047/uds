@@ -82,53 +82,48 @@ class InstEmacsNC < InstallStuff
     gcc_jit_found = false
     libgccjit_found = false
     @gcc_prefix = @prefix
+
     gcc_jit_path = UTILS.which('gcc-jit')
-    if File.exists? gcc_jit_path
-      @env["CC"] = gcc_jit_path
-      gcc_jit_found = true
-      libgccjit_found = true
-    elsif UTILS.which("gcc-#{$newest_gcc_ver}")
-      @env["CC"] = "gcc-#{$newest_gcc_ver}"
-    else
-      @env["CC"] = UTILS.which('gcc')
-    end
+    gcc_new_path = UTILS.which("gcc-#{$newest_gcc_ver}")
+    gcc_fallback_path = UTILS.which("gcc")
     gpp_jit_path = UTILS.which('g++-jit')
-    if File.exists? gpp_jit_path
+    gpp_new_path = UTILS.which("g++-#{$newest_gcc_ver}")
+    gpp_fallback_path = UTILS.which("g++")
+
+    if gcc_jit_path
+      @env["CC"] = gcc_jit_path
       @env["CXX"] = gpp_jit_path
       gcc_jit_found = true
       libgccjit_found = true
-    elsif UTILS.which("gcc-#{$newest_gcc_ver}")
-      @env["CXX"] = "gcc-#{$newest_gcc_ver}"
-    else
-      @env["CXX"] = UTILS.which('g++')
+    elsif gcc_new_path
+      @env["CC"] = gcc_new_path
+      @env["CXX"] = gpp_new_path
+    elsif gcc_fallback_path
+      @env["CC"] = gcc_fallback_path
+      @env["CXX"] = gpp_fallback_path
     end
-
+ 
     # Detect whether current gcc has libgccjit capability.
     @gcc_prefix = File.realpath(File.join(File.dirname(@env["CC"]), '..'))
 
-    if gcc_jit_found
-      @env["C_INCLUDE_PATH"] = "#{@gcc_prefix}/include:"+@env["C_INCLUDE_PATH"]
-      @env["CPLUS_INCLUDE_PATH"] = "#{@gcc_prefix}/include:"+@env["CPLUS_INCLUDE_PATH"]
-      @env["LDFLAGS"] = "-Wl,-rpath=#{@gcc_prefix}/lib -Wl,-rpath=#{@gcc_prefix}/lib64 "+@env["LDFLAGS"]
-      return gcc_jit_found
-    else
-      # Since we are working with system installed gcc, we can browse it even
-      # further since they keep them in pretty peculiar places.
-      search_result = `find #{@gcc_prefix} | grep libgccjit`
-      if search_result.include? 'libgccjit'
-        @env["CFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
-        @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
-        @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
-        libgccjit_found = true
-        return libgccjit_found
-      end
-
-      unless libgccjit_found
-        puts "Oops, current compiler #{@env["CC"]} cannot support jit!!"
-        puts "Exiting!!"
-        exit 1
-      end
+    # Since we are working with system installed gcc, we can browse it even
+    # further since they keep them in pretty peculiar places.
+    search_result = `find #{@gcc_prefix} | grep libgccjit`
+    if search_result.include? 'libgccjit'
+      puts "** Found libgccjit works with #{@env["CC"]}!! **"
+      @env["CFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
+      @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
+      @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
+      libgccjit_found = true
+      return libgccjit_found
     end
+
+    unless libgccjit_found
+      puts "Oops, current compiler #{@env["CC"]} cannot support jit!!"
+      puts "Exiting!!"
+      exit 1
+    end
+
 
     return libgccjit_found
   end # detect_libgccjit

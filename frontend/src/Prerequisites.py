@@ -55,6 +55,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_elementary_5(self):
         self.install_prereq_ubuntu_18()
 
+    def install_prereq_hamonikr_4(self):
+        self.install_prereq_ubuntu_20()
+
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
         self.Run(f"sudo -H dnf -y install {' '.join(self.pkgs_to_install)}")

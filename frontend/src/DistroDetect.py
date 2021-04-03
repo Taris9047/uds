@@ -63,6 +63,7 @@ class DistroPkgMap(GetDistro):
             "ubuntu": {
                 "linuxmint_20.1": "ubuntu_20.04_pkgs",
                 "elementary_5.1": "ubuntu_18.04_pkgs",
+                "hamonikr_4.0": "ubuntu_20.04_pkgs",
             },
             "debian": {
                 "ubuntu_20.04": "ubuntu_20.04_pkgs",
