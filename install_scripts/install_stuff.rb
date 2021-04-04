@@ -19,7 +19,7 @@ class InstallStuff < RunConsole
 
     @pkgname=pkgname
     @prefix=File.realpath(prefix)
-    @build_dir, @src_dir, @pkginfo_dir = work_dirs
+    @build_dir, @src_dir, @pkginfo_dir, @stage_dir = work_dirs
     @pkginfo_file = File.join(@pkginfo_dir, "#{@pkgname}.info" )
     @check_ver = ver_check
     @verbose = verbose_mode
@@ -201,10 +201,7 @@ class InstallStuff < RunConsole
     if cmd.empty?
       return 0
     end
-    files_before_install = self.get_prefix_file_list
     self.Run( env, "#{cmd}" )
-    files_after_install = self.get_prefix_file_list
-    @Installed_files += files_after_install - files_before_install
   end
 
   def get_prefix_file_list

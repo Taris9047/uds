@@ -78,6 +78,8 @@ class UnixDevSetup
     # @pkginfo_dir_path = File.join(@current_dir, 'pkginfo')
     @pkginfo_dir_path = File.join(ENV["HOME"], '.uds_pkginfo')
     @work_dir_log = File.join(@work_dir_root, 'log')
+    @stage_dir = File.join(@wwork_dir_root, 'BrewedPackages')
+
     @prefix_dir_path = def_prefix
     @inst_script_dir=$def_inst_script_dir
 
@@ -412,7 +414,7 @@ class UnixDevSetup
     @pkginfo_dir = File.realpath(@pkginfo_dir_path)
     puts "Package information directory will be: #{@pkginfo_dir}"
 
-    @work_dirs = [@work_dir, @source_dir, @pkginfo_dir]
+    @work_dirs = [@work_dir, @source_dir, @pkginfo_dir, @stage_dir]
 
     unless File.directory?(@prefix_dir_path)
       puts @prefix_dir_path+" not found, making one..."
