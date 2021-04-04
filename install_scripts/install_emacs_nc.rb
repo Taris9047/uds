@@ -108,7 +108,7 @@ class InstEmacsNC < InstallStuff
 
     # Since we are working with system installed gcc, we can browse it even
     # further since they keep them in pretty peculiar places.
-    search_result = `find #{@gcc_prefix} | grep libgccjit`
+    search_result = `find #{@gcc_prefix} -name libgccjit.so`
     if search_result.include? 'libgccjit'
       puts "** Found libgccjit works with #{@env["CC"]}!! **"
       @env["CFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
