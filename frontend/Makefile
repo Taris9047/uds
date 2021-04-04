@@ -7,4 +7,4 @@ udbrew: udbrew.py
 all: udbrew
 
 clean:
-	rm -rfv ./dist ./build ./udbrew ./__pycache__
+	rm -rfv ./dist ./build ./udbrew ./__pycache__ ./src/__pycache__

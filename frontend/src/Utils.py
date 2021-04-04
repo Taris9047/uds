@@ -8,6 +8,8 @@ import re
 import subprocess as sbp
 
 ### Run Console (Bash.. currently...) ###
+
+
 class RunCmd(object):
     def __init__(self, shell_type="bash", verbose=False):
         # At this moment, just bash is supported! Let's see if it works out!
@@ -121,7 +123,7 @@ class Version(object):
         while insert_list:
             sp = insert_list.pop(0)
             ary[sp[0] + offset] = sp[1][0]
-            ary = ary[: sp[0] + 1 + offset] + sp[1][1:] + ary[sp[0] + 1 + offset :]
+            ary = ary[: sp[0] + 1 + offset] + sp[1][1:] + ary[sp[0] + 1 + offset:]
             offset += len(sp) - 1
         return ary
 

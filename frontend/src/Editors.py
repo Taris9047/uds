@@ -13,7 +13,7 @@ import sys
 class InstallEditors(GetDistro, RunCmd):
 
     pkgman_to_name_map = {
-        "apt": ["ubuntu", "debian", "elementary OS"],
+        "apt": ["ubuntu", "debian", "elementary"],
         "dnf": ["fedora", "rhel", "Red Hat Enterprise Linux", "CentOS Linux"],
         "zypper": ["openSUSE Leap"],
         "pacman": ["manjaro", "Arch Linux"],
