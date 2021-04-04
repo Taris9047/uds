@@ -15,11 +15,14 @@ class InstallStuff < RunConsole
 
   @souce_url = 'https://some_site.net.org/some_url-0.0.0'
 
+  # Init stuff
   def initialize(pkgname, prefix, work_dirs=[], ver_check=true, verbose_mode=false)
 
     @pkgname=pkgname
     @prefix=File.realpath(prefix)
+
     @build_dir, @src_dir, @pkginfo_dir, @stage_dir = work_dirs
+
     @pkginfo_file = File.join(@pkginfo_dir, "#{@pkgname}.info" )
     @check_ver = ver_check
     @verbose = verbose_mode
@@ -39,20 +42,20 @@ class InstallStuff < RunConsole
     @comp_settings = ''
     @env = {}
 
+    @stage_dir_name = "#{@pkgname}-#{@Version}"
+
   end # initialize
 
+  # Actually does install.
   def install
     self.ShowTitle
     self.SetURL
-    # prefix_files = self.get_prefix_file_list
     if @run_install
       self.do_install
     end
-    # puts "Running some post install stuff."
-    # prefix_files_after = self.get_prefix_file_list
-    # @Installed_files = prefix_files_after - prefix_files
   end
 
+  # Get remote source URLs and version info. from it.
   def SetURL
     @source_url = SRC_URL[@pkgname]
     @ver_source = @Version
@@ -64,12 +67,14 @@ class InstallStuff < RunConsole
     end
   end
 
+  # Shows package's name we are working on.
   def ShowTitle
     puts ""
     puts "Working on #{@pkgname} (#{@Version})!!"
     puts ""
   end
 
+  # Snows summary of install command and environment variables.
   def ShowInstallInfo
     env_txt = ''
     if @env == nil
@@ -95,6 +100,8 @@ class InstallStuff < RunConsole
     sleep(2.5)
   end
 
+  # Checking versin between installed ones and current url.
+  # TODO Consider deleting it. 
   def VerCheck
     # Checking if newer version has rolled out
     if @check_ver
@@ -185,6 +192,7 @@ class InstallStuff < RunConsole
     return nil
   end
 
+  # Web installed Qt5 has weird pkgconfig lines... We fix them.
   def patch_qt5_pkgconfig(qt5_bin_path)
     qt5_pkgconfig_path = File.join(qt5_bin_path, '../lib/pkgconfig')
     pkgconfig_files = Dir["#{qt5_pkgconfig_path}/*.pc"]
@@ -196,7 +204,6 @@ class InstallStuff < RunConsole
   end
 
   # Collects the list of files installed
-  # TODO: make it faster. This is super brute force now...
   def RunInstall(env: {}, cmd: '')
     if cmd.empty?
       return 0
@@ -204,14 +211,48 @@ class InstallStuff < RunConsole
     self.Run( env, "#{cmd}" )
   end
 
-  def get_prefix_file_list
-    if File.directory? @prefix
-      return Find.find(@prefix).collect { |_| _ }
-    else
-      return []
+  # Let's make a package of compiled file!
+  # The code has been written for gnumake and ninja or possibly meson.
+  # --> Make sure to impelement override for some packages..
+  def MakePackage(build_system='make', pkg_type='tar.gz')
+    cmd = [
+      "cd #{@build_dir}",
+      "DESTDIR=#{@stage_dir_name} #{build_system} install"
+    ]
+    self.Run(cmd.join(' && '))
+
+    require 'pathname'
+    @Installed_files = []
+    Dir[@stage_dir_name] each do |file|
+      abs_path = Pathname.new(File.realpath(file))
+      proj_root = File.join(File.realpath(@stage_dir_name))
+      @Installed_files << abs_path.relative_path_from(proj_root)
     end
+
+    puts "Making package file for #{@pkgname} ... at #{@stage_dir_name}"
+    
+    make_tarball_cmd = ["cd #{@build_dir}"]
+    tar_opt = {
+      'tar.gz' => 'z',
+      'tar.bz2' => 'j',
+      'tar.xz' => 'J'
+    }
+    case pkg_type
+    when 'tar.gz'
+      make_tarball_cmd << "tar c#{pkg_type}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_name}"
+    when 'tar.bz2'
+      make_tarball_cmd << "tar c#{pkg_type}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_name}"
+    when 'tar.xz'
+      make_tarball_cmd << "tar c#{pkg_type}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_name}"
+    end
+    self.Run(make_tarball_cmd.join(' && '))
+
+    # Finishing up...
+    FileUtils.rm_rf(File.realpath(@stage_dir_name))
+
   end
 
+  # Uninstallation!
   def uninstall
     puts "Uninstalling #{@pkgname} ... "
     spinner = TTY::Spinner("[Uninstalling] ... :spinner", format: :bouncing_ball)
@@ -224,6 +265,7 @@ class InstallStuff < RunConsole
     puts "#{@pkgname} uninstalled successfully!"
   end
 
+  # Write package information.
   def WriteInfo
     puts "Writing package info for #{@pkgname}..."
     fp = File.open(@pkginfo_file, 'w')
@@ -248,7 +290,7 @@ class InstallStuff < RunConsole
       "Installed Files" => @Installed_files,
     }
     fp.write(compile_info_json.to_json)
-    # fp.puts(compile_info.join("\n"))
+
     fp.close
   end
 end # class InstallStuff
