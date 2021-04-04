@@ -8,3 +8,5 @@ vm_check
 .auctex*
 ./pkginfo
 pkginfo/*
+.vscode
+
