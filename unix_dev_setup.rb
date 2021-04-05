@@ -415,6 +415,13 @@ class UnixDevSetup
     @pkginfo_dir = File.realpath(@pkginfo_dir_path)
     puts "Package information directory will be: #{@pkginfo_dir}"
 
+    unless File.directory?(@stage_dir)
+      puts @stage_dir+" not found, making one..."
+      FileUtils.mkdir_p(@stage_dir)
+    end
+    # @stage_dir = File.realpath(@stage_dir)
+    puts "Package staging directory will be: #{@stage_dir}"
+
     @work_dirs = [@work_dir, @source_dir, @pkginfo_dir, @stage_dir]
 
     unless File.directory?(@prefix_dir_path)

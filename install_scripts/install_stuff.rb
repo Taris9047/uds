@@ -222,6 +222,9 @@ class InstallStuff < RunConsole
     ]
     self.Run(cmd.join(' && '))
 
+    # Debugging purpose for openssl and python
+    return ''
+
     require 'pathname'
     @Installed_files = []
     Dir[@stage_dir_pkg].each do |file|

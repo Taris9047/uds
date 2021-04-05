@@ -368,7 +368,7 @@
     "url": "https://www.openssl.org/source/openssl-1.1.1k.tar.gz",
     "type": "tarball",
     "alt-names": ["OpenSSL"],
-    "dependency": [],
+    "dependency": ["gcc"],
     "script": "libs/install_openssl.rb",
     "class": "InstLibOpenSSL"
   }

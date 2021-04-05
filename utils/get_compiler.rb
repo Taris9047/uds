@@ -14,7 +14,7 @@ $include_path = '{env_path}/include'
 $fallback_compiler_path = '/usr/bin'
 $state_of_art_gcc_ver = SRC_VER['gcc'][0]
 
-$rpath = "-Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64"
+$rpath = "-Wl,-rpath=. -Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64"
 $pkg_config_path = "{env_path}/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig"
 
 class GetCompiler
@@ -58,6 +58,10 @@ class GetCompiler
     @CXXFLAGS = @CFLAGS.gsub('{env_path}', @prefix)
     @C_INCLUDE_PATH=$include_path.gsub('{env_path}', @prefix)
     @CPLUS_INCLUDE_PATH=@C_INCLUDE_PATH
+
+    @CFLAGS += " -I#{@C_INCLUDE_PATH}"
+    @CXXFLAGS += " -I#{@CPLUS_INCLUDE_PATH}"
+
     @RPATH = @RPATH.gsub('{env_path}', @prefix)
     unless @PKG_CONFIG_PATH.empty?
       @PKG_CONFIG_PATH = @PKG_CONFIG_PATH.gsub('{env_path}', @prefix)
@@ -113,9 +117,7 @@ class GetCompiler
       puts "C compiler: #{@CC}"
       puts "C++ compiler: #{@CXX}"
       puts "C flags: #{@CFLAGS}"
-      puts "C include path: #{@C_INCLUDE_PATH}"
       puts "CXX flags: #{@CXXFLAGS}"
-      puts "CXX include path: #{@CPLUS_INCLUDE_PATH}"
       puts "Linker flags: #{@RPATH}"
       unless @PKG_CONFIG_PATH.empty?
         puts "pkgconfig path: #{@PKG_CONFIG_PATH}"
@@ -128,8 +130,6 @@ class GetCompiler
       [ "CXX=\""+@CXX+"\"" ] + \
       [ "CFLAGS=\"#{@CFLAGS}\"" ] + \
       [ "CXXFLAGS=\"#{@CXXFLAGS}\"" ] + \
-      [ "C_INCLUDE_PATH=\"#{@C_INCLUDE_PATH}\"" ] + \
-      [ "CPLUS_INCLUDE_PATH=\"#{@CPLUS_INCLUDE_PATH}\"" ] + \
       [ "LDFLAGS=\"#{@RPATH}\"" ]
     
     unless @PKG_CONFIG_PATH.empty?
@@ -149,8 +149,6 @@ class GetCompiler
       'CFLAGS' => @CFLAGS,
       'CXXFLAGS' => @CXXFLAGS,
       'LDFLAGS' => @RPATH,
-      'C_INCLUDE_PATH' => @C_INCLUDE_PATH,
-      'CPLUS_INCLUDE_PATH' => @CPLUS_INCLUDE_PATH
     }
 
     unless @PKG_CONFIG_PATH.empty?

@@ -60,10 +60,10 @@ class InstLibOpenSSL < InstallStuff
     opts = ["--prefix="+@prefix]+@conf_options
 
     if @need_sudo
-      inst_cmd = "sudo make install_sw"
+      inst_cmd = "sudo make install"
       mod_sudo = "sudo -H"
     else
-      inst_cmd = "make install_sw"
+      inst_cmd = "make install"
       mod_sudo = ""
     end
 
@@ -78,7 +78,7 @@ class InstLibOpenSSL < InstallStuff
 
     puts "Compiling (with #{@Processors} processors) and Installing ..."
     self.RunInstall( env: @env, cmd: cmds.join(" ") )
-    # self.WriteInfo
+    self.WriteInfo
   end
 
 end # class InstLibOpenSSL
