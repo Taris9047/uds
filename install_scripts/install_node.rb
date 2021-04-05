@@ -102,6 +102,7 @@ class InstNode < InstallStuff
     major, minor, patch = fp.version
 
     src_extract_folder = File.join(@build_dir, src_tarball_bname)
+    @src_build_dir = src_extract_folder
 
     if Dir.exists?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
@@ -234,6 +235,7 @@ class InstNodeLTS < InstallStuff
     major, minor, patch = fp.version
 
     src_extract_folder = File.join(@build_dir, src_tarball_bname)
+    @src_build_dir = src_extract_folder
 
     if Dir.exists?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder

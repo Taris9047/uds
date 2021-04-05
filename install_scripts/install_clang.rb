@@ -34,6 +34,7 @@ class InstClang < InstallStuff
 
     # Let's build!!
     @build_dir = File.join(@build_dir, "llvm-clang-build")
+    @src_build_dir = @build_dir
     if Dir.exists?(@build_dir) == false
       puts "Build dir missing.. making one.."
     else

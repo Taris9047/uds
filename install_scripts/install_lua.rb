@@ -126,6 +126,7 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
 
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
     src_extract_folder = File.join(File.realpath(@build_dir), src_tarball_bname)
+    @src_build_dir = src_extract_folder
 
     if Dir.exists?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
@@ -166,6 +167,8 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
       "&&", sudo_cmd, "install -v -m644 -D lua.pc #{@prefix}/lib/pkgconfig/lua.pc",
     ]
     self.RunInstall( env: @env, cmd: cmds.join(" ") )
+
+    # TODO We need to re-write WriteInfo...
     self.WriteInfo
   end
 

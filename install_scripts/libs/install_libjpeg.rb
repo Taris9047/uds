@@ -48,6 +48,7 @@ class InstLibJPEG < InstallStuff
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
     src_extract_folder = File.join(File.realpath(@build_dir), "jpeg-#{@Version[0]}")
     src_build_folder = File.join(File.realpath(@build_dir), "jpeg-#{@Version[0]}"+'-build')
+    @src_build_dir = src_build_folder
 
     if Dir.exists?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder

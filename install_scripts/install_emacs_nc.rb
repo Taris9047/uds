@@ -148,6 +148,7 @@ class InstEmacsNC < InstallStuff
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
     src_clone_folder = File.join(File.realpath(@src_dir), "#{@pkgname}")
     src_build_folder = File.join(File.realpath(@build_dir), "#{@pkgname}-build")
+    @src_build_dir = src_build_folder
 
     if Dir.exists?(src_build_folder)
       puts "Build folder found!! Removing it for 'pure' experience!!"

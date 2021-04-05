@@ -111,6 +111,7 @@ class InstGCC < InstallStuff
 
     extracted_src_dir = File.join(@build_dir, src_tarball_bname)
     bld_dir = extracted_src_dir+"-#{@pkgname}-build"
+    @src_build_dir = bld_dir
 
     if Dir.exists?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!" 
@@ -368,6 +369,7 @@ class InstGCC4 < InstGCC
 
     extracted_src_dir = File.join(@build_dir, src_tarball_bname)
     bld_dir = extracted_src_dir+"-build"
+    @src_build_dir = bld_dir
 
     if Dir.exists?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!" 
