@@ -41,14 +41,12 @@ class InstEmacsNC < InstallStuff
     @conf_options += [
       '--with-modules',
       '--with-xft',
-      '--with-otf',
       '--with-file-notification=inotify',
       '--with-x=yes',
       '--with-x-toolkit=gtk3',
       '--with-xwidgets',
       '--with-lcms2',
-      '--with-giflib',
-#      '--with-imagemagick',
+      '--with-imagemagick',
       '--with-mailutils',
       '--with-pop',
       '--with-native-compilation',
@@ -113,7 +111,7 @@ class InstEmacsNC < InstallStuff
       puts "** Found libgccjit works with #{@env["CC"]}!! **"
       @env["CFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
       @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
-      @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
+      @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
       libgccjit_found = true
       return libgccjit_found
     end

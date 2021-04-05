@@ -30,42 +30,28 @@ class InstEmacs < InstallStuff
 
     # build options
     @conf_options = []
-    # Checking up qt5
+
     @conf_options += [
-      # This may not work.. on 27
       '--with-modules',
       '--with-xft',
-      '--with-otf',
       '--with-file-notification=inotify',
       '--with-x=yes',
       '--with-x-toolkit=gtk3',
-      '--with-xwidgets',
       '--with-lcms2',
-      '--with-giflib',
-#      '--with-imagemagick',
-      '--with-mailutils',
+      '--with-imagemagick',
       '--with-pop',
       '--with-mailutils',
-      '--with-pop',
       '--with-xwidgets'    # needs webkitgtk4-dev
     ]
 
-    @env["CC"] = "gcc"
-    @env["CXX"] = "g++"
+    @env["CC"] = UTILS.which("gcc")
     @env["CFLAGS"] = "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include"
-    @env["CXXLAGS"] = "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include"
-    @env["LDFLAGS"] = "-Wl,-rpath=#{@prefix}/lib -Wl,-rpath=#{@prefix}/lib64"
+    @env["LDFLAGS"] = "-Wl,-rpath=. -Wl,-rpath=#{@prefix}/lib -Wl,-rpath=#{@prefix}/lib64"
+    @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
   end
 
   def do_install
-
-    puts ""
-    puts "*** Dependencies has not implemented yet... ***"
-    puts "Usually, you need giflib and gnutls. Install them from "
-    puts "your distribution's package manager."
-    puts ""
-    sleep (2)
 
     dl = Download.new(@source_url, @src_dir)
     src_tarball_path = dl.GetPath

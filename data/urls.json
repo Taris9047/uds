@@ -201,7 +201,7 @@
     "url": "http://ftp.gnu.org/gnu/emacs/emacs-27.2.tar.xz",
     "type": "tarball",
     "alt-names": ["Emacs", "EMAC"],
-    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
+    "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
     "script": "install_emacs.rb",
     "class": "InstEmacs"
   },
@@ -209,7 +209,7 @@
     "url": "git://git.savannah.gnu.org/emacs.git",
     "type": "git",
     "alt-names": ["GccEmacs", "emacs-native-compiler"],
-    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
+    "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
     "script": "install_emacs_nc.rb",
     "class": "InstEmacsNC"
   },
@@ -371,5 +371,23 @@
     "dependency": ["gcc"],
     "script": "libs/install_openssl.rb",
     "class": "InstLibOpenSSL"
+  },
+  # nettle
+  "nettle": {
+    "url": "https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Nettle"],
+    "dependency": ["gcc"],
+    "script": "libs/install_nettle.rb",
+    "class": "InstNettle"
+  },
+  # GnuTLS
+  "gnutls": {
+    "url": "https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz",
+    "type": "tarball",
+    "alt-names": ["GnuTLS"],
+    "dependency": ["gcc", "nettle"],
+    "script": "libs/install_gnutls.rb",
+    "class": "InstGnuTLS"
   }
 }

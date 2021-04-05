@@ -81,4 +81,44 @@ class InstLibOpenSSL < InstallStuff
     self.WriteInfo
   end
 
+  # Overriden due to specific make script.
+  def MakePackage(build_system='make', pkg_type='tar.gz')
+    cmd = [
+      "cd #{@src_build_dir}",
+      "#{build_system} DESTDIR=#{@stage_dir_pkg} install"
+    ]
+    self.Run(cmd.join(' && '))
+
+    require 'pathname'
+    @Installed_files = []
+    Dir[@stage_dir_pkg].each do |file|
+      abs_path = Pathname.new(File.realpath(file))
+      proj_root = File.join(File.realpath(@stage_dir_pkg))
+      @Installed_files << abs_path.relative_path_from(proj_root)
+    end
+
+    puts "Making package file for #{@pkgname} ... at #{@stage_dir_pkg}"
+    
+    make_tarball_cmd = ["cd #{@stage_dir}"]
+    tar_opt = {
+      'tar.gz' => 'z',
+      'tar.bz2' => 'j',
+      'tar.xz' => 'J'
+    }
+    case pkg_type
+    when 'tar.gz'
+      make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+    when 'tar.bz2'
+      make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+    when 'tar.xz'
+      make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+    end
+    self.Run(make_tarball_cmd.join(' && '))
+
+    # Finishing up...
+    FileUtils.rm_rf(File.realpath(@stage_dir_pkg))
+
+  end
+
+
 end # class InstLibOpenSSL

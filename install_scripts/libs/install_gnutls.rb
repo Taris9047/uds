@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
-# Install libLibJansson
+# Install libGnuTLS
 
 require_relative '../../utils/utils.rb'
 require_relative '../install_stuff.rb'
 
-class InstLibJansson < InstallStuff
+class InstGnuTLS < InstallStuff
 
   def initialize(args)
 
@@ -18,19 +18,17 @@ class InstLibJansson < InstallStuff
     @source_url = SRC_URL[@pkgname]
 
     # mpich build options
-    @conf_options = ['--disable-static']
+    @conf_options = ['--disable-guile', '--with-included-unistring']
 
     # Setting up compilers
     self.CompilerSet
 
+    # Adding up some more package stuffs.
+    @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig:$PKG_CONFIG_PATH"
+
   end
 
   def do_install
-
-    # TODO: version extraction needs to be a bit different.
-    # The filename is a bit different.
-    #
-    # https://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz
 
     dl = Download.new(@source_url, @src_dir)
     src_tarball_path = dl.GetPath
@@ -83,4 +81,4 @@ class InstLibJansson < InstallStuff
     self.WriteInfo
   end
 
-end # class InstLibJansson
+end # class InstGnuTLS
