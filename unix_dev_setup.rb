@@ -76,9 +76,10 @@ class UnixDevSetup
     @work_dir_path = File.join(@work_dir_root, 'build')
     @source_dir_path = File.join(@work_dir_root, 'download')
     # @pkginfo_dir_path = File.join(@current_dir, 'pkginfo')
-    @pkginfo_dir_path = File.join(ENV["HOME"], '.uds_pkginfo')
+    # @pkginfo_dir_path = File.join(ENV["HOME"], '.uds_pkginfo')
+    @pkginfo_dir_path = File.join(@work_dir_root, 'pkginfo')
     @work_dir_log = File.join(@work_dir_root, 'log')
-    @stage_dir = File.join(@wwork_dir_root, 'BrewedPackages')
+    @stage_dir = File.join(@work_dir_root, 'BrewedPackages')
 
     @prefix_dir_path = def_prefix
     @inst_script_dir=$def_inst_script_dir

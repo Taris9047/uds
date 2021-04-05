@@ -36,7 +36,7 @@ class InstNgspice < InstallStuff
 
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
     src_extract_folder = File.join(File.realpath(@build_dir), src_tarball_bname)
-    src_build_folder = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
+    @src_build_dir = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
 
     if Dir.exists?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
@@ -45,13 +45,13 @@ class InstNgspice < InstallStuff
       self.Run( "tar xf "+File.realpath(File.join(@src_dir, src_tarball_fname))+" -C "+@build_dir )
     end
 
-    if Dir.exists?(src_build_folder)
+    if Dir.exists?(@src_build_dir)
       puts "Build folder found!! Removing it for 'pure' experience!!"
-      self.Run( "rm -rfv "+src_build_folder )
+      self.Run( "rm -rfv "+@src_build_dir )
     else
       puts "Ok, let's make a build folder"
     end
-    self.Run( "mkdir -p "+src_build_folder )
+    self.Run( "mkdir -p "+@src_build_dir )
 
     opts = ["--prefix="+@prefix]+@conf_options
 
@@ -65,7 +65,7 @@ class InstNgspice < InstallStuff
 
     # Ok let's roll!!
     cmds = [
-      "cd", src_build_folder, "&&",
+      "cd", @src_build_dir, "&&",
       src_extract_folder+"/configure",
       opts.join(" "), "&&",
       "nice make -j", @Processors.to_s, "&&",
