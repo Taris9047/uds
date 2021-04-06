@@ -114,11 +114,11 @@ class RunConsole
     puts "*** Execution ended with error! ***"
     puts " ENV:"
     env.keys.each do |k|
-      puts " #{k}=#{env[k]},"
+      puts "  #{k}=#{env[k]}"
     end
     puts ""
     puts " Command:"
-    puts " #{cmds}"
+    puts "  #{cmds}"
     puts ""
     unless @log_file_name.empty?
       puts "Check #{@log_file_name} for details..."

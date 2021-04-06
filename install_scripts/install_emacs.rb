@@ -46,13 +46,12 @@ class InstEmacs < InstallStuff
 
     @env = {
       "CC" => UTILS.which("gcc"),
-      "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe",
-#      "LDFLAGS" => "-L#{@prefix}/lib -L#{@prefix}/lib64 -Wl,-rpath=#{@prefix}/lib -Wl,-rpath=#{@prefix}/lib64",
+      "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include",
     }
     # @env["CC"] = UTILS.which("gcc")
     # @env["CFLAGS"] = "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include"
-    # @env["LDFLAGS"] = "-Wl,-rpath=. -Wl,-rpath=#{@prefix}/lib -Wl,-rpath=#{@prefix}/lib64"
-    # @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig:$PKG_CONFIG_PATH"
+    # @env["LDFLAGS"] = "-Wl,-rpath=#{@prefix}/lib -Wl,-rpath=#{@prefix}/lib64"
+    # @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
 
   end
 

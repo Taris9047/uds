@@ -216,6 +216,11 @@ class InstallStuff < RunConsole
   # The code has been written for gnumake and ninja or possibly meson.
   # --> Make sure to impelement override for some packages..
   def MakePackage(build_system='make', pkg_type='tar.gz')
+
+    unless ['make', 'ninja', 'meson'].include? build_system
+      return nil
+    end
+
     cmd = [
       "cd #{@src_build_dir}",
       "DESTDIR=#{@stage_dir_pkg} #{build_system} install"
