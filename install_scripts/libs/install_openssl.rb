@@ -18,10 +18,19 @@ class InstLibOpenSSL < InstallStuff
     # build options
     @conf_options = [
       "--libdir=#{File.join(@prefix, 'lib')}",
-      "--openssldir=#{@prefix}",
+      # "--openssldir=#{@prefix}",
       "shared",
       "zlib"
     ]
+
+    # Setting up correct openssl dir
+    if UTILS.which('/usr/bin/openssl')
+      openssl_dir = `/usr/bin/openssl version -d`.split(' ')[-1].gsub("\"","")
+    else
+      openssl_dir = File.join(@prefix, 'ssl')
+    end
+
+    @conf_options += [ "--openssldir=#{openssl_dir}" ]
 
     # Setting up compilers
     self.CompilerSet
@@ -60,10 +69,10 @@ class InstLibOpenSSL < InstallStuff
     opts = ["--prefix="+@prefix]+@conf_options
 
     if @need_sudo
-      inst_cmd = "sudo make install"
+      inst_cmd = "sudo make install_sw"
       mod_sudo = "sudo -H"
     else
-      inst_cmd = "make install"
+      inst_cmd = "make install_sw"
       mod_sudo = ""
     end
 
@@ -85,7 +94,7 @@ class InstLibOpenSSL < InstallStuff
   def MakePackage(build_system='make', pkg_type='tar.gz')
     cmd = [
       "cd #{@src_build_dir}",
-      "#{build_system} DESTDIR=#{@stage_dir_pkg} install"
+      "#{build_system} DESTDIR=#{@stage_dir_pkg} install_sw"
     ]
     self.Run(cmd.join(' && '))
 

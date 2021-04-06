@@ -158,6 +158,10 @@ module UTILS
   # Which command eqv.
   # https://stackoverflow.com/a/5471032
   def which(cmd)
+    if File.exists? cmd
+      return cmd
+    end
+    
     exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
     ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
       exts.each do |ext|
