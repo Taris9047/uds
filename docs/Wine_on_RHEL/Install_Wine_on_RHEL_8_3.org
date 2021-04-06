@@ -132,7 +132,7 @@ DOWNLOADS="${WORKSPACE}/downloads"
 if [ ! -d "$DOWNLOADS" ]; then
 	mkdir -pv "${DOWNLOADS}"
 fi
-wget "http://dl.winehq.org/wine/source/${WINE_VER_URL}/wine-${WINE_VER}.tar.xz" -O "${DOWNLOADS}/wine-${WINE_VER}.tar.xz" 2>&1 >>$log
+wget "http://dl.winehq.org/wine/source/${WINE_VER_MAJOR}.x/wine-${WINE_VER}.tar.xz" -O "${DOWNLOADS}/wine-${WINE_VER}.tar.xz" 2>&1 >>$log
 #+end_src
 
 #+RESULTS:
