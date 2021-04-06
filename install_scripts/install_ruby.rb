@@ -38,8 +38,9 @@ class InstRuby < InstallStuff
 
     # Setting up compilers
     self.CompilerSet(
-      cflags='-fno-semantic-interposition', cxxflags='-fno-semantic-interposition')
-
+      cflags='-fno-semantic-interposition',
+      cxxflags='-fno-semantic-interposition')
+      
   end
 
   def do_install
@@ -103,7 +104,10 @@ class InstRuby < InstallStuff
     puts "Installing additional gems..."
     self.RunInstall( env: @env, cmd: inst_module_cmds.join(" ") )
 
-    self.WriteInfo
+    self.WriteInfo(
+      build_system='make', 
+      pkg_type='tar.gz', 
+      destdir_inst_cmd="make DESTDIR=#{@stage_dir_pkg} install")
   end
 
 end # class InstRuby

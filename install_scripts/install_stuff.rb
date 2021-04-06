@@ -215,16 +215,20 @@ class InstallStuff < RunConsole
   # Let's make a package of compiled file!
   # The code has been written for gnumake and ninja or possibly meson.
   # --> Make sure to impelement override for some packages..
-  def MakePackage(build_system='make', pkg_type='tar.gz')
+  def MakePackage(build_system='make', pkg_type='tar.gz', destdir_inst_cmd=nil)
 
     unless ['make', 'ninja', 'meson'].include? build_system
       return nil
     end
 
-    cmd = [
-      "cd #{@src_build_dir}",
-      "DESTDIR=#{@stage_dir_pkg} #{build_system} install"
-    ]
+    if destdir_inst_cmd
+      cmd = [ "cd #{@src_build_dir}", destdir_inst_cmd ]
+    else
+      cmd = [
+        "cd #{@src_build_dir}",
+        "DESTDIR=#{@stage_dir_pkg} #{build_system} install"
+      ]
+    end
     self.Run(cmd.join(' && '))
 
     require 'pathname'
@@ -272,7 +276,7 @@ class InstallStuff < RunConsole
   end
 
   # Write package information.
-  def WriteInfo(build_system='make', pkg_type='tar.gz')
+  def WriteInfo(build_system='make', pkg_type='tar.gz', destdir_inst_cmd=nil)
     self.MakePackage(build_system, pkg_type)
 
     puts "Writing package info for #{@pkgname}..."
