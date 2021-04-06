@@ -277,7 +277,7 @@ class InstallStuff < RunConsole
 
   # Write package information.
   def WriteInfo(build_system='make', pkg_type='tar.gz', destdir_inst_cmd=nil)
-    self.MakePackage(build_system, pkg_type)
+    self.MakePackage(build_system, pkg_type, destdir_inst_cmd)
 
     puts "Writing package info for #{@pkgname}..."
     fp = File.open(@pkginfo_file, 'w')
