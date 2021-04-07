@@ -22,7 +22,7 @@ The Wine version will not be so state-of-art since we need to ensure other impor
 Wine version:
 #+NAME: ver_string
 #+begin_src string
-6.0
+5.0
 #+end_src
 
 The preamble part is here:

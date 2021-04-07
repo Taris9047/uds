@@ -4,7 +4,7 @@ if [ ! -d "${CWD}/workspace" ]; then
 	mkdir -pv "${CWD}/workspace"
 fi
 WORKSPACE="${CWD}/workspace"
-WINE_VER="6.0"
+WINE_VER="5.0"
 WINE_VER_MAJOR=$(echo ${WINE_VER} | cut -d'.' -f1)
 WINE_VER_URL=$(echo ${WINE_VER} | cut -d'.' -f1,2)
 
