@@ -10,6 +10,7 @@ from src.Editors import InstallEditors
 from src.RubyGems import InstallSystemRubyGems
 from src.Prerequisites import InstallPrereqPkgs
 from src.RustTools import InstallRustTools
+from sec.PatchQt5WebInstall import PatchQt5WebInstall
 
 ### Front End main class ###
 ###
@@ -20,8 +21,8 @@ class UDSBrew(RunCmd):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.find_out_version()
-        self.system_ruby = program_exists('/usr/bin/ruby')
-        if not os.path.isfile(self.system_ruby):
+        self.system_ruby = '/usr/bin/ruby'
+        if not program_exists(self.system_ruby):
             print ("Oh crap, we need ruby to work correctly!!")
             sys.exit(-1)
 
@@ -50,6 +51,10 @@ class UDSBrew(RunCmd):
         if len(self.p_args.editors) > 0:
             InstallEditors(self.p_args.editors)
             sys.exit(0)
+
+        if self.p_args.qt5_patch:
+            qt5_version = self.p_args.qt5_patch
+            PatchQt5WebInstall(qt5_version, qt5path)
 
         if len(self.p_args.install) > 0:
             pkgs_to_install = set(self.p_args.install)
@@ -189,6 +194,14 @@ class UDSBrew(RunCmd):
             default=False,
             help="Installs super useful utilities written by Rust"
         )
+        p.add_argument(
+            "-qt5patch",
+            "--qt5-patch",
+            metavar="<qt5_version>",
+            nargs="*",
+            default=['5.12.2', os.path.expandvars('#HOME#/.Qt/#qt5_version#/gcc_64')],
+            help="Patches weird pkgconfig files on Web installed Qt5."
+        )
 
         if len(self.args) > 1:
             self.p_args = p.parse_args(self.args[1:])
@@ -214,7 +227,7 @@ class UDSBrew(RunCmd):
 
         self.version = None
 
-        with open(uds_backend, "r") as fp:
+        with open(self.uds_backend, "r") as fp:
             while True:
                 line = fp.readline()
                 if "$version" in line:
