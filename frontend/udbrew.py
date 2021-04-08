@@ -5,7 +5,7 @@ import sys
 
 import argparse
 
-from src.Utils import RunCmd
+from src.Utils import RunCmd, program_exists
 from src.Editors import InstallEditors
 from src.RubyGems import InstallSystemRubyGems
 from src.Prerequisites import InstallPrereqPkgs
@@ -20,6 +20,10 @@ class UDSBrew(RunCmd):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.find_out_version()
+        self.system_ruby = program_exists('/usr/bin/ruby')
+        if not os.path.isfile(self.system_ruby):
+            print ("Oh crap, we need ruby to work correctly!!")
+            sys.exit(-1)
 
         self.args = args
         self.parse_args()
@@ -32,11 +36,11 @@ class UDSBrew(RunCmd):
             sys.exit(0)
 
         if self.p_args.clean:
-            self.Run(f"ruby ./unix_dev_setup clean")
+            self.Run(f"{self.system_ruby} {self.uds_backend} clean")
             sys.exit(0)
 
         if self.p_args.purge:
-            self.Run(f"ruby ./unix_dev_setup purge")
+            self.Run(f"{self.system_ruby} {self.uds_backend} purge")
             sys.exit(0)
 
         if self.p_args.version:
@@ -89,7 +93,7 @@ class UDSBrew(RunCmd):
                 sys.exit(0)
 
             for pkg in pkgs_to_install:
-                self.Run(f"ruby ./unix_dev_setup {opt_verbose} {opt_sgcc} {pkg}")
+                self.Run(f"{self.system_ruby} {self.uds_backend} {opt_verbose} {opt_sgcc} {pkg}")
 
             sys.exit(0)
 
@@ -97,7 +101,7 @@ class UDSBrew(RunCmd):
             pkgs_to_uninstall = set(self.p_args.uninstall)
 
             for pkg in pkgs_to_uninstall:
-                self.Run(f"ruby ./unix_dev_setup -v {pkg}")
+                self.Run(f"{self.system_ruby} {self.uds_backend} -v {pkg}")
 
             sys.exit(0)
 
@@ -204,9 +208,9 @@ class UDSBrew(RunCmd):
     ### finds unix_dev_setup.rb to extract version info.
     ###
     def find_out_version(self):
-        uds_backend = "./unix_dev_setup.rb"
+        self.uds_backend = "./unix_dev_setup.rb"
         if os.path.exists("./unix_dev_setup"):
-            uds_backend = "./unix_dev_setup"
+            self.uds_backend = "./unix_dev_setup"
 
         self.version = None
 
