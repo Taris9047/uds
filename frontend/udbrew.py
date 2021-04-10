@@ -10,7 +10,7 @@ from src.Editors import InstallEditors
 from src.RubyGems import InstallSystemRubyGems
 from src.Prerequisites import InstallPrereqPkgs
 from src.RustTools import InstallRustTools
-from sec.PatchQt5WebInstall import PatchQt5WebInstall
+from src.PatchQt5WebInstall import PatchQt5WebInstall
 
 ### Front End main class ###
 ###
