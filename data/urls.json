@@ -398,5 +398,5 @@
     "dependency": ["gcc"],
     "script": "libs/install_zlib.rb",
     "class": "InstZlib"
-  },
+  }
 }

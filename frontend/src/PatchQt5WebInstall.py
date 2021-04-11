@@ -7,7 +7,8 @@ import sys
 import glob
 
 class PatchQt5WebInstall(object):
-    def __init__(self, qt5version, qt5path):
+    def __init__(self, qt5version='5.12.2', qt5path='#HOME#/.Qt/#qt5_version#/gcc_64'):
+
         self.qt5version = qt5version
         self.qt5path = \
             qt5path.replace('#qt5_version#', qt5version).replace('#HOME#', os.path.expandvars('$HOME'))

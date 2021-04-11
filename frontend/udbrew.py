@@ -53,7 +53,8 @@ class UDSBrew(RunCmd):
             sys.exit(0)
 
         if self.p_args.qt5_patch:
-            qt5_version = self.p_args.qt5_patch
+            qt5_version = self.p_args.qt5_patch[0]
+            qt5path = self.p_args.qt5_patch[1]
             PatchQt5WebInstall(qt5_version, qt5path)
 
         if len(self.p_args.install) > 0:
@@ -199,7 +200,7 @@ class UDSBrew(RunCmd):
             "--qt5-patch",
             metavar="<qt5_version>",
             nargs="*",
-            default=['5.12.2', os.path.expandvars('#HOME#/.Qt/#qt5_version#/gcc_64')],
+            default=[],
             help="Patches weird pkgconfig files on Web installed Qt5."
         )
 
