@@ -389,5 +389,14 @@
     "dependency": ["gcc", "nettle"],
     "script": "libs/install_gnutls.rb",
     "class": "InstGnuTLS"
-  }
+  },
+  # Zlib
+  "zlib": {
+    "url": "https://zlib.net/zlib-1.2.11.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Zlib", "libz"],
+    "dependency": ["gcc"],
+    "script": "libs/install_zlib.rb",
+    "class": "InstZlib"
+  },
 }
