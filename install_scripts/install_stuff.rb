@@ -238,11 +238,11 @@ class InstallStuff < RunConsole
         "#{@stage_dir_pkg}/**/*", 
         File::FNM_DOTMATCH).reject { |f| File.directory?(f) }
 
-      stage_dir_pkg_flist.each do |file|
-      abs_path = Pathname.new(File.realpath(file))
-      proj_root = File.realpath(@stage_dir_pkg)
-
-      @Installed_files << abs_path.relative_path_from(proj_root)
+    stage_dir_pkg_flist.each do |file|
+      abs_path = Pathname.new(file)
+      proj_root = Pathname.new(File.realpath(@stage_dir_pkg))
+      abs_root_removed = abs_path.relative_path_from(proj_root)
+      @Installed_files << File.join('/', abs_root_removed)
     end
 
     puts "Making package file for #{@pkgname} ... at #{@stage_dir_pkg}"
