@@ -235,7 +235,7 @@ class InstallStuff < RunConsole
     @Installed_files = []
     Dir[@stage_dir_pkg].each do |file|
       abs_path = Pathname.new(File.realpath(file))
-      proj_root = File.join(File.realpath(@stage_dir_pkg))
+      proj_root = File.realpath(@stage_dir_pkg)
       @Installed_files << abs_path.relative_path_from(proj_root)
     end
 
