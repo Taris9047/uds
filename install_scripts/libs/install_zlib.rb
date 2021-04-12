@@ -16,7 +16,7 @@ class InstZlib < InstallStuff
     @source_url = SRC_URL[@pkgname]
 
     # build options
-    @conf_options = [ "--64", "--libdir=lib" ]
+    @conf_options = [ ]
 
     # Setting up compilers
     self.CompilerSet
