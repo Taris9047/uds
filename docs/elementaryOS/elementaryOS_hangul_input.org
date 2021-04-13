@@ -1,6 +1,7 @@
 #+PROPERTY: header-args :tangle yes
 #+TITLE: elementary OS Setting up Hangul Input guide.
 #+AUTHOR: Taylor Shin
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 * Hangul Setup on elementary OS 5.
 ** Elementary OS Juno still uses Ubuntu 18.04 as its base which is already an ancient crap. Also, their repository has really limited software selections. But it looks SO GOOD!

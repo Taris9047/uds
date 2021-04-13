@@ -1,6 +1,8 @@
 #+PROPERTY: header-args :tangle yes
 #+TITLE: elementary OS Setting up Hangul Input guide.
 #+AUTHOR: Taylor Shin
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
 
 * Heads up Note
 This walkthrough is not designed for the 'long' way. Installing GccEmacs and setting the environment up is not in the scope of this script! If you want to take this 'grandeur' way, better work with the homebrew compilation scripts!

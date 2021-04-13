@@ -2,6 +2,7 @@
 #+AUTHOR: Taylor Shin
 #+OPTIONS: toc:2
 #+STARTUP: showeverything
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 * Wine on RHEL
 ** Main motivation
@@ -302,3 +303,14 @@ chmod +x "$CWD/workspace/downloads/winetricks"
 cp "$CWD/workspace/downloads/winetricks" "$HOME/.local/bin/winetricks"
 #+end_src
 
+Now run =winetricks= on your shell. It will detect system installed wine automatically and set up =~/.wine= directory accordingly. The 64bit version might involve a bit of error messages during operation but you can turn on 'silent install' mode anytime.
+
+
+* Korean Fonts
+This is not really a troublesome feature if you do not speak Korean nor have to use any Korean UI programs. But Wine in default set up, does not brings in any Korean fonts and unable to display any EUC_KR encoded fonts. This is because the default wine installation do not come with CJK fonts. These fonts can be installed via the winetricks! Install fakekorean, cjkfonts, and tahoma.
+
+Also, you can put in font files to =~/.wine/drive_c/windows/fonts= directory. Yes, if you have copied font files from any Windows machine, it will work flawlessly with the wine as well. Note that =Gulim= is the best selection for wine's default Windows theme!
+
+Once you have successfully installed those Korean fonts, open =~/.wine/system.reg= to edit a couple of lines. Search ="MS Shell Dlg"= and ="MS Shell Dlg 2"= to replace those settings to =Gulim= and =Tahoma=!! Then it will show Korean fonts correctly!!
+
+This part was referenced from [[https://blog.danggun.net/3661][Danggun's Blog]].

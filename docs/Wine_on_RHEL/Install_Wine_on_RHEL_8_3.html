@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-04-12 Mon 22:41 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Install Wine On RHEL 8.3</title>
+<meta name="author" content="Taylor Shin" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Install Wine On RHEL 8.3</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org47bc631">1. Wine on RHEL</a>
+<ul>
+<li><a href="#orgefc48e2">1.1. Main motivation</a></li>
+<li><a href="#org3ed6b90">1.2. Initial Set-Up with DNF</a></li>
+<li><a href="#org69a6854">1.3. Downloading Wine</a></li>
+<li><a href="#orgb49c950">1.4. Compiling Wine</a></li>
+<li><a href="#orge7a3534">1.5. Wine Gecko and Mono</a></li>
+<li><a href="#orgc172d2b">1.6. Closing up</a></li>
+</ul>
+</li>
+<li><a href="#org70c95a4">2. Winetricks</a></li>
+<li><a href="#org762a846">3. Korean Fonts</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org47bc631" class="outline-2">
+<h2 id="org47bc631"><span class="section-number-2">1</span> Wine on RHEL</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orgefc48e2" class="outline-3">
+<h3 id="orgefc48e2"><span class="section-number-3">1.1</span> Main motivation</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+We need to run some Windows tools on Linux since not a lot of Windows simulation tools are ported or written for UNIX system or similar OS.
+Good thing is, those circuit simulators are not so graphics intensive. Thus, they must be easier to run than most of Steam games.
+</p>
+
+<p>
+Let&rsquo;s start installing Wine emulator, then!!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3ed6b90" class="outline-3">
+<h3 id="org3ed6b90"><span class="section-number-3">1.2</span> Initial Set-Up with DNF</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+As we know, building everything from scratch is not a solid way to go, especially on somewhat established environment such as RHEL or CentOS. However, those distributions do not provide state-of-art Wine in their repositories for some weird reason. Stability? What stability do you need with a Windows emulator?
+</p>
+
+<p>
+So, it is obvious we need to set up some method to actually &rsquo;compile&rsquo; Wine codes. But compiling every single line of codes of dependency libraries is a time-consuming and head bonking job. These steps are adopted from <a href="https://www.tecmint.com/install-wine-in-rhel-centos-and-fedora/">Techmint.com&rsquo;s guide</a> and <a href="https://github.com/zma/usefulscripts/blob/master/script/install-wine-i686-centos8.sh">SysTutorials.com</a>.
+</p>
+
+<p>
+Thus, let&rsquo;s start with installing some baseline libraries&#x2026;
+</p>
+
+<p>
+The Wine version will not be so state-of-art since we need to ensure other important packages to catch up: such as <a href="https://wiki.winehq.org/Mono">Wine-mono</a> and <a href="https://wiki.winehq.org/Gecko">Wine-gecko</a>.
+</p>
+
+<p>
+Wine version:
+</p>
+<div class="org-src-container">
+<pre class="src src-string" id="org5ad0371">5.0
+</pre>
+</div>
+
+<p>
+The preamble part is here:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell" id="org8f54a76"><span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">!/usr/bin/</span><span style="color: #859900; font-weight: bold;">env</span><span style="color: #96A7A9; font-style: italic;"> bash -e</span>
+<span style="color: #268bd2;">CWD</span>=<span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(</span><span style="color: #268bd2; font-weight: bold; font-style: italic;">pwd</span><span style="color: #268bd2; font-weight: bold;"> -P)</span><span style="color: #2aa198;">"</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -d <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">/workspace"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">/workspace"</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+<span style="color: #268bd2;">WORKSPACE</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">/workspace"</span>
+<span style="color: #268bd2;">WINE_VER</span>=<span style="color: #2aa198;">"5.0"</span>
+<span style="color: #268bd2;">WINE_VER_MAJOR</span>=$<span style="color: #268bd2;">(</span><span style="color: #b58900; font-style: italic;">echo</span> $<span style="color: #d33682;">{</span><span style="color: #268bd2;">WINE_VER</span><span style="color: #d33682;">}</span> | cut -d<span style="color: #2aa198;">'.'</span> -f1<span style="color: #268bd2;">)</span>
+<span style="color: #268bd2;">WINE_VER_URL</span>=$<span style="color: #268bd2;">(</span><span style="color: #b58900; font-style: italic;">echo</span> $<span style="color: #d33682;">{</span><span style="color: #268bd2;">WINE_VER</span><span style="color: #d33682;">}</span> | cut -d<span style="color: #2aa198;">'.'</span> -f1,2<span style="color: #268bd2;">)</span>
+
+<span style="color: #268bd2;">log</span>=<span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(mktemp -t install-wine.XXXXXX.log)</span><span style="color: #2aa198;">"</span>
+
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">Checking for wget</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -x <span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(command -v wget)</span><span style="color: #2aa198;">"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Oops! wget is a must!!"</span>
+    <span style="color: #859900; font-weight: bold;">exit</span> <span style="color: #6c71c4; font-weight: bold;">1</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+</pre>
+</div>
+
+<p>
+In fact, we can skip all those pesky package installation stuff once we have done it! So, let&rsquo;s implement some argument to avoid this time consuming crap.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #268bd2;">compile_only</span>=<span style="color: #2aa198;">"false"</span>
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">if [ $# -ne 0 ]; then</span>
+<span style="color: #96A7A9; font-style: italic;">#     </span><span style="color: #96A7A9; font-style: italic;">if [ "$1" = "compile_only" ]; then</span>
+<span style="color: #96A7A9; font-style: italic;">#         </span><span style="color: #96A7A9; font-style: italic;">compile_only="true"</span>
+<span style="color: #96A7A9; font-style: italic;">#     </span><span style="color: #96A7A9; font-style: italic;">fi</span>
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">fi</span>
+<span style="color: #b58900;">usage</span> <span style="color: #268bd2;">()</span> <span style="color: #268bd2;">{</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">""</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Options are: compile_only"</span>
+<span style="color: #268bd2;">}</span>
+
+<span style="color: #859900; font-weight: bold;">while</span> <span style="color: #268bd2;">[</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">1</span><span style="color: #2aa198;">"</span> != <span style="color: #2aa198;">""</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">do</span>
+    <span style="color: #268bd2;">PARAM</span>=<span style="color: #268bd2; font-weight: bold;">`</span><span style="color: #268bd2; font-weight: bold; font-style: italic;">echo</span><span style="color: #268bd2; font-weight: bold;"> $1 | awk -F= '{print $1}'`</span>
+    <span style="color: #268bd2;">VALUE</span>=<span style="color: #268bd2; font-weight: bold;">`</span><span style="color: #268bd2; font-weight: bold; font-style: italic;">echo</span><span style="color: #268bd2; font-weight: bold;"> $1 | awk -F= '{print $2}'`</span>
+
+    <span style="color: #859900; font-weight: bold;">case</span> $<span style="color: #268bd2;">PARAM</span><span style="color: #859900; font-weight: bold;"> in</span>
+        -h | --help)
+            usage
+            <span style="color: #859900; font-weight: bold;">exit</span>
+            ;;
+        compile_only)
+            <span style="color: #268bd2;">compile_only</span>=<span style="color: #2aa198;">"true"</span>
+            ;;
+        *)
+            <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Error! Unknown Parameter!!"</span>
+            usage
+            <span style="color: #859900; font-weight: bold;">exit</span> <span style="color: #6c71c4; font-weight: bold;">1</span>
+            ;;
+    <span style="color: #859900; font-weight: bold;">esac</span>
+    <span style="color: #d33682; font-style: italic;">shift</span>
+<span style="color: #859900; font-weight: bold;">done</span>
+
+</pre>
+</div>
+
+
+<p>
+Now, the baseline libraries&#x2026; This takes a lot of time. Also, there is a bit of diffeerence between RHEL8 and CentOS.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell" id="orged5e89a">
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">compile_only</span><span style="color: #2aa198;">"</span> = <span style="color: #2aa198;">"false"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Installing prerequisite packages..."</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H subscription-manager repos --enable <span style="color: #2aa198;">"codeready-builder-for-rhel-8-x86_64-rpms"</span>
+    <span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">sudo</span><span style="color: #96A7A9; font-style: italic;"> -H dnf config-manager --set-enable PowerTools 2&gt;&amp;1 &gt;&gt;$log # CentOS8</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf clean all <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf update --best --allowerasing -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Removing wine from official repo."</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf remove wine wine-* -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install glibc-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libgcc.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libX11-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> freetype-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> gnutls-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libxml2-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libjpeg-turbo-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libpng-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libXrender-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> alsa-lib-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> glib2-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libSM-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+</pre>
+</div>
+
+<p>
+Some packages needs custom repo installation. They were available on RHEL 7 or CentOS 7 but discontinued on 8. This is why many institutions do not migrate to newest distributions easily.
+</p>
+
+<ol class="org-ol">
+<li>isdn4k-utils-devel.i686</li>
+<li>pkgconfig.i686</li>
+<li>audiofile-devel.i686</li>
+<li>qt-devel.i686</li>
+</ol>
+
+<p>
+They will be installed manually&#x2026;
+</p>
+<div class="org-src-container">
+<pre class="src src-shell" id="org7a5b41f">
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">compile_only</span><span style="color: #2aa198;">"</span> = <span style="color: #2aa198;">"false"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Installing some edge case 32bit packages..."</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/prelink-0.5.0-9.el7.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install glibc-devel libstdc++-devel icoutils openal-soft-devel prelink gstreamer1-plugins-base-devel gstreamer1-devel ImageMagick-devel fontpackages-devel libv4l-devel gsm-devel giflib-devel libXxf86dga-devel mesa-libOSMesa-devel isdn4k-utils-devel libgphoto2-devel fontforge libusb-devel lcms2-devel audiofile-devel -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-0.3.6-9.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-devel-0.3.6-9.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-4.8.7-8.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/libmng-1.0.10-14.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-x11-4.8.7-8.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-devel-4.8.7-8.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/vulkan-loader-devel-1.2.148.0-1.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/mpg123-devel-1.25.10-2.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/extras/x86_64/libvkd3d-1.1-3.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/extras/x86_64/libvkd3d-devel-1.1-3.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-20.07-1.el8.8_2.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-devel-20.07-1.el8.8_2.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-20.07-1.el8.8_2.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-devel-20.07-1.el8.8_2.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install glibc-devel.i686 dbus-devel.i686 freetype-devel.i686 pulseaudio-libs-devel.i686 libX11-devel.i686 mesa-libGLU-devel.i686 libICE-devel.i686 libXext-devel.i686 libXcursor-devel.i686 libXi-devel.i686 libXxf86vm-devel.i686 libXrender-devel.i686 libXinerama-devel.i686 libXcomposite-devel.i686 libXrandr-devel.i686 mesa-libGL-devel.i686 mesa-libOSMesa-devel.i686 libxml2-devel.i686 zlib-devel.i686 gnutls-devel.i686 ncurses-devel.i686 sane-backends-devel.i686 libv4l-devel.i686 libgphoto2-devel.i686 libexif-devel.i686 lcms2-devel.i686 gettext-devel.i686 isdn4k-utils-devel.i686 cups-devel.i686 fontconfig-devel.i686 gsm-devel.i686 libjpeg-turbo-devel.i686 libtiff-devel.i686 unixODBC.i686 openldap-devel.i686 alsa-lib-devel.i686 audiofile-devel.i686 freeglut-devel.i686 giflib-devel.i686 gstreamer1-devel.i686 gstreamer1-plugins-base-devel.i686 libXmu-devel.i686 libXxf86dga-devel.i686 libieee1284-devel.i686 libpng-devel.i686 librsvg2-devel.i686 libstdc++-devel.i686 libusb-devel.i686 unixODBC-devel.i686 qt-devel.i686 libpcap-devel.i686 -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Resolving conflicts..."</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf clean all <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf update --best --allowerasing -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf builddep wine -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf update -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install gstreamer1-plugins-base-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> gstreamer1-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> systemd-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install libXfixes-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+<span style="color: #859900; font-weight: bold;">fi</span>
+</pre>
+</div>
+
+<p>
+Package installation part can be summarized as&#x2026;
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">!/usr/bin/</span><span style="color: #859900; font-weight: bold;">env</span><span style="color: #96A7A9; font-style: italic;"> bash -e</span>
+<span style="color: #268bd2;">CWD</span>=<span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(</span><span style="color: #268bd2; font-weight: bold; font-style: italic;">pwd</span><span style="color: #268bd2; font-weight: bold;"> -P)</span><span style="color: #2aa198;">"</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -d <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">/workspace"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">/workspace"</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+<span style="color: #268bd2;">WORKSPACE</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">/workspace"</span>
+<span style="color: #268bd2;">WINE_VER</span>=<span style="color: #2aa198;">"5.0"</span>
+<span style="color: #268bd2;">WINE_VER_MAJOR</span>=$<span style="color: #268bd2;">(</span><span style="color: #b58900; font-style: italic;">echo</span> $<span style="color: #d33682;">{</span><span style="color: #268bd2;">WINE_VER</span><span style="color: #d33682;">}</span> | cut -d<span style="color: #2aa198;">'.'</span> -f1<span style="color: #268bd2;">)</span>
+<span style="color: #268bd2;">WINE_VER_URL</span>=$<span style="color: #268bd2;">(</span><span style="color: #b58900; font-style: italic;">echo</span> $<span style="color: #d33682;">{</span><span style="color: #268bd2;">WINE_VER</span><span style="color: #d33682;">}</span> | cut -d<span style="color: #2aa198;">'.'</span> -f1,2<span style="color: #268bd2;">)</span>
+
+<span style="color: #268bd2;">log</span>=<span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(mktemp -t install-wine.XXXXXX.log)</span><span style="color: #2aa198;">"</span>
+
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">Checking for wget</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -x <span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(command -v wget)</span><span style="color: #2aa198;">"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Oops! wget is a must!!"</span>
+    <span style="color: #859900; font-weight: bold;">exit</span> <span style="color: #6c71c4; font-weight: bold;">1</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">compile_only</span><span style="color: #2aa198;">"</span> = <span style="color: #2aa198;">"false"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Installing prerequisite packages..."</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H subscription-manager repos --enable <span style="color: #2aa198;">"codeready-builder-for-rhel-8-x86_64-rpms"</span>
+    <span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">sudo</span><span style="color: #96A7A9; font-style: italic;"> -H dnf config-manager --set-enable PowerTools 2&gt;&amp;1 &gt;&gt;$log # CentOS8</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf clean all <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf update --best --allowerasing -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Removing wine from official repo."</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf remove wine wine-* -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install libjpeg-turbo-devel libtiff-devel freetype-devel -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install glibc-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libgcc.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libX11-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> freetype-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> gnutls-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libxml2-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libjpeg-turbo-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libpng-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libXrender-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> alsa-lib-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> glib2-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> libSM-devel.<span style="color: #268bd2;">{</span>i686,x86_64<span style="color: #268bd2;">}</span> -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">compile_only</span><span style="color: #2aa198;">"</span> = <span style="color: #2aa198;">"false"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Installing some edge case 32bit packages..."</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/prelink-0.5.0-9.el7.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install glibc-devel libstdc++-devel icoutils openal-soft-devel prelink gstreamer1-plugins-base-devel gstreamer1-devel ImageMagick-devel fontpackages-devel libv4l-devel gsm-devel giflib-devel libXxf86dga-devel mesa-libOSMesa-devel isdn4k-utils-devel libgphoto2-devel fontforge libusb-devel lcms2-devel audiofile-devel -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-3.2-99.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/isdn4k-utils-devel-3.2-99.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-0.3.6-9.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/audiofile-devel-0.3.6-9.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-4.8.7-8.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/libmng-1.0.10-14.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-x11-4.8.7-8.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/7/os/x86_64/Packages/qt-devel-4.8.7-8.el7.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/vulkan-loader-devel-1.2.148.0-1.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install http://mirror.centos.org/centos/8/PowerTools/x86_64/os/Packages/mpg123-devel-1.25.10-2.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/extras/x86_64/libvkd3d-1.1-3.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/extras/x86_64/libvkd3d-devel-1.1-3.el8.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-20.07-1.el8.8_2.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-devel-20.07-1.el8.8_2.i686.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-20.07-1.el8.8_2.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install https://pkgs.dyn.su/el8/multimedia/x86_64/libFAudio-devel-20.07-1.el8.8_2.x86_64.rpm -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install glibc-devel.i686 dbus-devel.i686 freetype-devel.i686 pulseaudio-libs-devel.i686 libX11-devel.i686 mesa-libGLU-devel.i686 libICE-devel.i686 libXext-devel.i686 libXcursor-devel.i686 libXi-devel.i686 libXxf86vm-devel.i686 libXrender-devel.i686 libXinerama-devel.i686 libXcomposite-devel.i686 libXrandr-devel.i686 mesa-libGL-devel.i686 mesa-libOSMesa-devel.i686 libxml2-devel.i686 zlib-devel.i686 gnutls-devel.i686 ncurses-devel.i686 sane-backends-devel.i686 libv4l-devel.i686 libgphoto2-devel.i686 libexif-devel.i686 lcms2-devel.i686 gettext-devel.i686 isdn4k-utils-devel.i686 cups-devel.i686 fontconfig-devel.i686 gsm-devel.i686 libjpeg-turbo-devel.i686 libtiff-devel.i686 unixODBC.i686 openldap-devel.i686 alsa-lib-devel.i686 audiofile-devel.i686 freeglut-devel.i686 giflib-devel.i686 gstreamer1-devel.i686 gstreamer1-plugins-base-devel.i686 libXmu-devel.i686 libXxf86dga-devel.i686 libieee1284-devel.i686 libpng-devel.i686 librsvg2-devel.i686 libstdc++-devel.i686 libusb-devel.i686 unixODBC-devel.i686 qt-devel.i686 libpcap-devel.i686 -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Resolving conflicts..."</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf clean all <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf update --best --allowerasing -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf builddep wine -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf update -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install gstreamer1-plugins-base-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> gstreamer1-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> systemd-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+    <span style="color: #b58900; font-style: italic;">sudo</span> -H dnf install libXfixes-devel.<span style="color: #268bd2;">{</span>x86_64,i686<span style="color: #268bd2;">}</span> -y <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+
+<span style="color: #859900; font-weight: bold;">fi</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org69a6854" class="outline-3">
+<h3 id="org69a6854"><span class="section-number-3">1.3</span> Downloading Wine</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Ok, we can download Wine source code from the official <a href="https://www.winehq.org/">Wine web site</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #268bd2;">DOWNLOADS</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WORKSPACE}</span><span style="color: #2aa198;">/downloads"</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -d <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">DOWNLOADS</span><span style="color: #2aa198;">"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{DOWNLOADS}</span><span style="color: #2aa198;">"</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+wget <span style="color: #2aa198;">"http://dl.winehq.org/wine/source/</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER_URL}</span><span style="color: #2aa198;">/wine-</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER}</span><span style="color: #2aa198;">.tar.xz"</span> -O <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{DOWNLOADS}</span><span style="color: #2aa198;">/wine-</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER}</span><span style="color: #2aa198;">.tar.xz"</span> <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">Use this url for experimental version.</span>
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">wget "http://dl.winehq.org/wine/source/${WINE_VER_MAJOR}.x/wine-${WINE_VER}.tar.xz" -O</span>
+</pre>
+</div>
+
+<p>
+Now, extract the tarball!
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #268bd2;">SRC_DIR</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WORKSPACE}</span><span style="color: #2aa198;">/src"</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -d <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{SRC_DIR}</span><span style="color: #2aa198;">"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{SRC_DIR}</span><span style="color: #2aa198;">"</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+tar xf <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{DOWNLOADS}</span><span style="color: #2aa198;">/wine-</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER}</span><span style="color: #2aa198;">.tar.xz"</span> -C <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{SRC_DIR}</span><span style="color: #2aa198;">"</span>
+<span style="color: #268bd2;">WINE_SRC_DIR</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{SRC_DIR}</span><span style="color: #2aa198;">/wine-</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER}</span><span style="color: #2aa198;">"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb49c950" class="outline-3">
+<h3 id="orgb49c950"><span class="section-number-3">1.4</span> Compiling Wine</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+As usual, we will install Wine on the Homebrew directory (default is <code>$HOME/.local</code>) so that we can manage it locally. We will compile 64 bit first to give reference to 32 bit configuration. After all, Windows runs both 32 bit and 64 bit core simultaneously, which makes compatibility with Linux or any UNIX like OS.
+</p>
+
+<p>
+Good thing is, we are running this script on RHEL or CentOS or their clones. Ubuntu has some trouble with separating 64bit and 32bit libraries. In fact, Ubuntu does not even have <code>lib64</code> system directory but rather put everything into just <code>lib</code>, even in 64bit OS. This is not a bad thing since everything is migrating to 64bit architecture. We do not want to provide additional packages for deprecated 32bit architectures.
+</p>
+
+<p>
+I believe <a href="https://www.winehq.org/">WineHq</a> will find out how to mitigate this problem once almost all Linux distributions dropped 32bit support. Legacy codes always cause trouble, anyway.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #268bd2;">WINE_BUILD_DIR_32</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WORKSPACE}</span><span style="color: #2aa198;">/build/wine-</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER}</span><span style="color: #2aa198;">-i686-build"</span>
+<span style="color: #268bd2;">WINE_BUILD_DIR_64</span>=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WORKSPACE}</span><span style="color: #2aa198;">/build/wine-</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_VER}</span><span style="color: #2aa198;">-x86_64-build"</span>
+<span style="color: #859900; font-weight: bold;">if</span> <span style="color: #268bd2;">[</span> <span style="color: #268bd2; font-weight: bold;">!</span> -d <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">WORKSPACE</span><span style="color: #2aa198;">/build"</span> <span style="color: #268bd2;">]</span>; <span style="color: #859900; font-weight: bold;">then</span>
+    <span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">WORKSPACE</span><span style="color: #2aa198;">/build"</span>
+<span style="color: #859900; font-weight: bold;">fi</span>
+<span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">WINE_BUILD_DIR_32</span><span style="color: #2aa198;">"</span>
+<span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">WINE_BUILD_DIR_64</span><span style="color: #2aa198;">"</span>
+</pre>
+</div>
+
+<p>
+Let&rsquo;s compile 64 bit Wine first&#x2026;
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Configuring 64 bit Wine..."</span>
+<span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">WINE_BUILD_DIR_64</span><span style="color: #2aa198;">"</span> &amp;&amp; <span style="color: #268bd2;">CC</span>=<span style="color: #2aa198;">"/usr/bin/gcc"</span> <span style="color: #268bd2;">CXX</span>=<span style="color: #2aa198;">"/usr/bin/g++"</span> <span style="color: #268bd2;">CFLAGS</span>=<span style="color: #2aa198;">"-O3 -march=native -pipe"</span> <span style="color: #268bd2;">CXXFLAGS</span>=<span style="color: #2aa198;">"-O3 -march=native -pipe"</span> <span style="color: #268bd2;">LDFLAGS</span>=<span style="color: #2aa198;">"-Wl,-rpath=</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">HOME</span><span style="color: #2aa198;">/.local/lib -Wl,-rpath=</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">HOME</span><span style="color: #2aa198;">/.local/lib64"</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_SRC_DIR}</span><span style="color: #2aa198;">/configure"</span> <span style="color: #2aa198;">\</span>
+    --prefix=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">HOME</span><span style="color: #2aa198;">/.local"</span> --enable-win64 &amp;&amp; <span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">CWD</span><span style="color: #2aa198;">"</span> <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+</pre>
+</div>
+
+<p>
+Let&rsquo;s just compile 64 bit wine.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Building 64 bit Wine (Wine64)..."</span>
+<span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_BUILD_DIR_64}</span><span style="color: #2aa198;">"</span> &amp;&amp; <span style="color: #b58900; font-style: italic;">make</span> -j4 &amp;&amp; <span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{CWD}</span><span style="color: #2aa198;">"</span> <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+</pre>
+</div>
+
+<p>
+Now we need to supply correct environmental variables to the configure script. We&rsquo;ll just use my favorite rice up stuff. Note that gcc and g++ must be able to compile with <code>-m32</code> flag, or 32bit capable. We are sticking to the system gcc since installing those <code>i686</code> packages ensure 32bit code cross compilation.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Configuring 32 bit Wine..."</span>
+<span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">WINE_BUILD_DIR_32</span><span style="color: #2aa198;">"</span> &amp;&amp; <span style="color: #268bd2;">CC</span>=<span style="color: #2aa198;">"/usr/bin/gcc"</span> <span style="color: #268bd2;">CXX</span>=<span style="color: #2aa198;">"/usr/bin/g++"</span> <span style="color: #268bd2;">CFLAGS</span>=<span style="color: #2aa198;">"-O3 -march=native -pipe"</span> <span style="color: #268bd2;">CXXFLAGS</span>=<span style="color: #2aa198;">"-O3 -march=native -pipe"</span> <span style="color: #268bd2;">LDFLAGS</span>=<span style="color: #2aa198;">"-Wl,-rpath=</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">HOME</span><span style="color: #2aa198;">/.local/lib"</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_SRC_DIR}</span><span style="color: #2aa198;">/configure"</span> <span style="color: #2aa198;">\</span>
+    --prefix=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">HOME</span><span style="color: #2aa198;">/.local"</span> --with-wine64=<span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_BUILD_DIR_64}</span><span style="color: #2aa198;">"</span> &amp;&amp; <span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">CWD</span><span style="color: #2aa198;">"</span> <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+</pre>
+</div>
+
+<p>
+Once everything&rsquo;s configured, let&rsquo;s do the usual stuff!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Building 32 bit Wine... and Installing it into prefix directory."</span>
+<span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_BUILD_DIR_32}</span><span style="color: #2aa198;">"</span> &amp;&amp; <span style="color: #b58900; font-style: italic;">make</span> -j <span style="color: #6c71c4; font-weight: bold;">4</span> &amp;&amp; <span style="color: #b58900; font-style: italic;">make</span> install <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+<span style="color: #b58900; font-style: italic;">cd</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">{WINE_BUILD_DIR_64}</span><span style="color: #2aa198;">"</span> &amp;&amp; <span style="color: #b58900; font-style: italic;">make</span> install <span style="color: #6c71c4; font-weight: bold;">2</span>&gt;&amp;<span style="color: #6c71c4; font-weight: bold;">1</span> &gt;&gt;$<span style="color: #268bd2;">log</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge7a3534" class="outline-3">
+<h3 id="orge7a3534"><span class="section-number-3">1.5</span> Wine Gecko and Mono</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+&gt;&gt;&gt; Disabled for now. &lt;&lt;&lt;
+&#x2013;&gt; Wine actually tries to install them automatically.
+</p>
+
+<p>
+Wine has additional dependencies to run many programs properly. This section actually limits the version of Wine to be installed. Those two packages are super sensitive to version matching&#x2026;
+</p>
+
+<p>
+Let&rsquo;s install Wine Mono&#x2026;
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">wget https://dl.winehq.org/wine/wine-mono/6.0.0/wine-mono-6.0.0-x86.msi -O "$DOWNLOADS/wine-mono-6.0.0-x86.msi"</span>
+<span style="color: #96A7A9; font-style: italic;"># </span><span style="color: #96A7A9; font-style: italic;">wine msiexec /i $DOWNLOADS/wine-mono-6.0.0-x86.msi</span>
+</pre>
+</div>
+
+<p>
+And Wine Gecko
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">wget http://dl.winehq.org/wine/wine-gecko/2.47.2/wine-gecko-2.47.2-x86.msi -O "$DOWNLOADS/wine-gecko-2.47.2-x86.msi"</span>
+<span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">wine msiexec /i $DOWNLOADS/wine-gecko-2.47.2-x86.msi</span>
+<span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">wget http://dl.winehq.org/wine/wine-gecko/2.47.2/wine-gecko-2.47.2-x86_64.msi -O "$DOWNLOADS/wine-gecko-2.47.2-x86_64.msi"</span>
+<span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">wine msiexec /i $DOWNLOADS/wine-gecko-2.47.2-x86_64.msi</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc172d2b" class="outline-3">
+<h3 id="orgc172d2b"><span class="section-number-3">1.6</span> Closing up</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+If the compilation does not confront more hiccups, it will end up wine executable at <code>$HOME/.local/bin</code>. Now let&rsquo;s try to install <a href="https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html">LTSpice</a> with it!
+</p>
+
+<p>
+Then clean up everything! (Not mandatory)
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">rm</span><span style="color: #96A7A9; font-style: italic;"> -rf "${WORKSPACE}"</span>
+<span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">echo</span><span style="color: #96A7A9; font-style: italic;"> "Cleaned up all the build craps! Consider installing Winetricks."</span>
+</pre>
+</div>
+
+<p>
+Checking up installed wine.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Checking the installation results..."</span>
+<span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Wine 32 bit is..."</span>
+file <span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(command -v wine)</span><span style="color: #2aa198;">"</span>
+<span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Wine 32 bit version is:"</span>
+wine --version
+<span style="color: #b58900; font-style: italic;">echo</span>
+<span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Wine 64 bit is..."</span>
+file <span style="color: #2aa198;">"</span><span style="color: #268bd2; font-weight: bold;">$(command -v wine64)</span><span style="color: #2aa198;">"</span>
+<span style="color: #b58900; font-style: italic;">echo</span> <span style="color: #2aa198;">"Wine 64 bit version is:"</span>
+wine64 --version
+</pre>
+</div>
+
+<p>
+Also, consider installing Winetricks! It will help you install all the interesting packages easily.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org70c95a4" class="outline-2">
+<h2 id="org70c95a4"><span class="section-number-2">2</span> Winetricks</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Apparently, installing wine itself isn&rsquo;t really enough. We need to install more stuffs such as Windows fonts and Visual Studio .Net Runtime, blah blah stuffs. So, Installing <a href="https://wiki.winehq.org/Winetricks">Winetricks</a> is a must!
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #96A7A9; font-style: italic;">#</span><span style="color: #96A7A9; font-style: italic;">!/usr/bin/</span><span style="color: #859900; font-weight: bold;">env</span><span style="color: #96A7A9; font-style: italic;"> bash -e</span>
+
+<span style="color: #268bd2;">CWD</span>=$<span style="color: #268bd2;">(</span><span style="color: #b58900; font-style: italic;">pwd</span> -P<span style="color: #268bd2;">)</span>
+
+<span style="color: #b58900; font-style: italic;">mkdir</span> -pv <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">CWD</span><span style="color: #2aa198;">/workspace/downloads"</span>
+wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -O <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">CWD</span><span style="color: #2aa198;">/workspace/downloads/winetricks"</span>
+<span style="color: #b58900; font-style: italic;">chmod</span> +x <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">CWD</span><span style="color: #2aa198;">/workspace/downloads/winetricks"</span>
+<span style="color: #b58900; font-style: italic;">cp</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">CWD</span><span style="color: #2aa198;">/workspace/downloads/winetricks"</span> <span style="color: #2aa198;">"</span><span style="color: #6c71c4; font-weight: bold;">$</span><span style="color: #268bd2;">HOME</span><span style="color: #2aa198;">/.local/bin/winetricks"</span>
+</pre>
+</div>
+
+<p>
+Now run <code>winetricks</code> on your shell. It will detect system installed wine automatically and set up <code>~/.wine</code> directory accordingly. The 64bit version might involve a bit of error messages during operation but you can turn on &rsquo;silent install&rsquo; mode anytime.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org762a846" class="outline-2">
+<h2 id="org762a846"><span class="section-number-2">3</span> Korean Fonts</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+This is not really a troublesome feature if you do not speak Korean nor have to use any Korean UI programs. But Wine in default set up, does not brings in any Korean fonts and unable to display any EUC<sub>KR</sub> encoded fonts. This is because the default wine installation do not come with CJK fonts. These fonts can be installed via the winetricks! Install fakekorean, cjkfonts, and tahoma.
+</p>
+
+<p>
+Also, you can put in font files to <code>~/.wine/drive_c/windows/fonts</code> directory. Yes, if you have copied font files from any Windows machine, it will work flawlessly with the wine as well. Note that <code>Gulim</code> is the best selection for wine&rsquo;s default Windows theme!
+</p>
+
+<p>
+Once you have successfully installed those Korean fonts, open <code>~/.wine/system.reg</code> to edit a couple of lines. Search <code>"MS Shell Dlg"</code> and <code>"MS Shell Dlg 2"</code> to replace those settings to <code>Gulim</code> and <code>Tahoma</code>!! Then it will show Korean fonts correctly!!
+</p>
+
+<p>
+This part was referenced from <a href="https://blog.danggun.net/3661">Danggun&rsquo;s Blog</a>.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Taylor Shin</p>
+<p class="date">Created: 2021-04-12 Mon 22:41</p>
+</div>
+</body>
+</html>

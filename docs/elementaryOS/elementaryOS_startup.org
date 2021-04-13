@@ -1,6 +1,7 @@
 #+PROPERTY: header-args :tangle yes
 #+TITLE: elementary OS Setting up Hangul Input guide.
 #+AUTHOR: Taylor Shin
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 * Things to do after installing elementary OS.
 

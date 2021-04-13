@@ -1,3 +1,7 @@
+#+TITLE: UDS Work list and ideas
+#+AUTHOR: Taylor Shin
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
 * TODO Implement other platforms... namely Fedora, OS X, etc.
 ** IDEA OS X? huh... I need MONEY! Now all those Apple computers I have are totally outdated and Apple cut down support. So, it will not happen anytime soon!
 
