@@ -99,7 +99,7 @@
     "class": "InstPython2"
   },
   "python3": {
-    "url": "https://www.python.org/ftp/python/3.9.3/Python-3.9.3.tgz",
+    "url": "https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz",
     "type": "tarball",
     "alt-names": ["Python3"],
     "dependency": ["gcc", "openssl"],
