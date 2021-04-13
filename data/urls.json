@@ -1,7 +1,7 @@
 {
   # GCC
   "gcc": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz",
     "type": "tarball",
     "alt-names": ["gcc-10"],
     "dependency": [],
@@ -9,7 +9,7 @@
     "class": "InstGCC"
   },
   "gcc-jit": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz",
     "type": "tarball",
     "alt-names": ["gccjit", "gcc-10-jit"],
     "dependency": [],
