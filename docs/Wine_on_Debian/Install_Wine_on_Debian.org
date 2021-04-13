@@ -1,5 +1,6 @@
 #+TITLE: Install Wine on Debian
 #+AUTHOR: Taylor Shin
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 * Wine on Debian
 Debian is a rock solid and old-school distro which still supports 32bit libraries unlike Ubuntu. Even, we can install Wine through package manager. This walkthough is based on a guide from [[https://computingforgeeks.com/how-to-install-wine-on-debian/][here]]. Since we are running Debian Buster (10), this guide will not consider other versions.
