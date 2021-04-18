@@ -12,18 +12,24 @@ from src.Prerequisites import InstallPrereqPkgs
 from src.RustTools import InstallRustTools
 from src.PatchQt5WebInstall import PatchQt5WebInstall
 
-### Front End main class ###
-###
-### Organizes all the dirty jobs.
-###
+
 class UDSBrew(RunCmd):
+    """
+    The front-end main class
+
+    Yeap, organizes all the dirty works.
+    """
+
     def __init__(self, args):
+        """
+        Initializing stuff.
+        """
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.find_out_version()
-        self.system_ruby = '/usr/bin/ruby'
+        self.system_ruby = "/usr/bin/ruby"
         if not program_exists(self.system_ruby):
-            print ("Oh crap, we need ruby to work correctly!!")
+            print("Oh crap, we need ruby to work correctly!!")
             sys.exit(-1)
 
         self.args = args
@@ -99,7 +105,9 @@ class UDSBrew(RunCmd):
                 sys.exit(0)
 
             for pkg in pkgs_to_install:
-                self.Run(f"{self.system_ruby} {self.uds_backend} {opt_verbose} {opt_sgcc} {pkg}")
+                self.Run(
+                    f"{self.system_ruby} {self.uds_backend} {opt_verbose} {opt_sgcc} {pkg}"
+                )
 
             sys.exit(0)
 
@@ -112,12 +120,19 @@ class UDSBrew(RunCmd):
             sys.exit(0)
 
     def InstallPrerequisiteStuffs(self):
+        """
+        Installs Prerequisite packages (selected by subroutines)
+        and ruby gems that we need to run those ruby scripts!
+        """
         InstallPrereqPkgs()
         InstallSystemRubyGems()
         sys.exit(0)
 
     def parse_args(self):
+        """
+        Parses command line arguments for the backend.
 
+        """
         p = argparse.ArgumentParser(prog="unix_dev_setup")
 
         p.add_argument(
@@ -193,7 +208,7 @@ class UDSBrew(RunCmd):
             "--rust_tools",
             action="store_true",
             default=False,
-            help="Installs super useful utilities written by Rust"
+            help="Installs super useful utilities written by Rust",
         )
         p.add_argument(
             "-qt5patch",
@@ -201,7 +216,7 @@ class UDSBrew(RunCmd):
             metavar="<qt5_version>",
             nargs="*",
             default=[],
-            help="Patches weird pkgconfig files on Web installed Qt5."
+            help="Patches weird pkgconfig files on Web installed Qt5.",
         )
 
         if len(self.args) > 1:
@@ -210,18 +225,24 @@ class UDSBrew(RunCmd):
             p.print_help()
             sys.exit(0)
 
-    ### Help file
-    def show_help(self):
-        print("<Put help message here>")
+    # def show_help(self):
+    #     """
+    #     DUMMY: Help message.
+    #     TODO Fill out help message? Someday?
+    #     """
+    #     print("<Put help message here>")
 
-    ### Show version
     def show_version(self):
+        """
+        Displays the version we extracted to stdio
+        """
         print(f"unix_dev_setup {'.'.join(self.version)}")
 
-    ### Set Version ###
-    ### finds unix_dev_setup.rb to extract version info.
-    ###
     def find_out_version(self):
+        """
+        Extracts version info from the backend
+        unix_dev_setup.rb
+        """
         self.uds_backend = "./unix_dev_setup.rb"
         if os.path.exists("./unix_dev_setup"):
             self.uds_backend = "./unix_dev_setup"
@@ -243,6 +264,5 @@ class UDSBrew(RunCmd):
                 )
 
 
-### Calling main function ###
 if __name__ == "__main__":
     UDSBrew(sys.argv)
