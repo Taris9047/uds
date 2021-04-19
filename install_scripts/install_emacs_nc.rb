@@ -12,19 +12,17 @@
 # Additional deps for Fedora
 #
 # libgccjit-devel texinfo
-# 
+#
 
-$newest_gcc_ver = '10'
+$newest_gcc_ver = "10"
 
-require 'fileutils'
-require_relative '../utils/utils.rb'
-require_relative './install_stuff.rb'
+require "fileutils"
+require_relative "../utils/utils.rb"
+require_relative "./install_stuff.rb"
 
 class InstEmacsNC < InstallStuff
-
   def initialize(args)
-
-    args.each do |k,v|
+    args.each do |k, v|
       instance_variable_set("@#{k}", v) unless v.nil?
     end
 
@@ -39,24 +37,23 @@ class InstEmacsNC < InstallStuff
     @conf_options = []
     # Checking up qt5
     @conf_options += [
-      '--with-modules',
-      '--with-xft',
-      '--with-file-notification=inotify',
-      '--with-x=yes',
-      '--with-x-toolkit=gtk3',
-      '--with-xwidgets',
-      '--with-lcms2',
-      '--with-imagemagick',
-      '--with-mailutils',
-      '--with-pop',
-      '--with-native-compilation',
-      '--with-xwidgets'    # needs webkitgtk4-dev
+      "--with-modules",
+      "--with-xft",
+      "--with-file-notification=inotify",
+      "--with-x=yes",
+      "--with-x-toolkit=gtk3",
+      "--with-xwidgets",
+      "--with-lcms2",
+      "--with-imagemagick",
+      "--with-mailutils",
+      "--with-pop",
+      "--with-native-compilation",
+      "--with-xwidgets",    # needs webkitgtk4-dev
     ]
 
     # TODO: Implement more elegant way to find out jit enabled gcc
     #
     self.detect_libgccjit
-  
   end # initialize
 
   def detect_libgccjit
@@ -75,16 +72,16 @@ class InstEmacsNC < InstallStuff
     #
     # In this case, we will search system directory and
     # tag libgccjit_found as true.
-    # 
-    
+    #
+
     gcc_jit_found = false
     libgccjit_found = false
     @gcc_prefix = @prefix
 
-    gcc_jit_path = UTILS.which('gcc-jit')
+    gcc_jit_path = UTILS.which("gcc-jit")
     gcc_new_path = UTILS.which("gcc-#{$newest_gcc_ver}")
     gcc_fallback_path = UTILS.which("gcc")
-    gpp_jit_path = UTILS.which('g++-jit')
+    gpp_jit_path = UTILS.which("g++-jit")
     gpp_new_path = UTILS.which("g++-#{$newest_gcc_ver}")
     gpp_fallback_path = UTILS.which("g++")
 
@@ -100,18 +97,18 @@ class InstEmacsNC < InstallStuff
       @env["CC"] = gcc_fallback_path
       @env["CXX"] = gpp_fallback_path
     end
- 
+
     # Detect whether current gcc has libgccjit capability.
-    @gcc_prefix = File.realpath(File.join(File.dirname(@env["CC"]), '..'))
+    @gcc_prefix = File.realpath(File.join(File.dirname(@env["CC"]), ".."))
 
     # Since we are working with system installed gcc, we can browse it even
     # further since they keep them in pretty peculiar places.
     search_result = `find #{@gcc_prefix} -name libgccjit.so`
-    if search_result.include? 'libgccjit'
+    if search_result.include? "libgccjit"
       puts "** Found libgccjit works with #{@env["CC"]}!! **"
-      @env["CFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
-      @env["CXXFLAGS"] += " -I#{File.join(@gcc_prefix, 'include')}"
-      @env["LDFLAGS"] += " -Wl,-rpath=#{@gcc_prefix}/lib -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu"
+      @env["CFLAGS"] = " -I#{File.join(@gcc_prefix, "include")} " + @env["CFLAGS"]
+      @env["CXXFLAGS"] = " -I#{File.join(@gcc_prefix, "include")} " + @env["CXXFLAGS"]
+      @env["LDFLAGS"] = " -Wl,-rpath=#{@gcc_prefix}/lib -Wl,-rpath=#{@gcc_prefix}/lib/x86_64-linux-gnu" + @env["LDFLAGS"]
       libgccjit_found = true
       return libgccjit_found
     end
@@ -121,7 +118,6 @@ class InstEmacsNC < InstallStuff
       puts "Exiting!!"
       exit 1
     end
-
 
     return libgccjit_found
   end # detect_libgccjit
@@ -133,14 +129,14 @@ class InstEmacsNC < InstallStuff
  Many rolling distros provide this version with repl or copr.
  So, it's better to use them instead of this head-bonking source compile.
 *** **** ***
-}      
+}
     puts warn_txt
     puts "\n\n"
     sleep (2)
 
     dl = Download.new(@source_url, @src_dir,
-        source_ctl='git', mode='wget',
-        source_ctl_opts="#{@pkgname} -b feature/native-comp")
+                      source_ctl = "git", mode = "wget",
+                      source_ctl_opts = "#{@pkgname} -b feature/native-comp")
     src_clone_path = dl.GetPath
 
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
@@ -150,13 +146,13 @@ class InstEmacsNC < InstallStuff
 
     if Dir.exists?(src_build_folder)
       puts "Build folder found!! Removing it for 'pure' experience!!"
-      self.Run( "rm -rf "+src_build_folder )
+      self.Run("rm -rf " + src_build_folder)
     else
       puts "Ok, let's make a build folder"
     end
-    self.Run( "mkdir -p "+src_build_folder )
+    self.Run("mkdir -p " + src_build_folder)
 
-    opts = ["--prefix=#{@prefix}"]+@conf_options
+    opts = ["--prefix=#{@prefix}"] + @conf_options
 
     if @need_sudo
       inst_cmd = "sudo -H make install"
@@ -174,20 +170,18 @@ class InstEmacsNC < InstallStuff
       "cd #{src_clone_folder}", "&&",
       "./autogen.sh", "&&",
       "cd #{src_build_folder}", "&&",
-      env.join(' '),
-      File.join(src_clone_folder,"configure"), opts.join(" "), "&&",
+      File.join(src_clone_folder, "configure"), opts.join(" "), "&&",
       "nice make -j#{@Processors.to_s}", "&&",
-      inst_cmd
+      inst_cmd,
     ]
     puts "Compiling (with #{@Processors} processors) and Installing ..."
-    self.RunInstall( env: @env, cmd: cmds.join(" ") )
+    self.RunInstall(env: @env, cmd: cmds.join(" "))
     # self.InstallSystemd()
     self.WriteInfo
   end
 
   def InstallSystemd
-  sd_txt = \
-%Q{[Unit]
+    sd_txt = %Q{[Unit]
 Description=Emacs: the extensible, self-documenting text editor
 
 [Service]
@@ -201,18 +195,17 @@ WorkingDirectory=%h
 [Install]
 WantedBy=multi-user.target
 }
-  
-  systemd_dir = File.join(ENV["HOME"],'.config','systemd','user')
-  FileUtils.mkdir_p(systemd_dir)
-  File.write(File.join(systemd_dir, 'emacs.service'), sd_txt)
-  
-  inst_cmd = [
-    "systemctl --user daemon-reload",
-    "systemctl enable --user emacs",
-    "systemctl start --user emacs",
-  ]
-  
-  self.Run(cmd: inst_cmd)
-  end
 
+    systemd_dir = File.join(ENV["HOME"], ".config", "systemd", "user")
+    FileUtils.mkdir_p(systemd_dir)
+    File.write(File.join(systemd_dir, "emacs.service"), sd_txt)
+
+    inst_cmd = [
+      "systemctl --user daemon-reload",
+      "systemctl enable --user emacs",
+      "systemctl start --user emacs",
+    ]
+
+    self.Run(cmd: inst_cmd)
+  end
 end # class InstEmacsNC
