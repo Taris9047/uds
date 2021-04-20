@@ -18,7 +18,11 @@ class InstGnuTLS < InstallStuff
     @source_url = SRC_URL[@pkgname]
 
     # mpich build options
-    @conf_options = ['--disable-guile', '--with-included-unistring']
+    @conf_options = [
+      '--disable-guile',
+      '--with-included-unistring',
+      '--with-included-libtasn1'
+      ]
 
     # Setting up compilers
     self.CompilerSet

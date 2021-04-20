@@ -33,17 +33,8 @@ class InstImagemagick < InstallStuff
 
   def do_install
 
-    # TODO: version extraction needs to be a bit different.
-    # The filename is a bit different.
-    #
-    # https://sourceforge.net/projects/libjpeg/files/libjpeg/6b/jpegsrc.v6b.tar.gz
-
     dl = Download.new(@source_url, @src_dir)
     src_tarball_path = dl.GetPath
-
-    # fp = FNParser.new(@source_url)
-    # src_tarball_fname, src_tarball_bname = fp.name
-    # major, minor, patch = fp.version
     
     # Parsing name and version
     @src_tarball_fname = @source_url.split('/')[-1]

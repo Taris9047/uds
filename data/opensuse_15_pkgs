@@ -24,6 +24,7 @@ libXpm-devel
 libXft-devel
 libXext-devel
 libXt-devel
+libXaw-devel
 openssl
 openssl-devel
 pcre-devel
@@ -49,10 +50,16 @@ neofetch
 openblas-devel
 mysql-devel
 glew-devel
+pango-devel
 graphviz-devel
 doxygen
 unicode-emoji
 emojione-color-font
 OpenMoji-Color
+p11-kit-devel
+gtk3-devel
+webkit2gtk3-devel
+libotf-devel
+m17n-lib-devel
 ninja
 

@@ -14,8 +14,8 @@ $include_path = '{env_path}/include'
 $fallback_compiler_path = '/usr/bin'
 $state_of_art_gcc_ver = SRC_VER['gcc'][0]
 
-$rpath = "-Wl,-rpath=. -Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64"
-$pkg_config_path = "{env_path}/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig"
+$rpath = "-Wl,-rpath=. -Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64 -L/usr/lib -L/usr/lib64"
+$pkg_config_path = "{env_path}/lib/pkgconfig:{env_path}/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig"
 
 class GetCompiler
 
@@ -40,7 +40,7 @@ class GetCompiler
     if ENV['PKG_CONFIG_PATH']
       @PKG_CONFIG_PATH = "#{$pkg_config_path}:#{ENV['PKG_CONFIG_PATH']}"
     else
-      @PKG_CONFIG_PATH = ''
+      @PKG_CONFIG_PATH = "#{$pkg_config_path}"
     end
     @PATH=""
     @CXXFLAGS = [$cxxflags, cxxflags].join(' ')
@@ -54,13 +54,13 @@ class GetCompiler
     if env_path == '' or !File.directory? env_path
       @prefix = File.dirname(cc_path)
     end
-    @CFLAGS = @CFLAGS.gsub('{env_path}', @prefix)
-    @CXXFLAGS = @CFLAGS.gsub('{env_path}', @prefix)
     @C_INCLUDE_PATH=$include_path.gsub('{env_path}', @prefix)
     @CPLUS_INCLUDE_PATH=@C_INCLUDE_PATH
-
     @CFLAGS += " -I#{@C_INCLUDE_PATH}"
     @CXXFLAGS += " -I#{@CPLUS_INCLUDE_PATH}"
+    @CFLAGS = @CFLAGS.gsub('{env_path}', @prefix)
+    @CXXFLAGS = @CFLAGS.gsub('{env_path}', @prefix)
+
 
     @RPATH = @RPATH.gsub('{env_path}', @prefix)
     unless @PKG_CONFIG_PATH.empty?
@@ -80,14 +80,11 @@ class GetCompiler
     else
       cc_state_of_art = UTILS.which("gcc-#{$state_of_art_gcc_ver}")
       cxx_state_of_art = UTILS.which("g++-#{$state_of_art_gcc_ver}")
-      if cc_state_of_art and File.exist? cc_state_of_art
+      if cc_state_of_art and cxx_state_of_art
         c_compiler = cc_state_of_art
-      else
-        c_compiler = UTILS.which("gcc")
-      end
-      if cc_state_of_art and File.exist? cxx_state_of_art
         cxx_compiler = cxx_state_of_art
       else
+        c_compiler = UTILS.which("gcc")
         cxx_compiler = UTILS.which("g++")
       end
     end
@@ -152,7 +149,7 @@ class GetCompiler
     }
 
     unless @PKG_CONFIG_PATH.empty?
-      env_hash.merge({ 'PKG_CONFIG_PATH' => @PKG_CONFIG_PATH })
+      env_hash = env_hash.merge({ 'PKG_CONFIG_PATH' => @PKG_CONFIG_PATH })
     end
     return env_hash
   end

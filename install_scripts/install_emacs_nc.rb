@@ -81,7 +81,7 @@ class InstEmacsNC < InstallStuff
     gcc_new_path = UTILS.which("gcc-#{$newest_gcc_ver}")
     gcc_fallback_path = UTILS.which("gcc")
 
-    @env = {}
+    #@env = {}
 
     if gcc_jit_path
       @env["CC"] = gcc_jit_path
@@ -101,8 +101,8 @@ class InstEmacsNC < InstallStuff
     search_result = `find #{@gcc_prefix} -name libgccjit.so`
     if search_result.include? "libgccjit"
       puts "** Found libgccjit works with #{@env["CC"]}!! **"
-      @env["CFLAGS"] = "-I#{File.join(@gcc_prefix, "include")} "
-      @env["LDFLAGS"] = "-Wl,-rpath=#{File.join(@gcc_prefix, "lib")} "
+      @env["CFLAGS"].prepend("-I#{File.join(@gcc_prefix, "include")} ")
+      @env["LDFLAGS"].prepend("-Wl,-rpath=#{File.join(@gcc_prefix, "lib")} ")
       libgccjit_found = true
       return libgccjit_found
     end
