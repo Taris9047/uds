@@ -20,6 +20,7 @@ class InstImagemagick < InstallStuff
     # mpich build options
     @conf_options = [
       "--sysconfdir=#{@prefix}/etc",
+      "--with-modules",
       "--enable-hdri",
       "--with-modules",
       # "--with-perl",
