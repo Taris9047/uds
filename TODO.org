@@ -20,3 +20,4 @@
 *** NO Apparently, they actually work well with source compilation. Even AUR is a source compile install. So, why would I care about them?
 ** Holy cow, RHEL is failing to compile gccemacs again! signal.h inclusion probme... huh.
 
+* Looks like the changed made on openSUSE doesn't affect negatively on other distribution. Debian was successfully built emacs-nc!! Probably, Ubuntu won't have similar issue either.
