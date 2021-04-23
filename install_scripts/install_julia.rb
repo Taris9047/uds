@@ -19,7 +19,9 @@ class InstJulia < InstallStuff
     @ver_check = false
     super(@pkgname, @prefix, @work_dirs, @ver_check, @verbose_mode)
     @source_url = SRC_URL[@pkgname]
-    @target_dir = File.join(@prefix, '.opt')
+    @source_dir = File.join(@src_dir, 'julia-src')
+    @src_build_dir = File.join(@build_dir, 'julia-build')
+    @target_dir = File.join(@prefix, '.opt', 'julia')
     @Version = $julia_version.join('.')
 
   end
@@ -31,29 +33,20 @@ class InstJulia < InstallStuff
     puts ""
 
     puts "Installing Julia"
-    if !File.directory?(@target_dir)
-      if !need_sudo
-        FileUtils.mkdir_p("#{@target_dir}", verbose: true)
-      else
-        self.Run( "sudo mkdir -pv #{@target_dir}" )
-      end
-    end
-    @src_dir = File.join(@target_dir, 'julia-src')
-    if File.directory?(@src_dir)
+
+    if File.directory?(@source_dir)
       puts "Julia src directory found! Deleting it!"
-      FileUtils.rm_rf("#{@src_dir}")
+      FileUtils.rm_rf("#{@source_dir}")
     end
-    self.Run( "cd #{@target_dir} && git clone #{@source_url} #{@src_dir}" )
-    self.RunInstall( env:@env, cmd: "cd #{@src_dir} && git checkout v#{@Version} && make" )
-    julia_bin = File.join(@src_dir, 'julia')
-
-    puts "Compilation finished! Linking executable!"
-    julia_bin = File.join(@prefix, 'bin')
-    if !File.directory?(julia_bin)
-      self.Run( "mkdir -pv #{julia_bin}" )
-    end
-    FileUtils.ln_s "#{julia_bin}", "#{File.join(julia_bin, 'julia')}", force:true, verbose:true
-
+    self.Run( "cd #{@src_dir} && git clone #{@source_url} #{@source_dir}" )
+    inst_cmd = [
+      "cd #{@source_dir}",
+      "git checkout v#{@Version}",
+      "touch Make.user",
+      "echo \"prefix=#{@target_dir}\" >./Make.user",
+      "make install"
+    ]
+    self.RunInstall( env:@env, cmd: inst_cmd.join(' && ') )
     self.WriteInfo
 
   end
