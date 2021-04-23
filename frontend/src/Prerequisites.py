@@ -43,6 +43,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_ubuntu_20(self):
         self.install_with_apt()
 
+    def install_prereq_ubuntu_21(self):
+        self.install_with_apt()
+
     def install_prereq_ubuntu_18(self):
         self.install_with_apt()
 
