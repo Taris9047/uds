@@ -42,6 +42,7 @@ libncurses5-dev
 libexpat1-dev
 libgdbm-dev
 tk-dev
+gfortran
 libgc-dev
 libnuma-dev
 libopenblas-dev

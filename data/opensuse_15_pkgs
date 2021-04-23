@@ -52,6 +52,7 @@ mysql-devel
 glew-devel
 pango-devel
 graphviz-devel
+gfortran
 doxygen
 unicode-emoji
 emojione-color-font

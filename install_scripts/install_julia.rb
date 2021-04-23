@@ -6,7 +6,7 @@ require_relative './install_stuff.rb'
 require 'open3'
 require 'fileutils'
 
-$julia_version = ["1", "3", "0"]
+$julia_version = ["1", "6", "0"]
 
 
 class InstJulia < InstallStuff
@@ -19,7 +19,7 @@ class InstJulia < InstallStuff
     @ver_check = false
     super(@pkgname, @prefix, @work_dirs, @ver_check, @verbose_mode)
     @source_url = SRC_URL[@pkgname]
-    @target_dir = File.join(@prefix, '/.opt')
+    @target_dir = File.join(@prefix, '.opt')
     @Version = $julia_version.join('.')
 
   end
@@ -38,17 +38,17 @@ class InstJulia < InstallStuff
         self.Run( "sudo mkdir -pv #{@target_dir}" )
       end
     end
-    @src_dir = File.join(@target_dir, '/julia-src')
+    @src_dir = File.join(@target_dir, 'julia-src')
     if File.directory?(@src_dir)
       puts "Julia src directory found! Deleting it!"
       FileUtils.rm_rf("#{@src_dir}")
     end
     self.Run( "cd #{@target_dir} && git clone #{@source_url} #{@src_dir}" )
-    self.RunInstall( env:@env, cmd: "cd #{@src_dir} && git checkout v#{@Version.join('.')} && make" )
+    self.RunInstall( env:@env, cmd: "cd #{@src_dir} && git checkout v#{@Version} && make" )
     julia_bin = File.join(@src_dir, 'julia')
 
     puts "Compilation finished! Linking executable!"
-    julia_bin = File.join(@prefix, '/bin')
+    julia_bin = File.join(@prefix, 'bin')
     if !File.directory?(julia_bin)
       self.Run( "mkdir -pv #{julia_bin}" )
     end

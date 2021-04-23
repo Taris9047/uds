@@ -26,6 +26,7 @@ swig
 doxygen
 graphviz
 xz-utils
+gfortran
 ruby
 ruby-dev
 git-lfs
