@@ -53,7 +53,7 @@
 
   # Lua
   "lua": {
-    "url": "https://www.lua.org/ftp/lua-5.4.2.tar.gz",
+    "url": "https://www.lua.org/ftp/lua-5.4.3.tar.gz",
     "type": "tarball",
     "alt-names": ["Lua"],
     "dependency": [ "gcc" ],
@@ -257,7 +257,7 @@
     "url": "http://ftp.cstug.cz/pub/CTAN/graphics/gnuplot/5.2.6/gnuplot-5.2.6.tar.gz",
     "type": "tarball",
     "alt-names": ["Gnuplot"],
-    "dependency": ["libpng", "libjpeg-turbo", "pdflib", "libgd" ,"lua"],
+    "dependency": ["libpng", "libjpeg-turbo", "libgd" ,"lua"],
     "script": "install_gnuplot.rb",
     "class": "InstGnuplot"
   },
