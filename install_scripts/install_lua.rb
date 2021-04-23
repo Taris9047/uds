@@ -166,7 +166,6 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
     ]
     self.RunInstall( env: @env, cmd: cmds.join(" ") )
 
-    # TODO We need to re-write WriteInfo...
     self.WriteInfo
   end
 
