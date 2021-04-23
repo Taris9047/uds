@@ -4,8 +4,9 @@ require_relative '../utils/utils.rb'
 require_relative './install_stuff.rb'
 
 require 'open3'
+require 'fileutils'
 
-$golang_version = ["1", "15", "7"]
+$golang_version = ["1", "16", "3"]
 
 
 class InstGolang < InstallStuff
@@ -30,24 +31,26 @@ class InstGolang < InstallStuff
     self.Run( "cd #{@src_dir} && tar xvf ./golang-bootstrap.tgz")
     self.Run( {"CGO_ENABLED" => "0"}, "cd #{@src_dir}/go/src && ./make.bash")
 
-    bootstrap_dir = File.join(@src_dir, "/go")
-    go_dir = File.join(@prefix, '/.opt/go')
+    bootstrap_dir = File.join(@src_dir, "go")
+    go_dir = File.join(@prefix, '.opt', 'go')
 
     puts "Let's build Golang version (#{@Version})"
+    FileUtils.rm_rf("#{go_dir}")
     self.Run( "cd #{@src_dir} && git clone #{@source_url} #{go_dir} && cd #{go_dir} && git checkout go#{@Version}" )
     self.RunInstall( 
       env: {"GOROOT_BOOTSTRAP" => bootstrap_dir}, 
-      cmd: "cd #{go_dir}/src && nice ./all.bash" )
+      cmd: "cd #{go_dir}/src && ./all.bash" )
 
     self.WriteInfo
 
-    puts ""
-    puts "Ok, golang has been installed!! let's install it!"
-    puts "Make sure you add env stuff in your bashrc"
-    puts "GOPATH=#{go_dir}"
-    puts "Also, make sure to add #{go_dir}/bin to your PATH"
-    puts ""
-
+    golang_inst_mag = %Q(
+Ok, golang has been installed!! let's install it!
+Make sure you add env stuff in your bashrc
+GOPATH=#{go_dir}
+Also, make sure to add #{go_dir}/bin to your PATH
+)
+    puts golang_inst_mag
+    
   end
 
   def WriteInfo
