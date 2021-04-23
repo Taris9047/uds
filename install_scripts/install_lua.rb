@@ -42,7 +42,7 @@ Libs: -L$\{libdir\} -llua -lm -ldl
 Cflags: -I$\{includedir\}
 )
 
-    @patch = %q(diff -Naurp lua-5.4.0.orig/Makefile lua-5.4.0/Makefile
+    @patch = %Q(diff -Naurp lua-5.4.0.orig/Makefile lua-5.4.0/Makefile
 --- lua-5.4.0.orig/Makefile	2020-04-15 07:55:07.000000000 -0500
 +++ lua-5.4.0/Makefile	2020-06-30 13:22:00.997938585 -0500
 @@ -52,7 +52,7 @@ R= $V.0
@@ -62,7 +62,7 @@ diff -Naurp lua-5.4.0.orig/src/luaconf.h lua-5.4.0/src/luaconf.h
  #else			/* }{ */
  
 -#define LUA_ROOT	"/usr/local/"
-+#define LUA_ROOT	"/usr/"
++#define LUA_ROOT	"#{@prefix}"
  #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
  #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
  
@@ -107,7 +107,6 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
 +
  $(LUA_T): $(LUA_O) $(LUA_A)
  	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
- 
 )
 
     # Setting up compilers
