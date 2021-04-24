@@ -1,19 +1,34 @@
 /* Server js */
 
-var express = require('express');
-var app = express();
+const path = require( 'path' );
+const getPort = require( 'get-port' );
+const open = require( 'open' );
+const express = require( 'express' );
+
+// Create express application
+const app = express();
 
 // Set view engine as ejs
 app.set('view engine', 'ejs');
 
 // public directory to store assets
-app.use(express.static(__dirname+'/public'));
+app.use(express.static( path.join( __dirname+'/public' ) ) );
 
 // routes for app
 app.get('/', function(req, res) {
   res.render('pad');
-})
+});
 
-// Listen to port 8000
-var port = process.env.PORT || 8000;
-app.listen(port);
+// Find available port, if not 8000 Then listen to server, then
+// open main browser!
+getPort( {port:8000} ).then(pt => {
+  console.log(pt);
+  const port = pt;
+  const host = `http://127.0.0.1:${ port }`;
+  app.listen( port, async () => {
+    console.log( 'Express server started!' );
+    await open( `${ host }` );
+  });
+});
+
+
