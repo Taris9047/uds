@@ -60,6 +60,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_prereq_hamonikr_4(self):
         self.install_prereq_ubuntu_20()
+        
+    def install_prereq_pop_20(self):
+        self.install_prereq_ubuntu_20()
 
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
