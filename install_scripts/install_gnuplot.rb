@@ -4,6 +4,8 @@ $qt5_bin_path = File.join(ENV["HOME"], '.Qt/5.15.2/gcc_64/bin')
 
 # this will handle Gnuplot
 
+# TODO Implement some way to install or help users to install Qt?
+
 require_relative '../utils/utils.rb'
 require_relative './install_stuff.rb'
 
@@ -85,7 +87,7 @@ class InstGnuplot < InstallStuff
       "cd", src_build_folder, "&&",
       src_extract_folder+"/configure",
       opts.join(" "), "&&",
-      "nice make -j", @Processors.to_s, "&&",
+      "make -j", @Processors.to_s, "&&",
       inst_cmd
     ]
     puts "Compiling (with #{@Processors} processors) and Installing ..."

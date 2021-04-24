@@ -25,6 +25,7 @@ libedit-dev
 swig
 doxygen
 graphviz
+gfortran
 xz-utils
 ruby
 ruby-dev

@@ -42,45 +42,45 @@ Libs: -L$\{libdir\} -llua -lm -ldl
 Cflags: -I$\{includedir\}
 )
 
-    @patch = %q(diff -Naurp lua-5.4.0.orig/Makefile lua-5.4.0/Makefile
+    @patch = %Q(diff -Naurp lua-5.4.0.orig/Makefile lua-5.4.0/Makefile
 --- lua-5.4.0.orig/Makefile	2020-04-15 07:55:07.000000000 -0500
 +++ lua-5.4.0/Makefile	2020-06-30 13:22:00.997938585 -0500
 @@ -52,7 +52,7 @@ R= $V.0
  all:	$(PLAT)
- 
+
  $(PLATS) help test clean:
 -	@cd src && $(MAKE) $@
 +	@cd src && $(MAKE) $@ V=$(V) R=$(R)
- 
+
  install: dummy
  	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
 diff -Naurp lua-5.4.0.orig/src/luaconf.h lua-5.4.0/src/luaconf.h
 --- lua-5.4.0.orig/src/luaconf.h	2020-06-18 09:25:54.000000000 -0500
 +++ lua-5.4.0/src/luaconf.h	2020-06-30 13:24:59.294932289 -0500
 @@ -227,7 +227,7 @@
- 
+
  #else			/* }{ */
- 
+
 -#define LUA_ROOT	"/usr/local/"
-+#define LUA_ROOT	"/usr/"
++#define LUA_ROOT	"#{@prefix}"
  #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
  #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
- 
+
 diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
 --- lua-5.4.0.orig/src/Makefile	2020-04-15 08:00:29.000000000 -0500
 +++ lua-5.4.0/src/Makefile	2020-06-30 13:24:15.746933827 -0500
 @@ -7,7 +7,7 @@
  PLAT= guess
- 
+
  CC= gcc -std=gnu99
 -CFLAGS= -O2 -Wall -Wextra -DLUA_COMPAT_5_3 $(SYSCFLAGS) $(MYCFLAGS)
 +CFLAGS= -fPIC -O0 -Wall -Wextra -DLUA_COMPAT_5_3 -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1 $(SYSCFLAGS) $(MYCFLAGS)
  LDFLAGS= $(SYSLDFLAGS) $(MYLDFLAGS)
  LIBS= -lm $(SYSLIBS) $(MYLIBS)
- 
+
 @@ -33,6 +33,7 @@ CMCFLAGS= -Os
  PLATS= guess aix bsd c89 freebsd generic linux linux-readline macosx mingw posix solaris
- 
+
  LUA_A=	liblua.a
 +LUA_SO=  liblua.so
  CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o
@@ -88,17 +88,17 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
  BASE_O= $(CORE_O) $(LIB_O) $(MYOBJS)
 @@ -44,7 +45,7 @@ LUAC_T=	luac
  LUAC_O=	luac.o
- 
+
  ALL_O= $(BASE_O) $(LUA_O) $(LUAC_O)
 -ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T)
 +ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T) $(LUA_SO)
  ALL_A= $(LUA_A)
- 
+
  # Targets start here.
 @@ -60,6 +61,12 @@ $(LUA_A): $(BASE_O)
  	$(AR) $@ $(BASE_O)
  	$(RANLIB) $@
- 
+
 +$(LUA_SO): $(CORE_O) $(LIB_O)
 +	$(CC) -shared -ldl -Wl,--soname,$(LUA_SO).$(V) -o $@.$(R) $? -lm
 +	$(MYLDFLAGS)
@@ -106,9 +106,7 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
 +	ln -sf $(LUA_SO).$(R) $(LUA_SO)
 +
  $(LUA_T): $(LUA_O) $(LUA_A)
- 	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
- 
-)
+ 	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS))
 
     # Setting up compilers
     self.CompilerSet
@@ -168,8 +166,60 @@ diff -Naurp lua-5.4.0.orig/src/Makefile lua-5.4.0/src/Makefile
     ]
     self.RunInstall( env: @env, cmd: cmds.join(" ") )
 
-    # TODO We need to re-write WriteInfo...
     self.WriteInfo
+  end
+
+  def MakePackage(build_system='make', pkg_type='tar.gz', destdir_inst_cmd=nil)
+
+      unless ['make', 'ninja', 'meson'].include? build_system
+          return nil
+      end
+
+      if destdir_inst_cmd
+          cmd = [ "cd #{@src_build_dir}", destdir_inst_cmd ]
+      else
+          cmd = [
+              "cd #{@src_build_dir}",
+              "#{build_system} INSTALL_TOP=\"#{@stage_dir_pkg}\" INSTALL_DATA=\"cp -d\" TO_LIB=\"liblua.so liblua.so.#{@ver_maj_min} liblua.so.#{@version}\" install"
+          ]
+      end
+      self.Run(cmd.join(' && '))
+
+      require 'pathname'
+      @Installed_files = []
+      stage_dir_pkg_flist = \
+              Dir.glob(
+                  "#{@stage_dir_pkg}/**/*",
+                  File::FNM_DOTMATCH).reject { |f| File.directory?(f) }
+
+      stage_dir_pkg_flist.each do |file|
+          abs_path = Pathname.new(file)
+          proj_root = Pathname.new(File.realpath(@stage_dir_pkg))
+          abs_root_removed = abs_path.relative_path_from(proj_root)
+          @Installed_files << File.join('/', abs_root_removed)
+      end
+
+      puts "Making package file for #{@pkgname} ... at #{@stage_dir_pkg}"
+
+      make_tarball_cmd = ["cd #{@stage_dir}"]
+      tar_opt = {
+          'tar.gz' => 'z',
+          'tar.bz2' => 'j',
+          'tar.xz' => 'J'
+      }
+      case pkg_type
+      when 'tar.gz'
+          make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+      when 'tar.bz2'
+          make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+      when 'tar.xz'
+          make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+      end
+      self.Run(make_tarball_cmd.join(' && '))
+
+      # Finishing up...
+      FileUtils.rm_rf(File.realpath(@stage_dir_pkg))
+
   end
 
 end # class InstLua

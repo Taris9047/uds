@@ -72,4 +72,5 @@ class InstallRustTools(RunCmd):
         )
 
     def InstallPackages(self):
+        self.Run(f"{self.rustup_exec} component add rust-src")
         self.Run(f"{self.cargo_exec} install {' '.join(self.pkgs_to_install)}")

@@ -43,6 +43,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_ubuntu_20(self):
         self.install_with_apt()
 
+    def install_prereq_ubuntu_21(self):
+        self.install_with_apt()
+
     def install_prereq_ubuntu_18(self):
         self.install_with_apt()
 
@@ -56,6 +59,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_prereq_ubuntu_18()
 
     def install_prereq_hamonikr_4(self):
+        self.install_prereq_ubuntu_20()
+        
+    def install_prereq_pop_20(self):
         self.install_prereq_ubuntu_20()
 
     def install_with_dnf(self):

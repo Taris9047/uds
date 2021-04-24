@@ -18,7 +18,16 @@ class InstNgspice < InstallStuff
     @source_url = SRC_URL[@pkgname]
 
     # mpich build options
-    @conf_options = []
+    @conf_options = [
+      "--with-ngshared",
+      "--enable-xspice",
+      "--enable-cider",
+      "--enable-capbypass",
+      "--enable-predictor",
+      "--enable-newtrunc",
+      "--enable-sense2",
+      "--enable-openmp"
+    ]
 
     # Setting up compilers
     self.CompilerSet
