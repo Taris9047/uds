@@ -12,6 +12,7 @@ $conf_options = [
 $npm_global_pkgs = [
   "npm@latest",
   "yarn",
+  "hjson"
 ]
 
 class InstNode < InstallStuff
