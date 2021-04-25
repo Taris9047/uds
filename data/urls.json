@@ -430,7 +430,13 @@
       "Imagemagick",
       "ImageMagick-7"
     ],
-    "dependency": [],
+    "dependency": [
+      "libpng",
+      "libjpeg-turbo",
+      "libtiff",
+      "libwebp",
+      "giflib"
+    ],
     "script": "libs/install_imagemagick.rb",
     "class": "InstImagemagick"
   },

@@ -322,7 +322,7 @@
     "url": "https://www.imagemagick.org/download/releases/ImageMagick-7.0.11-0.tar.xz",
     "type": "tarball",
     "alt-names": ["Imagemagick", "ImageMagick-7"],
-    "dependency": [],
+    "dependency": ["libpng", "libjpeg-turbo", "libtiff", "libwebp", "giflib"],
     "script": "libs/install_imagemagick.rb",
     "class": "InstImagemagick"
   },
