@@ -44,7 +44,7 @@ class InstEmacs < InstallStuff
       '--with-xwidgets'    # needs webkitgtk4-dev
     ]
     
-    os_release_NAME=`grep -i 'name' /etc/*-release`
+    os_release_name=`grep -i 'name' /etc/*-release`
     if os_release_name.include? 'Red Hat' or
       os_release_name.include? 'CentOS' or
       os_release_name.include? 'Alma'
