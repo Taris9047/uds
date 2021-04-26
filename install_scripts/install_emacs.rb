@@ -44,26 +44,15 @@ class InstEmacs < InstallStuff
       '--with-xwidgets'    # needs webkitgtk4-dev
     ]
     
-    os_release_name=`grep -i 'name' /etc/*-release`
-    if os_release_name.include? 'Red Hat' or
-      os_release_name.include? 'CentOS' or
-      os_release_name.include? 'Alma'
-
-      @env = {
-        "CC" => UTILS.which("gcc"),
-        "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include",
-      }
-
-    end
-
-    # @env = {
-    #   "CC" => UTILS.which("gcc"),
-    #   "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include",
-    # }
-    # @env["CC"] = UTILS.which("gcc")
-    # @env["CFLAGS"] = "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include"
-    # @env["LDFLAGS"] = "-Wl,-rpath=#{@prefix}/lib -Wl,-rpath=#{@prefix}/lib64"
-    # @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
+    # os_release_name=`grep -i 'name' /etc/*-release`
+    # if os_release_name.include? 'Red Hat' or
+    #   os_release_name.include? 'CentOS' or
+    #   os_release_name.include? 'Alma'
+    #   @env = {
+    #     "CC" => UTILS.which("gcc"),
+    #     "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include",
+    #   }
+    # end
 
   end
 
