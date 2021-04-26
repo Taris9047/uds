@@ -5,6 +5,8 @@
 require_relative '../utils/utils.rb'
 require_relative './install_stuff.rb'
 
+require 'fileutils'
+
 class InstNgspice < InstallStuff
 
   def initialize(args)
@@ -84,6 +86,9 @@ class InstNgspice < InstallStuff
     puts "Compiling (with #{@Processors} processors) and Installing ..."
     self.RunInstall( env: @env, cmd: cmds.join(" ") )
     self.WriteInfo
+
+    # To avoid confusion... let's move config.h to somewhere else.
+    FileUtils.mv File.join(@prefix, 'include', 'config.h') File.join(@prefix, 'include', 'ngspice', 'config.h')
 
     puts "This is bare bones ngspice! Put in SPICE libraries to #{@prefix}"
   end
