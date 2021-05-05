@@ -9,4 +9,4 @@ die() {
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-hjson -j "$DIR/urls.hjson" >"$DIR/urls.json"
+hjson -j "$DIR/urls.hjson" >"$DIR/urls.json" && printf '%s\n' "urls.hjson export completed!!"
