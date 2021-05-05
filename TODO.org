@@ -13,11 +13,8 @@
 ** TODO We might need to implement or sketch up a GUI version of the script first.
 ** IDEA Actually, we can implement some kind of Web(HTML2) based management interface with ruby.
 
-* PROJ Emacs native-compiler
-** DONE It works on Kubuntu (Ubuntu).
-** DONE emacs-nc works perfectly well on RHEL!!
-** KILL Fedora, Manjaro has their own repo (or additional repo) to install emacs-nc. So, don't bother with them.
-*** NO Apparently, they actually work well with source compilation. Even AUR is a source compile install. So, why would I care about them?
-** Holy cow, RHEL is failing to compile gccemacs again! signal.h inclusion probme... huh.
+* IDEA RamFS? or tmpFS?
+** Apparently, we do not need to keep all the build directories at all! Once the are installed and packaged, build directories are just waste of space.
+** We have 'clean' functionality, though. But the speed advantage from Ram drive is not to be trifled with!! It's DAMN fast! We can reduce build time significantly.
+** Of course, we need at least 10 GB of idle RAM space to use the Ramfs reliably. Other than that, big stuffs like GCC won't be able to be compiled simply within any Ramfs.
 
-* Looks like the changed made on openSUSE doesn't affect negatively on other distribution. Debian was successfully built emacs-nc!! Probably, Ubuntu won't have similar issue either.
