@@ -13,7 +13,8 @@ $npm_global_pkgs = [
   "npm@latest",
   "yarn",
   "hjson",
-  "pkg"
+  "pkg",
+  "n"
 ]
 
 class InstNode < InstallStuff
@@ -45,13 +46,14 @@ class InstNode < InstallStuff
     end
   end # do_install
 
+  # Let's not waste time on compiling a huge package on a crappy machine.
   def do_bin_install
 
     puts "Downloading binary packages from ... #{@bin_url}"
     @bin_fname = @bin_url.split('/')[-1]
     @bin_fname_base = @bin_fname.split('.')[0..-3].join('.')
 
-    dl = Download.new(@bin_url, @src_dir, source_ctl='', mode='wget', 
+    Download.new(@bin_url, @src_dir, source_ctl='', mode='wget', 
     source_ctl_opts='')
 
     ver = @bin_fname_base.split('-')[1].delete('v')
@@ -95,13 +97,14 @@ class InstNode < InstallStuff
 
   end # do_bin_install
 
+  # The old-school way. Compile everything!!
   def do_src_install
 
     puts "Downloading source from ... "+@source_url
-    dl = Download.new(@source_url, @src_dir)
+    Download.new(@source_url, @src_dir)
     fp = FNParser.new(@source_url)
     src_tarball_fname, src_tarball_bname = fp.name
-    major, minor, patch = fp.version
+    # major, minor, patch = fp.version
 
     src_extract_folder = File.join(@build_dir, src_tarball_bname)
     @src_build_dir = src_extract_folder
@@ -143,8 +146,6 @@ class InstNode < InstallStuff
     self.RunInstall( cmd: "#{npm_cmd} install -g #{$npm_global_pkgs.join(' ')}" )
 
   end # do_src_install
-
-
 
 end # class InstNode
 
