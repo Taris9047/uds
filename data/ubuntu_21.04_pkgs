@@ -77,7 +77,6 @@ ninja-build
 autoconf
 automake
 vim
-ttf-bitstream-vera
 subversion
 git
 wget

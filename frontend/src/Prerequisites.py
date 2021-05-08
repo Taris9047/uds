@@ -64,12 +64,15 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_pop_20(self):
         self.install_prereq_ubuntu_20()
 
+    def install_prereq_solus_4(self):
+        self.install_prereq_solus_4dot2()
+
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
         self.Run(f"sudo -H dnf -y install {' '.join(self.pkgs_to_install)}")
 
     def install_prereq_rhel_8(self):
-        print("Installing Prereq. packages for RHEL8")
+        # print("Installing Prereq. packages for RHEL8")
         self.Run("sudo -H dnf -y update")
         self.Run("sudo -H dnf -y install dnf-plugins-core")
         self.Run(
@@ -81,7 +84,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_with_dnf()
 
     def install_prereq_centos_8(self):
-        print("Installing CentOS repos.")
+        # print("Installing CentOS repos.")
         self.Run("sudo -H dnf -y install epel-release")
         self.Run("sudo -H dnf config-manager --set-enabled powertools")
         self.Run(
@@ -90,7 +93,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_with_dnf()
 
     def install_prereq_fedora_33(self):
-        print("Installing Fedora packages!!")
+        # print("Installing Fedora packages!!")
         cmds = [
             "sudo -H dnf -y update",
             'sudo -H dnf -y groupinstall "Development Tools" "Additional Development"',
@@ -99,7 +102,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_with_dnf()
 
     def install_prereq_almalinux_8(self):
-        print("Almalinux detected! Activating CentOS repo!")
+        # print("Almalinux detected! Activating CentOS repo!")
         self.install_prereq_centos_8()
 
     def install_with_zypper(self):
@@ -114,5 +117,11 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_with_zypper()
 
     def install_with_pacman(self):
-        print("Syncing with Pacman!")
+        # print("Syncing with Pacman!")
         self.Run(f"sudo -H pacman -Syyu --noconfirm {' '.join(self.pkgs_to_install)}")
+
+    def install_prereq_solus_4dot2(self):
+        # print("Installing base packages!!")
+        self.Run("sudo -H eopkg up")
+        self.Run("sudo -H eopkg install -y -c system.devel")
+        self.Run(f"sudo -H eopkg install -y {' '.join(self.pkgs_to_install)}")

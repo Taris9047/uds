@@ -124,8 +124,13 @@ class UDSBrew(RunCmd):
         Installs Prerequisite packages (selected by subroutines)
         and ruby gems that we need to run those ruby scripts!
         """
+        print ("Installing Programs and Packages from the System's own repository!!\n")
         InstallPrereqPkgs()
+        print ("Done!\n")
+
+        print ("Installing Gems for the system Ruby for backend operation!!\n")
         InstallSystemRubyGems()
+        print ("\nDone!!\n")
         sys.exit(0)
 
     def parse_args(self):

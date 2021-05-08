@@ -84,6 +84,9 @@ class DistroPkgMap(GetDistro):
                 "fedora_33": "fedora_33_pkgs",
             },
             "arch": {"rolling": "arch_pkgs"},
+            "solus": {
+              "solus_4.2": "solus_42_pkgs"
+            }
         }
 
     # Maps distro file with given distro information.
