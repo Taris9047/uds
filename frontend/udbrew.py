@@ -2,6 +2,7 @@
 
 import os
 import sys
+import subprocess
 
 import argparse
 
@@ -27,10 +28,13 @@ class UDSBrew(RunCmd):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.find_out_version()
-        self.system_ruby = "/usr/bin/ruby"
+        self.system_ruby = "/usr/bin/ruby" # Fallback. Does not work with many situations.
+        self.ruby = subprocess.check_output( "$(command -v ruby)", shell=True )
         if not program_exists(self.system_ruby):
             print("Oh crap, we need ruby to work correctly!!")
             sys.exit(-1)
+        if program_exists(self.ruby):
+            self.system_ruby = self.ruby
 
         self.args = args
         self.parse_args()
