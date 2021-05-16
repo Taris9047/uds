@@ -157,8 +157,9 @@ class Version(object):
 
 # Checks up whether a command line program exists or not.
 def program_exists(program=None):
-    def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+    def is_exe(prog):
+        print(prog)
+        return os.path.isfile(prog) and os.access(prog, os.X_OK)
 
     fpath, fname = os.path.split(program)
     if fpath:

@@ -28,13 +28,19 @@ class UDSBrew(RunCmd):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.find_out_version()
-        self.system_ruby = "/usr/bin/ruby" # Fallback. Does not work with many situations.
-        self.ruby = subprocess.check_output( "$(command -v ruby)", shell=True )
-        if not program_exists(self.system_ruby):
+        self.fallback_ruby = "/usr/bin/ruby" # Fallback. Does not work with many situations.
+        self.system_ruby = subprocess.check_output( "echo \"$(command -v ruby)\"", shell=True ).decode('utf-8').rstrip()
+        if not program_exists(self.fallback_ruby):
             print("Oh crap, we need ruby to work correctly!!")
             sys.exit(-1)
-        if program_exists(self.ruby):
-            self.system_ruby = self.ruby
+
+        if program_exists(self.system_ruby):
+            print(f"Ruby detected: {self.system_ruby}")
+            if 'shims' in self.system_ruby:
+                print("Looks like we have rbenv ruby! Using it!")
+        else:
+            self.system_ruby = self.fallback_ruby
+            print("Using system wide ruby...: {}".format(self.system_ruby))
 
         self.args = args
         self.parse_args()
