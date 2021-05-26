@@ -10,7 +10,6 @@ require_relative './install_stuff.rb'
 
 $root_version = ["6", "24", "00"]
 
-
 class InstROOT < InstallStuff
 
   def initialize(args)
