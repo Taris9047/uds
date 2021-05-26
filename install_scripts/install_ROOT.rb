@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Installing ROOT
+
 require 'etc'
 require 'open3'
 
@@ -32,7 +34,7 @@ class InstROOT < InstallStuff
       self.Run('ln -sfv '+File.join(@prefix, '/.opt')+' '+File.join(@prefix, '/opt'))
     end
     @src_url = SRC_URL['ROOT']
-    branch_opts = "-b v#{$root_version[0]}-#{$root_version[1]}-#{$root_version[2]}-patches"
+    branch_opts = "-b v#{$root_version[0]}-#{$root_version[1]}-#{$root_version[2]}"
     dn = Download.new(
       @src_url, destination=@src_dir, source_ctl='git', mode='git', source_ctl_opts=branch_opts)
     @src_dir = dn.GetPath
