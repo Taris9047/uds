@@ -275,7 +275,7 @@
     "url": "http://ftp.cstug.cz/pub/CTAN/graphics/gnuplot/5.2.6/gnuplot-5.2.6.tar.gz",
     "type": "tarball",
     "alt-names": ["Gnuplot"],
-    "dependency": ["libpng", "libjpeg-turbo", "pdflib", "libgd" ,"lua"],
+    "dependency": ["libpng", "libjpeg-turbo", "libgd" ,"lua"],
     "script": "install_gnuplot.rb",
     "class": "InstGnuplot"
   },
@@ -353,15 +353,6 @@
     "dependency": [],
     "script": "libs/install_libjansson.rb",
     "class": "InstLibJansson"
-  },
-  # PDFlib
-  "pdflib": {
-    "url": "https://www.pdflib.com/binaries/PDFlib/930/PDFlib-9.3.0-Linux-x86_64-C-C++.tar.gz",
-    "type": "tarball-bin",
-    "alt-names": ["pdflib-dev", "pdflib-devel"],
-    "dependency": [],
-    "script": "libs/install_pdflib.rb",
-    "class": "InstPDFLib"
   },
   # LibGD
   "libgd": {
