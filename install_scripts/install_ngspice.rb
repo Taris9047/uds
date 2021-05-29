@@ -21,7 +21,6 @@ class InstNgspice < InstallStuff
 
     # mpich build options
     @conf_options = [
-      "--with-ngshared",
       "--enable-xspice",
       "--enable-cider",
       "--enable-capbypass",
