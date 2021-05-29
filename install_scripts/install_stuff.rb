@@ -182,9 +182,15 @@ class InstallStuff < RunConsole
     qmake_cmd = File.join(qt5_path, 'qmake')
     self.patch_qt5_pkgconfig(qt5_path)
     if File.exists? qmake_cmd
-      @env["LDFLAGS"] += " -Wl,-rpath=#{qt5_path}/../lib"
-      @env["PKG_CONFIG_PATH"] = "#{qt5_path}/../lib/pkgconfig:#{@env["PKG_CONFIG_PATH"]}"
-      @env["PATH"] = "#{qt5_path}:#{ENV["PATH"]}"
+      # If the qmake command is provided by Ubuntu package manager (or other package managers...)
+      if qmake_cmd == '/usr/bin/qmake'
+        puts "System installed qt5! Be sure to have Qt5Svg module!!!"
+      # If we are using Web downloaded Qt5
+      else
+        @env["LDFLAGS"] += " -Wl,-rpath=#{qt5_path}/../lib"
+        @env["PKG_CONFIG_PATH"] = "#{qt5_path}/../lib/pkgconfig:#{@env["PKG_CONFIG_PATH"]}"
+        @env["PATH"] = "#{qt5_path}:#{ENV["PATH"]}"
+      end
       puts "Custom qmake found in ... #{qmake_cmd}"
       return qmake_cmd
     end

@@ -27,10 +27,9 @@ class InstGnuplot < InstallStuff
     # build options
     @conf_options = []
     # Checking up qt5
-    @conf_options += ["--with-qt=no"]
+    # @conf_options += ["--with-qt=no"]
     qmake_cmd = self.qt5_qmake($qt5_bin_path)
     if qmake_cmd
-      @conf_options -= ["--with-qt=no"]
       @conf_options += ["--with-qt=qt5"]
       # puts "qmake found (#{qmake_cmd}), enabling qt-terminal!!"
     end
@@ -40,6 +39,8 @@ class InstGnuplot < InstallStuff
       "--with-gd=#{@prefix}/lib",
       "--enable-backwards-compatibility",
     ]
+
+    @env["CFLAGS"] += " -I/usr/include/x86_64-linux-gnu/qt5"
 
   end
 
