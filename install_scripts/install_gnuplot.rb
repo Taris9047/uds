@@ -40,8 +40,6 @@ class InstGnuplot < InstallStuff
       "--enable-backwards-compatibility",
     ]
 
-    @env["CFLAGS"] += " -I/usr/include/x86_64-linux-gnu/qt5"
-
   end
 
   def do_install
