@@ -39,7 +39,8 @@ class UnixDevSetup
     @not_really_a_pkg = ['get_pip', 'golang-bootstrap']
 
     @list_of_all = \
-      @list_of_progs - @not_so_stable_pkgs \
+      @list_of_progs \
+      - @not_so_stable_pkgs \
       - @not_so_needed_pkgs \
       - @not_really_a_pkg \
       - @deprecated_pkgs
@@ -132,20 +133,24 @@ class UnixDevSetup
     # Set up console
     require_relative './utils/run_console.rb'
     @Con = RunConsole.new(verbose: @verbose, logf_dir: @work_dir_log)
-  
     # Resolve dependencies.
     require './utils/utils.rb'
-    puts "Checking dependency for #{@pkgs_to_install.join(" ")}"
-    dep_resolve = DepResolve.new(
-      @pkgs_to_install, @pkginfo_dir_path, @force_install_mode, @use_system_gcc,
-      @uninstall_mode)
     if @uninstall_mode
-      @pkgs_to_install = dep_resolve.GetUninstList()
+      # Let's not worry about any dependency as of now...
+      #
+      # @pkgs_to_install = dep_resolve.GetUninstList()
       puts "List of packages to uninstall..."
       puts ""
       puts @pkgs_to_install.join(' ')
       puts ""
     else
+      puts "Checking dependency for #{@pkgs_to_install.join(" ")}"
+      dep_resolve = DepResolve.new(
+        @pkgs_to_install,
+        @pkginfo_dir_path,
+        @force_install_mode,
+        @use_system_gcc,
+        @uninstall_mode)
       @pkgs_to_install = dep_resolve.GetInstList()
       # List packages to install
       if !dep_resolve.GetDepList().empty?
