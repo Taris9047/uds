@@ -128,7 +128,7 @@ class UDSBrew(RunCmd):
             pkgs_to_uninstall = set(self.p_args.uninstall)
 
             for pkg in pkgs_to_uninstall:
-                self.Run(f"{self.system_ruby} {self.uds_backend} -v -u {pkg}")
+                self.Run(f"{self.system_ruby} {self.uds_backend} {opt_verbose} -u {pkg}")
 
             sys.exit(0)
 
