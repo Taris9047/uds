@@ -31,7 +31,7 @@
     "class": "InstGCCJit"
   },
   "gcc8": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.4.0/gcc-8.4.0.tar.gz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.5.0/gcc-8.5.0.tar.gz",
     "type": "tarball",
     "alt-names": [
       "gcc-8"
@@ -41,7 +41,7 @@
     "class": "InstGCC8"
   },
   "gcc9": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-9.3.0/gcc-9.3.0.tar.gz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-9.4.0/gcc-9.4.0.tar.gz",
     "type": "tarball",
     "alt-names": [
       "gcc-9"
