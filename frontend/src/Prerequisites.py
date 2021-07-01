@@ -63,6 +63,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         
     def install_prereq_pop_20(self):
         self.install_prereq_ubuntu_20()
+    
+    def install_prereq_pop_21(self):
+        self.install_prereq_ubuntu_21()
 
     def install_prereq_solus_4(self):
         self.install_prereq_solus_4dot2()
