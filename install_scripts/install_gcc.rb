@@ -605,13 +605,15 @@ class InstGCC4Sen < InstGCC
     @ver_source = SRC_VER[@pkgname]
 
     @conf_options = [
-      "--enable-shared",
-      "--disable-boostrap",
+      "--enable-boostrap",
       "--enable-threads=posix",
-      "--disable-nls",
-      "--enable-default-pie",
-      "--disable-multilib",
-      "--enable-languages=c,c++",
+      "--disable-checking",
+      "--with-system-zlib",
+      "--enable__cxa_atexit",
+      "--disable-libunwind-exceptions",
+      "--disable-gcj",
+      "--enable-languages=c,c++,fortran",
+      "--with-cpu=generic",
       "--libdir={prefix}/lib",
       "--libexecdir={prefix}/lib",
       "--build={target_arch}",
