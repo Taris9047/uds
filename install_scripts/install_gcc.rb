@@ -613,6 +613,7 @@ class InstGCC4Sen < InstGCC
       "--disable-libunwind-exceptions",
       "--disable-gcj",
       "--enable-languages=c,c++,fortran",
+      "--disable-multilib",
       "--with-cpu=generic",
       "--libdir={prefix}/lib",
       "--libexecdir={prefix}/lib",
