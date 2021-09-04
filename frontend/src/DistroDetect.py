@@ -61,6 +61,7 @@ class DistroPkgMap(GetDistro):
         #
         self.distro_to_pkgfile_map = {
             "ubuntu": {
+                "linuxmint_20.2": "ubuntu_20.04_pkgs",
                 "linuxmint_20.1": "ubuntu_20.04_pkgs",
                 "elementary_5.1": "ubuntu_18.04_pkgs",
                 "hamonikr_4.0": "ubuntu_20.04_pkgs",

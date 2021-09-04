@@ -48,6 +48,9 @@ class UDSBrew(RunCmd):
         self.args = args
         self.parse_args()
 
+        self.opt_sgcc = ""
+        self.opt_verbose = "-v"
+
         if self.p_args.prerequisite:
             self.InstallPrerequisiteStuffs()
 
@@ -103,13 +106,12 @@ class UDSBrew(RunCmd):
 
             parsed_inst_args = p_args_inst.parse_args(self.p_args.install)
 
-            opt_sgcc = ""
+            
             if parsed_inst_args.system_gcc:
-                opt_sgcc = "-sgcc"
+                self.opt_sgcc = "-sgcc"
 
-            opt_verbose = "-v"
             if parsed_inst_args.quiet:
-                opt_verbose = ""
+                self.opt_verbose = ""
 
             pkgs_to_install = set(parsed_inst_args.pkgs_to_install)
 
@@ -119,7 +121,7 @@ class UDSBrew(RunCmd):
 
             for pkg in pkgs_to_install:
                 self.Run(
-                    f"{self.system_ruby} {self.uds_backend} {opt_verbose} {opt_sgcc} {pkg}"
+                    f"{self.system_ruby} {self.uds_backend} {self.opt_verbose} {self.opt_sgcc} {pkg}"
                 )
 
             sys.exit(0)
@@ -128,7 +130,7 @@ class UDSBrew(RunCmd):
             pkgs_to_uninstall = set(self.p_args.uninstall)
 
             for pkg in pkgs_to_uninstall:
-                self.Run(f"{self.system_ruby} {self.uds_backend} {opt_verbose} -u {pkg}")
+                self.Run(f"{self.system_ruby} {self.uds_backend} {self.opt_verbose} -u {pkg}")
 
             sys.exit(0)
 
