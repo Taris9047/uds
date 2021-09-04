@@ -609,7 +609,7 @@ class InstGCC4Sen < InstGCC
       "--enable-threads=posix",
       "--disable-checking",
       "--with-system-zlib",
-      "--enable__cxa_atexit",
+      "--enable-__cxa_atexit",
       "--disable-libunwind-exceptions",
       "--disable-gcj",
       "--enable-languages=c,c++,fortran",
