@@ -605,7 +605,7 @@ class InstGCC4Sen < InstGCC
     @ver_source = SRC_VER[@pkgname]
 
     @conf_options = [
-      "--enable-boostrap",
+      "--disable-bootstrap",
       "--enable-threads=posix",
       "--disable-checking",
       "--with-system-zlib",
@@ -625,7 +625,7 @@ class InstGCC4Sen < InstGCC
     @env = {
       "CC" => "gcc",
       "CXX" => "g++",
-      "CFLAGS" => "-w -O2 -std=gnu89 -fgnu89-inline -fomit-frame-pointer -pipe",
+      "CFLAGS" => "-w -O2 -std=gnu99 -fomit-frame-pointer -pipe",
       "CXXFLAGS" => "-w -O2 -std=gnu++11 -fomit-frame-pointer -pipe",
     # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
     }
@@ -716,6 +716,7 @@ class InstGCC4Sen < InstGCC
     ]
 
     brag_msg = %{
+
 *** This is totally deprecated software! ***
 *** If it breaks, it breaks... ***
 *** (This package was added solely due to Sentaurus 2015 Version) ***
@@ -724,6 +725,7 @@ class InstGCC4Sen < InstGCC
  (Ubuntu) gcc-multilib libstdc++6:i386
  (RHEL) libstdc++.i686
 *** But don't expect to be 100\% successful. ***
+
 }
     puts brag_msg
     sleep(2)
