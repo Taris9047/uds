@@ -60,6 +60,16 @@
     "script": "install_gcc.rb",
     "class": "InstGCC4"
   },
+  "gcc4-sentaurus": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-4.8.3/gcc-4.8.3.tar.bz2",
+    "type": "tarball",
+    "alt-names": [
+      "gcc-4.8.3"
+    ],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC4Sen"
+  },
   "cmake": {
     "url": "https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5.tar.gz",
     "type": "tarball",
