@@ -56,7 +56,6 @@ neovim
 screen
 neofetch
 openblas
-gfortran
 glew-devel
 graphviz-devel
 avahi-compat-libdns_sd-devel

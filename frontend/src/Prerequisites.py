@@ -69,6 +69,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_prereq_solus_4(self):
         self.install_prereq_solus_4dot2()
+        
+    def install_prereq_rocky_8(self):
+        self.install_prereq_centos_8()
 
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")

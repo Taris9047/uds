@@ -56,9 +56,9 @@ openblas-devel
 mysql-devel
 glew-devel
 graphviz-devel
-gfortran
 avahi-compat-libdns_sd-devel
 doxygen
 ninja-build
 gnome-shell-extension-pop-shell
 libtool
+
