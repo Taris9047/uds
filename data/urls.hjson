@@ -289,8 +289,28 @@
     "class": "InstGnuplot"
   },
 
+  # Sqlite3
+  "sqlite3": {
+    "url": "https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Sqlite3", "Sqlite", "sqlite"],
+    "dependency": [],
+    "script": "install_sqlite3.rb",
+    "class": "InstSqlite3"
+  },
+
   # Libraries
   #
+  # libffi
+  "libffi": {
+    "url": "https://github.com/libffi/libffi/releases/download/v3.4.2/libffi-3.4.2.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libffi-dev", "libffi-devel", "ffi-devel"],
+    "dependency": [],
+    "script": "libs/install_libffi.rb",
+    "class": "InstLibffi"
+  },
+
   # libpng
   "libpng": {
     "url": "http://prdownloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz",

@@ -113,7 +113,7 @@ module SRC_TYPE
       json_parse = ParseHjson.new()
       return json_parse.GetType(pkg_name)
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[SRC_TYPE] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end
@@ -128,7 +128,7 @@ module SRC_SCRIPT
       json_parse = ParseHjson.new()
       return json_parse.GetScript(pkg_name)
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[SRC_SCRIPT] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end
@@ -143,7 +143,7 @@ module SRC_CLASS
       json_parse = ParseHjson.new()
       return json_parse.GetClass(pkg_name)
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[SRC_CLASS] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end
@@ -159,7 +159,7 @@ module SRC_INFO
       json_parse = ParseHjson.new()
       return json_parse.GetInfo(pkg_name)
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[SRC_INFO] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end
@@ -173,6 +173,14 @@ module SRC_VER
     begin
       if pkg_name == 'golang'
         return ['git']
+      end
+
+      if pkg_name == 'sqlite3'
+        src_tarball_fname = SRC_URL['sqlite3'].split('/')[-1]
+        src_tarball_bname = src_tarball_fname.split('.')[0]
+        ver_str = src_tarball_bname.split('-')[-1]
+
+        return Version.new([ ver_str[0], ver_str[1..2], ver_str[3..4] ].join('.'))
       end
 
       if pkg_name == 'pdflib'
@@ -194,8 +202,9 @@ module SRC_VER
       end
 
       return src_ver
+
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[SRC_VER] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end
@@ -230,7 +239,7 @@ module SRC_DEPS
       json_parse = ParseHjson.new()
       return json_parse.GetDepPkgs(pkg_name)
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[SRC_DEPS] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end
@@ -243,7 +252,7 @@ module DB_PKG
       json_parse = ParseHjson.new()
       return json_parse.GetDB(pkg_name)
     rescue
-      puts "Not a valid package name: \"#{pkg_name}\""
+      puts "[DB_PKG] Not a valid package name: \"#{pkg_name}\""
       exit(-1)
     end
   end

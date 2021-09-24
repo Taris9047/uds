@@ -54,6 +54,10 @@ class UDSBrew(RunCmd):
         if self.p_args.prerequisite:
             self.InstallPrerequisiteStuffs()
 
+        if self.p_args.list:
+            self.Run(f"{self.system_ruby} {self.uds_backend} list")
+            sys.exit(0)
+
         if self.p_args.rust_tools:
             InstallRustTools()
             sys.exit(0)
@@ -244,13 +248,6 @@ class UDSBrew(RunCmd):
         else:
             p.print_help()
             sys.exit(0)
-
-    # def show_help(self):
-    #     """
-    #     DUMMY: Help message.
-    #     TODO Fill out help message? Someday?
-    #     """
-    #     print("<Put help message here>")
 
     def show_version(self):
         """

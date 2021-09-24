@@ -51,6 +51,15 @@ class FNParser
   # Returns version
   def version()
 
+    # In case of Sqlite3... weird file naming convention it has...
+    if @@fname.include?'sqlite-autoconf'
+      fn_split = @@bname.split('-')
+      ver_str = fn_split[-1].split('.')[0]
+      ver_split = [ver_str[0], ver_str[1..2], ver_str[3..4]].join('.')
+      @@version = Version.new(ver_split)
+      return @@version.to_sA
+    end
+
     if @repo_addr
       @@version = Version.new('0.0.0')
     else
