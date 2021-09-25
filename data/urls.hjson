@@ -241,6 +241,16 @@
     "class": "InstVim"
   },
 
+  # btop
+  "btop": {
+    "url": "https://github.com/aristocratos/btop.git",
+    "type": "git",
+    "alt-names": ["btop++", "BTOP"],
+    "dependency": ["gcc-11"],
+    "script": "install_btop.rb",
+    "class": "InstBTOP"
+  },
+
   # GoLang
   "golang-bootstrap": {
     "url": "https://dl.google.com/go/go1.4-bootstrap-20171003.tar.gz",
