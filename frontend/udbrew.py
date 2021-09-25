@@ -30,7 +30,7 @@ class UDSBrew(RunCmd):
         self.update_self_repo()
 
         self.find_out_version()
-        self.fallback_ruby = "/usr/bin/ruby" # Fallback. Does not work with many situations.
+        self.fallback_ruby = "/usr/bin/ruby"  # Fallback. Does not work with many situations.
 
         print("Probing ruby...")
         self.system_ruby = subprocess.check_output("echo \"$(command -v ruby)\"", shell=True).decode('utf-8').rstrip()
@@ -112,7 +112,6 @@ class UDSBrew(RunCmd):
 
             parsed_inst_args = p_args_inst.parse_args(self.p_args.install)
 
-            
             if parsed_inst_args.system_gcc:
                 self.opt_sgcc = "-sgcc"
 
@@ -145,13 +144,13 @@ class UDSBrew(RunCmd):
         Installs Prerequisite packages (selected by subroutines)
         and ruby gems that we need to run those ruby scripts!
         """
-        print ("Installing Programs and Packages from the System's own repository!!\n")
+        print("Installing Programs and Packages from the System's own repository!!\n")
         InstallPrereqPkgs()
-        print ("Done!\n")
+        print("Done!\n")
 
-        print ("Installing Gems for the system Ruby for backend operation!!\n")
+        print("Installing Gems for the system Ruby for backend operation!!\n")
         InstallSystemRubyGems()
-        print ("\nDone!!\n")
+        print("\nDone!!\n")
         sys.exit(0)
 
     def parse_args(self):
@@ -286,6 +285,7 @@ class UDSBrew(RunCmd):
     def update_self_repo(self):
         print("Running self update ...")
         self.Run('git pull')
+
 
 if __name__ == "__main__":
     UDSBrew(sys.argv)
