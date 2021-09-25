@@ -27,6 +27,8 @@ class UDSBrew(RunCmd):
         """
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
+        self.update_self_repo()
+
         self.find_out_version()
         self.fallback_ruby = "/usr/bin/ruby" # Fallback. Does not work with many situations.
 
@@ -280,6 +282,10 @@ class UDSBrew(RunCmd):
                     "> Care to check up whether we have unix_dev_setup in the same path?"
                 )
 
+    # Runs 'git pull' every time
+    def update_self_repo(self):
+        print("Running self update ...")
+        self.Run('git pull')
 
 if __name__ == "__main__":
     UDSBrew(sys.argv)
