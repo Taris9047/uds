@@ -182,6 +182,13 @@ module SRC_VER
         return Version.new(ver_str.split('.'))
       end
 
+      if pkg_name == 'tcl'
+        src_tarball_fname = SRC_URL['tcl'].split('/')[-1]
+        ver_str = src_tarball_fname.split('-')[0][2..-1]
+
+        return Version.new(ver_str.split('.'))
+      end
+
       if pkg_name == 'sqlite3'
         src_tarball_fname = SRC_URL['sqlite3'].split('/')[-1]
         src_tarball_bname = src_tarball_fname.split('.')[0]

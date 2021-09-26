@@ -312,12 +312,20 @@
   # Libraries
   #
 
-  # tk (Tcl/Tk) (just library)
+  # tcl and tk (Tcl/Tk) (just library)
+  "tcl": {
+    "url": "https://downloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Tcl", "tcl-devel", "tcl-dev"],
+    "dependency": [],
+    "script": "libs/install_tcl.rb",
+    "class": "InstTcl"
+  },
   "tk": {
     "url": "https://downloads.sourceforge.net/tcl/tk8.6.11.1-src.tar.gz",
     "type": "tarball",
-    "alt-names": ["tcltk", "tk-devel", "tk-dev"],
-    "dependency": [],
+    "alt-names": ["Tk", "tk-devel", "tk-dev"],
+    "dependency": ["tcl"],
     "script": "libs/install_tk.rb",
     "class": "InstTk"
   },
