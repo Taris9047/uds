@@ -34,6 +34,7 @@ class InstTcl < InstallStuff
 
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
     src_extract_folder = File.join(File.realpath(@build_dir), "tcl#{SRC_VER[@pkgname].to_sA[0..2].join('.')}")
+    tclsh_exec = "tclsh#{SRC_VER[@pkgname].to_sA[0..1].join('.')}"
     src_build_folder = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
     @src_build_dir = src_build_folder
 
@@ -68,7 +69,8 @@ class InstTcl < InstallStuff
       File.join(src_extract_folder, 'unix')+"/configure",
       opts.join(" "), "&&",
       "make -j", @Processors.to_s, "&&",
-      inst_cmd
+      inst_cmd, '&&',
+      "ln -sfv #{File.join(@prefix, 'bin', tclsh_exec)} #{File.join(@prefix, 'bin', 'tclsh')}"
     ]
 
     puts "Compiling (with #{@Processors} processors) and Installing ..."
