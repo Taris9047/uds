@@ -184,8 +184,8 @@ module SRC_VER
 
       if pkg_name == 'tcl'
         src_tarball_fname = SRC_URL['tcl'].split('/')[-1]
-        ver_str = src_tarball_fname.split('-')[0][2..-1]
-
+        ver_str = src_tarball_fname.split('-')[0][3..-1]
+        
         return Version.new(ver_str.split('.'))
       end
 

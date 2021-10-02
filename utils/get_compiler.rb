@@ -12,7 +12,6 @@ $cflags = "-O3 -march=native -fomit-frame-pointer -pipe"
 $cxxflags = $cflags
 $include_path = '{env_path}/include'
 $fallback_compiler_path = '/usr/bin'
-$state_of_art_gcc_ver = SRC_VER['gcc'][0]
 
 $rpath = "-Wl,-rpath=. -Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64 -L/usr/lib -L/usr/lib64"
 $pkg_config_path = "{env_path}/lib/pkgconfig:{env_path}/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig"
@@ -78,22 +77,26 @@ class GetCompiler
         @CXXFLAGS.slice! '-fno-semantic-interposition'
       end  
     else
-      # cc_state_of_art = UTILS.which("gcc-#{$state_of_art_gcc_ver}")
-      # cxx_state_of_art = UTILS.which("g++-#{$state_of_art_gcc_ver}")
-      # if cc_state_of_art and cxx_state_of_art
-      #   c_compiler = cc_state_of_art
-      #   cxx_compiler = cxx_state_of_art
-      # else
-      #   c_compiler = UTILS.which("gcc")
-      #   cxx_compiler = UTILS.which("g++")
-      # end
-      c_compiler = UTILS.which("gcc")
-      cxx_compiler = UTILS.which("g++")
+      cc_state_of_art = UTILS.which("gcc-#{@current_gcc_major}")
+      cxx_state_of_art = UTILS.which("g++-#{@current_gcc_major}")
+      if cc_state_of_art and cxx_state_of_art
+        puts "Newest system gcc detected"
+        puts "CC: #{cc_state_of_art}"
+        puts "CXX: #{cxx_state_of_art}"
+        c_compiler = cc_state_of_art
+        cxx_compiler = cxx_state_of_art
+      else
+        c_compiler = UTILS.which("gcc")
+        cxx_compiler = UTILS.which("g++")
+      end
 
       unless c_compiler
-        cc_state_of_art = UTILS.which("gcc-#{$state_of_art_gcc_ver}")
-        cxx_state_of_art = UTILS.which("g++-#{$state_of_art_gcc_ver}")
+        cc_state_of_art = UTILS.which("gcc-#{@current_gcc_major}")
+        cxx_state_of_art = UTILS.which("g++-#{@current_gcc_major}")
         if cc_state_of_art and cxx_state_of_art
+          puts "Newest system gcc detected"
+          puts "CC: #{cc_state_of_art}"
+          puts "CXX: #{cxx_state_of_art}"
           c_compiler = cc_state_of_art
           cxx_compiler = cxx_state_of_art
         else

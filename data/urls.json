@@ -86,9 +86,7 @@
     "alt-names": [
       "Lua"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_lua.rb",
     "class": "InstLua"
   },
@@ -100,7 +98,6 @@
       "Ruby2"
     ],
     "dependency": [
-      "gcc",
       "node"
     ],
     "script": "install_ruby.rb",
@@ -112,9 +109,7 @@
     "alt-names": [
       "Ruby3"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
   },
@@ -137,8 +132,10 @@
       "Python2"
     ],
     "dependency": [
-      "gcc",
-      "openssl"
+      "openssl",
+      "tcl",
+      "tk",
+      "libffi"
     ],
     "script": "install_python.rb",
     "class": "InstPython2"
@@ -150,8 +147,10 @@
       "Python3"
     ],
     "dependency": [
-      "gcc",
-      "openssl"
+      "openssl",
+      "tcl",
+      "tk",
+      "libffi"
     ],
     "script": "install_python.rb",
     "class": "InstPython3"
@@ -178,9 +177,7 @@
       "node.js",
       "nodejs"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_node.rb",
     "class": "InstNode",
     "bin_url": "https://nodejs.org/dist/v16.2.0/node-v16.2.0-linux-x64.tar.xz"
@@ -193,9 +190,7 @@
       "node.js-lts",
       "nodejs-lts"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_node.rb",
     "class": "InstNodeLTS",
     "bin_url": "https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz"
@@ -206,9 +201,7 @@
     "alt-names": [
       "Boost"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_boost.rb",
     "class": "InstBoost"
   },
@@ -242,7 +235,6 @@
       "root"
     ],
     "dependency": [
-      "gcc",
       "python3"
     ],
     "script": "install_ROOT.rb",
@@ -254,9 +246,7 @@
     "alt-names": [
       "MPICH"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_mpich.rb",
     "class": "InstMPICH"
   },
@@ -320,9 +310,7 @@
       "vi",
       "Vim"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_vim.rb",
     "class": "InstVim"
   },
@@ -333,9 +321,7 @@
       "btop++",
       "BTOP"
     ],
-    "dependency": [
-      "gcc-11"
-    ],
+    "dependency": [],
     "script": "install_btop.rb",
     "class": "InstBTOP"
   },
@@ -354,9 +340,7 @@
       "go",
       "Golang"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang"
   },
@@ -366,9 +350,7 @@
     "alt-names": [
       "Julia"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_julia.rb",
     "class": "InstJulia"
   },
@@ -379,9 +361,7 @@
       "spice",
       "NGSpice"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "install_ngspice.rb",
     "class": "InstNgspice"
   },
@@ -584,9 +564,7 @@
     "alt-names": [
       "OpenSSL"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "libs/install_openssl.rb",
     "class": "InstLibOpenSSL"
   },
@@ -596,9 +574,7 @@
     "alt-names": [
       "Nettle"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "libs/install_nettle.rb",
     "class": "InstNettle"
   },
@@ -609,7 +585,6 @@
       "GnuTLS"
     ],
     "dependency": [
-      "gcc",
       "nettle"
     ],
     "script": "libs/install_gnutls.rb",
@@ -622,9 +597,7 @@
       "Zlib",
       "libz"
     ],
-    "dependency": [
-      "gcc"
-    ],
+    "dependency": [],
     "script": "libs/install_zlib.rb",
     "class": "InstZlib"
   }

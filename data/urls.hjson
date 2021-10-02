@@ -73,7 +73,7 @@
     "url": "https://www.lua.org/ftp/lua-5.4.2.tar.gz",
     "type": "tarball",
     "alt-names": ["Lua"],
-    "dependency": [ "gcc" ],
+    "dependency": [],
     "script": "install_lua.rb",
     "class": "InstLua"
   },
@@ -83,7 +83,7 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.3.tar.gz",
     "type": "tarball",
     "alt-names": ["ruby2", "Ruby2"],
-    "dependency": ["gcc", "node"],
+    "dependency": ["node"],
     "script": "install_ruby.rb",
     "class": "InstRuby"
   },
@@ -93,7 +93,7 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.1.tar.gz",
     "type": "tarball",
     "alt-names": ["Ruby3"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
   },
@@ -111,7 +111,7 @@
     "url": "https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz",
     "type": "tarball",
     "alt-names": ["Python2"],
-    "dependency": ["gcc", "openssl"],
+    "dependency": ["openssl", "tcl", "tk", "libffi"],
     "script": "install_python.rb",
     "class": "InstPython2"
   },
@@ -119,7 +119,7 @@
     "url": "https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tar.xz",
     "type": "tarball",
     "alt-names": ["Python3"],
-    "dependency": ["gcc", "openssl"],
+    "dependency": ["openssl", "tcl", "tk", "libffi"],
     "script": "install_python.rb",
     "class": "InstPython3"
   },
@@ -140,7 +140,7 @@
     "url": "https://nodejs.org/dist/v16.2.0/node-v16.2.0.tar.gz",
     "type": "tarball",
     "alt-names": ["Node.JS", "node.js", "nodejs"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_node.rb",
     "class": "InstNode",
     "bin_url": "https://nodejs.org/dist/v16.2.0/node-v16.2.0-linux-x64.tar.xz"
@@ -149,7 +149,7 @@
     "url": "https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz",
     "type": "tarball",
     "alt-names": ["Node.JS-lts", "node.js-lts", "nodejs-lts"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_node.rb",
     "class": "InstNodeLTS",
     "bin_url": "https://nodejs.org/dist/v14.16.0/node-v14.16.0-linux-x64.tar.xz"
@@ -160,7 +160,7 @@
     "url": "https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2",
     "type": "tarball",
     "alt-names": ["Boost"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_boost.rb",
     "class": "InstBoost"
   },
@@ -190,7 +190,7 @@
     "url": "https://github.com/root-project/root.git",
     "type": "git",
     "alt-names": ["root"],
-    "dependency": ["gcc", "python3"],
+    "dependency": ["python3"],
     "script": "install_ROOT.rb",
     "class": "InstROOT"
   },
@@ -200,7 +200,7 @@
     "url": "http://www.mpich.org/static/downloads/3.4.1/mpich-3.4.1.tar.gz",
     "type": "tarball",
     "alt-names": ["MPICH"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_mpich.rb",
     "class": "InstMPICH"
   },
@@ -236,7 +236,7 @@
     "url": "https://github.com/vim/vim.git",
     "type": "git",
     "alt-names": ["vi", "Vim"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_vim.rb",
     "class": "InstVim"
   },
@@ -246,7 +246,7 @@
     "url": "https://github.com/aristocratos/btop.git",
     "type": "git",
     "alt-names": ["btop++", "BTOP"],
-    "dependency": ["gcc-11"],
+    "dependency": [],
     "script": "install_btop.rb",
     "class": "InstBTOP"
   },
@@ -264,7 +264,7 @@
     "url": "https://go.googlesource.com/go",
     "type": "git",
     "alt-names": ["go", "Golang"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang"
   },
@@ -274,7 +274,7 @@
     "url": "https://github.com/JuliaLang/julia.git",
     "type": "git",
     "alt-names": ["Julia"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_julia.rb",
     "class": "InstJulia"
   },
@@ -284,7 +284,7 @@
     "url": "https://sourceforge.net/projects/ngspice/files/ng-spice-rework/34/ngspice-34.tar.gz",
     "type": "tarball",
     "alt-names": ["spice", "NGSpice"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "install_ngspice.rb",
     "class": "InstNgspice"
   },
@@ -436,7 +436,7 @@
     "url": "https://www.openssl.org/source/openssl-1.1.1k.tar.gz",
     "type": "tarball",
     "alt-names": ["OpenSSL"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "libs/install_openssl.rb",
     "class": "InstLibOpenSSL"
   },
@@ -445,7 +445,7 @@
     "url": "https://ftp.gnu.org/gnu/nettle/nettle-3.7.2.tar.gz",
     "type": "tarball",
     "alt-names": ["Nettle"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "libs/install_nettle.rb",
     "class": "InstNettle"
   },
@@ -454,7 +454,7 @@
     "url": "https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz",
     "type": "tarball",
     "alt-names": ["GnuTLS"],
-    "dependency": ["gcc", "nettle"],
+    "dependency": ["nettle"],
     "script": "libs/install_gnutls.rb",
     "class": "InstGnuTLS"
   },
@@ -463,7 +463,7 @@
     "url": "https://zlib.net/zlib-1.2.11.tar.gz",
     "type": "tarball",
     "alt-names": ["Zlib", "libz"],
-    "dependency": ["gcc"],
+    "dependency": [],
     "script": "libs/install_zlib.rb",
     "class": "InstZlib"
   }
