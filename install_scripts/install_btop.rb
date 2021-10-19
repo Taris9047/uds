@@ -31,7 +31,7 @@ class InstBTOP < InstallStuff
 
     # BTOP Doesn't have conventional configure script. It's all makefile.
     @make_opts = [
-      "STATIC=true",
+      # "STATIC=true",
       "ADDFLAGS=\"-march=native -fomit-frame-pointer\""
     ]
 
