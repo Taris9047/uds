@@ -314,6 +314,19 @@
     "script": "install_vim.rb",
     "class": "InstVim"
   },
+  "neovim": {
+    "url": "https://github.com/neovim/neovim.git",
+    "type": "git",
+    "alt-names": [
+      "nvim",
+      "Neovim"
+    ],
+    "dependency": [
+      "lua"
+    ],
+    "script": "install_neovim.rb",
+    "class": "InstNeovim"
+  },
   "btop": {
     "url": "https://github.com/aristocratos/btop.git",
     "type": "git",
