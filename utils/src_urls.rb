@@ -90,11 +90,14 @@ class ParseHjson
 
   # In some cases, we need to tell a specific version. Even when using Git repository.
   def GetSrcVer(pkg_name)
-    begin
-      return @URL_DB[pkg_name]["src_version"]
-    rescue
+    src_version = @URL_DB[pkg_name]["src_version"]
+    
+    if src_version.nil?
       return 'URL_VERSION'
+    else
+      return src_version
     end
+
   end
 
 end # class ParseHjson
