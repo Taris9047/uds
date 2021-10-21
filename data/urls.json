@@ -170,7 +170,7 @@
     "bootstrap_bin_url": "https://downloads.python.org/pypy/pypy2.7-v7.3.3-linux64.tar.bz2",
     "src_version": [
       "3",
-      "8"
+      "7"
     ]
   },
   "node": {
