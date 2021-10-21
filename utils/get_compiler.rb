@@ -172,7 +172,8 @@ class GetCompiler
   end
 
   def get_cmake_settings
-    env_ary = [ "-DCMAKE_C_COMPILER=\""+@CC+"\"" ] + \
+    env_ary = \
+      [ "-DCMAKE_C_COMPILER=\""+@CC+"\"" ] + \
       [ "-DCMAKE_CXX_COMPILER=\""+@CXX+"\"" ] + \
       [ "-DCMAKE_C_FLAGS=\""+@CFLAGS+" "+@RPATH+"\"" ] + \
       [ "-DCMAKE_CXX_FLAGS=\""+@CXXFLAGS+" "+@RPATH+"\"" ] + \

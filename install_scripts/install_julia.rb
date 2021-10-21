@@ -6,9 +6,6 @@ require_relative './install_stuff.rb'
 require 'open3'
 require 'fileutils'
 
-$julia_version = ["1", "6", "0"]
-
-
 class InstJulia < InstallStuff
 
   def initialize(args)
@@ -22,7 +19,7 @@ class InstJulia < InstallStuff
     @source_dir = File.join(@src_dir, 'julia-src')
     @src_build_dir = File.join(@build_dir, 'julia-build')
     @target_dir = File.join(@prefix, '.opt', 'julia')
-    @Version = $julia_version.join('.')
+    @Version = SRC_VER[@pkgname].join('.')
 
   end
 

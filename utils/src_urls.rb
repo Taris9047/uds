@@ -88,6 +88,14 @@ class ParseHjson
     return @URL_DB[pkg_name]["dependency"]
   end
 
+  # In some cases, we need to tell a specific version. Even when using Git repository.
+  def GetSrcVer(pkg_name)
+    begin
+      return @URL_DB[pkg_name]["src_version"]
+    rescue
+      return 'URL_VERSION'
+  end
+
 end # class ParseHjson
 
 # Some operator overloading alternatives.
@@ -171,8 +179,10 @@ module SRC_VER
 
   def [](pkg_name)
     begin
-      if pkg_name == 'golang'
-        return ['git']
+      json_parse = ParseHjson.new()
+      ver = json_parse.GetSrcVer(pkg_name)
+      if ver != 'URL_VERSION'
+        return ver
       end
 
       if pkg_name == 'tk'

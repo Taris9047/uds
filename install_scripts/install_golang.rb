@@ -6,9 +6,6 @@ require_relative './install_stuff.rb'
 require 'open3'
 require 'fileutils'
 
-$golang_version = ["1", "16", "3"]
-
-
 class InstGolang < InstallStuff
 
   def initialize(args)
@@ -21,7 +18,7 @@ class InstGolang < InstallStuff
     
     @source_url = SRC_URL[@pkgname]
     @bootstrap_url = SRC_URL['golang-bootstrap']
-    @Version = $golang_version.join('.')
+    @Version = SRC_VER[@pkgname].join('.')
   end
 
   def do_install

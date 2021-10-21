@@ -5,7 +5,7 @@
 require_relative '../utils/utils.rb'
 require_relative './install_stuff.rb'
 
-$least_cmake_ver = ['3', '13', '4']
+$least_cmake_ver = ['3', '21', '3']
 
 class InstCmake < InstallStuff
 

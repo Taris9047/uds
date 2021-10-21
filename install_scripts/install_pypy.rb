@@ -14,7 +14,6 @@ $pypy_modules = [
   'pycparser', 'sympy', 'nose'
 ]
 
-$pypy3_ver = '3.7'
 $platform = 'x86_64'
 $pypy_prefix_dir = '/.opt'
 
@@ -36,7 +35,7 @@ class InstPyPy3 < InstallStuff
 
     # Python2 modules to install
     @pypy_modules = $pypy_modules
-    @pypy3_ver = $pypy3_ver
+    @pypy3_ver = SRC_VER[@pkgname].join('.')
     @platform = $platform
     @pypy_dest_dir = File.join(@prefix, $pypy_prefix_dir)
 
@@ -91,7 +90,7 @@ class InstPyPy3 < InstallStuff
     fp = File.open(@pkginfo_file, 'w')
     compile_info_json = {
       "Package Name" => @pkgname,
-      "Version" => ["3", "7"]
+      "Version" => SRC_VER[@pkgname]
     }
     fp.write(compile_info_json.to_json)
     fp.close
