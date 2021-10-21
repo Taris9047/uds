@@ -94,6 +94,7 @@ class ParseHjson
       return @URL_DB[pkg_name]["src_version"]
     rescue
       return 'URL_VERSION'
+    end
   end
 
 end # class ParseHjson
