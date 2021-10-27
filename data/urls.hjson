@@ -124,7 +124,7 @@
     "class": "InstPython2"
   },
   "python3": {
-    "url": "https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tar.xz",
+    "url": "https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tar.xz",
     "type": "tarball",
     "alt-names": ["Python3"],
     "dependency": ["openssl", "tcl", "tk", "libffi"],
