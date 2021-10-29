@@ -25,41 +25,28 @@ class InstNeovim < InstallStuff
     @src_dir = dn.GetPath
 
     # Let's build!!
-    
-    #
-    # Vim's configure cannot be called from out of repository directory!!
-    # So, we need to use repository directory as build dir.
-    #
     @build_dir = @src_dir
 
-    # if Dir.exists?(@build_dir) == false
-    #   puts "Build dir missing.. making one.."
-    # else
-    #   puts "Build dir exists, cleaning up before work!!"
-    #   self.Run( "rm -rf "+@build_dir )
-    # end
-    # self.Run( "mkdir -p "+@build_dir )
-
     if @need_sudo
-      inst_cmd = "sudo make install DESTDIR=#{@prefix}"
+      inst_cmd = "sudo make install"
     else
-      inst_cmd = "make install DESTDIR=#{@prefix}"
+      inst_cmd = "make install"
     end
 
     # Setting up makefile arguments
     @conf_options = \
       [
         "CMAKE_BUILD_TYPE=Release",
+        "CMAKE_EXTRA_FLAGS=\"-DCMAKE_INSTALL_PREFIX=#{@prefix}\""
       ]
     @makefile_options = @conf_options.join(' ')
 
     # Setting up install prefix and configuration options...
     compile_cmd = [
       "cd",
-      @build_dir,
-      "&&",
-      "nice make #{@makefile_options}",
-      "&&",
+      @build_dir, "&&",
+      "make distclean", "&&",
+      "nice make #{@makefile_options}", "&&",
       inst_cmd
     ]
 
