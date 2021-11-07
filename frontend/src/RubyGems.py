@@ -4,6 +4,9 @@
 
 from .Utils import RunCmd, Version
 
+import os
+
+
 # Gems list for system.
 gems_system_ruby = [
     "json", "ruby-progressbar", "tty-spinner", "lolcat", "open3"
@@ -13,7 +16,18 @@ gems_system_ruby = [
 class InstallSystemRubyGems(RunCmd):
     def __init__(self, system_ruby="/usr/bin/ruby"):
         RunCmd.__init__(self, verbose=True)
+        
+        self.need_sudo = True
+        # Trying to probe ruby at $HOME/.local
+        homebrew_ruby = \
+            os.path.isfile(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
+        if homebrew_ruby:
+            system_ruby=\
+                os.path.realpath(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
+            self.need_sudo = not os.access(os.environ.get("HOMEBREW"), os.W_OK)
+        
         ruby_ver_str = self.RunSilent(cmd="{} --version".format(system_ruby))
+        print(ruby_ver_str)
         self.system_ruby_ver = \
             Version(ruby_ver_str.split(" ")[1].split("p")[0])
         self.new_ruby_ver = Version("2.7.0")
@@ -38,5 +52,8 @@ class InstallSystemRubyGems(RunCmd):
             gems = list(self.gems_to_install_ver.keys())
             vers = [self.gems_to_install_ver[_] for _ in gems]
             for gem, ver in zip(gems, vers):
-                self.Run(f"sudo -H {self.system_gem} install {gem} -v {ver}")
+                if self.need_sudo:
+                    self.Run(f"sudo -H {self.system_gem} install {gem} -v {ver}")
+                else:
+                    self.Run(f"{self.system_gem} install {gem} -v {ver}")
 
