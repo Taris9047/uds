@@ -95,15 +95,15 @@ class UnixDevSetup
     # Sort out input arguments
     @op_mode_list.each do |opm|
       if @list_of_progs.include?(opm)
-        @pkgs_to_install.append(opm)
+        @pkgs_to_install.push(opm)
       elsif @aliases.keys.include?(opm)
-        @pkgs_to_install.append(@aliases[opm])
+        @pkgs_to_install.push(@aliases[opm])
       elsif @opt_list.include?(opm)
-        @parameters.append(opm)
+        @parameters.push(opm)
       elsif opm == 'all'
         @pkgs_to_install = @list_of_all
       else
-        @wrong_pkgs.append(opm)
+        @wrong_pkgs.push(opm)
       end
     end
 

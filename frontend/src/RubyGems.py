@@ -24,6 +24,8 @@ class InstallSystemRubyGems(RunCmd):
         if self.system_ruby_ver >= self.new_ruby_ver:
             self.gems_to_install = gems_system_ruby
         else:
+            if self.system_ruby_ver < Version("2.3.0"):
+                gems_system_ruby.remove('json')
             self.gems_to_install = gems_system_ruby
             self.gems_to_install.remove("open3")
             self.gems_to_install_ver["open3"] = "0.1.0"

@@ -5,6 +5,7 @@
 from .DistroDetect import GetPackages
 from .Utils import RunCmd
 
+new_git_ver='2.33.0'
 
 ### InstallPkgs ###
 ###
@@ -77,6 +78,10 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run("sudo -H dnf -y update")
         self.Run(f"sudo -H dnf -y install {' '.join(self.pkgs_to_install)}")
 
+    def install_with_yum(self):
+        self.Run("sudo -H yum -y update")
+        self.Run("sudo -H yum -y install "+' '.join(self.pkgs_to_install) )
+
     def install_prereq_rhel_8(self):
         # print("Installing Prereq. packages for RHEL8")
         self.Run("sudo -H dnf -y update")
@@ -88,6 +93,14 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
             "sudo -H dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
         )
         self.install_with_dnf()
+
+    def install_prereq_centos_7(self):
+        self.Run("sudo -H yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm")
+        self.Run("sudo -H subscription-manager repos –enable \"rhel-*-optional-rpms\" –enable \"rhel-*-extras-rpms\" –enable \"rhel-ha-for-rhel-*-server-rpms\"")
+        self.Run("sudo -H yum -y install gcc gcc-c++ make glibc-devel openssl-devel autoconf automake binutils bison flex gettext libtool patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elflutils indent patchutils")
+        self.install_with_yum()
+        self.install_ruby274_local()
+        self.install_git_new()
 
     def install_prereq_centos_8(self):
         # print("Installing CentOS repos.")
@@ -131,3 +144,31 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run("sudo -H eopkg up")
         self.Run("sudo -H eopkg install -y -c system.devel")
         self.Run(f"sudo -H eopkg install -y {' '.join(self.pkgs_to_install)}")
+    
+    def install_ruby274_local(self):
+        cmd = ' && '.join(
+            [
+                "rm -rf /tmp/ruby-*.*.*.tar.* /tmp/ruby-*.*.*",
+                "cd /tmp",
+                "wget https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.4.tar.gz",
+                "tar xf ./ruby-2.7.4.tar.gz",
+                "cd ./ruby-2.7.4",
+                "./configure --prefix=/usr/local",
+                "make && sudo -H make install"
+            ] )
+        self.Run(cmd)
+    
+    def install_git_new(self):
+        cmd = ' && '.join(
+            [
+                "rm -rf /tmp/git-*.*.*.tar.* /tmp/git-*.*.*",
+                "cd /tmp",
+                f"wget \"https://www.kernel.org/pub/software/scm/git/git-{new_git_ver}.tar.xz\" -O \"/tmp/git-{new_git_ver}.tar.xz\"",
+                "tar xf ./git-{}.tar.xz".format(new_git_ver),
+                "cd ./git-{}".format(new_git_ver),
+                "make configure",
+                "./configure --prefix=/usr/local",
+                "make && sudo -H make install"
+            ] )
+        self.Run(cmd)
+    

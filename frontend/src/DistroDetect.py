@@ -79,6 +79,7 @@ class DistroPkgMap(GetDistro):
                 "opensuse-leap_15.2": "opensuse_15_pkgs",
             },
             "rhel": {
+                "centos_7": "rhel_7_pkgs",
                 "centos_8": "rhel_8_pkgs",
                 "almalinux_8.3": "rhel_8_pkgs",
                 "rocky_8.4": "rhel_8_pkgs",
