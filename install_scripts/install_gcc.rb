@@ -476,10 +476,10 @@ class InstGCC4 < InstGCC
     ]
 
     @env = {
-      "CC" => "gcc -std=gnu99",
+      "CC" => "gcc -std=gnu89",
       "CXX" => "g++ -std=gnu++11",
-      "CFLAGS" => "-w -O2 -std=gnu89 -fgnu89-inline -fomit-frame-pointer -pipe",
-      "CXXFLAGS" => "-w -O2 -std=gnu++11 -fomit-frame-pointer -pipe",
+      "CFLAGS" => "-w -O2 -fgnu89-inline -fomit-frame-pointer -pipe",
+      "CXXFLAGS" => "-w -O2 -fomit-frame-pointer -pipe",
     # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
     }
   end
@@ -622,11 +622,10 @@ class InstGCC4Sen < InstGCC
     ]
 
     @env = {
-      "CC" => "gcc -std=gnu99",
+      "CC" => "gcc -std=gnu89",
       "CXX" => "g++ -std=gnu++11",
-      "CFLAGS" => "-w -O2 -std=gnu99 -fomit-frame-pointer -pipe",
-      "CXXFLAGS" => "-w -O2 -std=gnu++11 -fomit-frame-pointer -pipe",
-    # "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
+      "CFLAGS" => "-w -O2 -fgnu89-inline -fomit-frame-pointer -pipe",
+      "CXXFLAGS" => "-w -O2 -fomit-frame-pointer -pipe",
     }
   end
 
