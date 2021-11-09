@@ -64,6 +64,22 @@
     "script": "install_gcc.rb",
     "class": "InstGCC4Sen"
   },
+    "gcc4-cadence": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-4.2.0/gcc-4.2.0.tar.bz2",
+    "type": "tarball",
+    "alt-names": ["gcc-4.2.0", "gcc4Cadence"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC4Cadence"
+  },
+    "gcc3-cadence": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-3.3/gcc-3.3.tar.bz2",
+    "type": "tarball",
+    "alt-names": ["gcc-3.3", "gcc3Cadence"],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC3Cadence"
+  },
 
 
   # cmake
