@@ -81,10 +81,12 @@ class DistroPkgMap(GetDistro):
             "rhel": {
                 "centos_7": "rhel_7_pkgs",
                 "centos_8": "rhel_8_pkgs",
+                "centos_9": "rhel_9_pkgs",
                 "almalinux_8.3": "rhel_8_pkgs",
                 "rocky_8.4": "rhel_8_pkgs",
             },
             "fedora": {
+                "rhel_9": "rhel_9_pkgs",
                 "rhel_8.3": "rhel_8_pkgs",
                 "fedora_33": "fedora_33_pkgs",
             },

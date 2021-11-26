@@ -235,6 +235,15 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         )
         self.install_with_dnf()
 
+    def install_prereq_centos_9(self):
+        # print("Installing CentOS repos.")
+        self.Run("sudo -H dnf -y install epel-release")
+        self.Run("sudo -H dnf config-manager --set-enabled powertools")
+        self.Run(
+            'sudo -H dnf -y groupinstall "Development Tools" "Additional Development"'
+        )
+        self.install_with_dnf()
+
     def install_prereq_fedora_33(self):
         # print("Installing Fedora packages!!")
         cmds = [
