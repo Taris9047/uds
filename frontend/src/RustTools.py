@@ -8,7 +8,7 @@ Rust_packages = [
     "exa",
     "bat",
     "rm-improved",
-    # "diskonaut",
+    "diskonaut",
     "lsd",
     "cargo-update",
     "starship",
@@ -17,7 +17,7 @@ Rust_packages = [
     "procs",
     "du-dust",
     "ripgrep",
-    # "hyperfine",
+    "hyperfine",
     # "eureka",
     "ddh",
     # "gitui",
@@ -53,10 +53,11 @@ class InstallRustTools(RunCmd):
 
     def CargoUpdate(self):
         print("Updating currently installed Rust packages!!")
+        for rpk in Rust_packages:
+            self.Run(f"{self.cargo_exec} install {rpk}")
+        # self.Run(f"{self.cargo_exec} install cargo-update")
         self.Run(f"{self.rustup_exec} update")
         self.Run(f"{self.cargo_exec} install-update -a")
-        if self.reinstall_pkgs:
-            self.InstallPackages()
 
     def InstallNew(self):
         env_script = os.path.join(self.default_cargo_path, "..", "env")
