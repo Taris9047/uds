@@ -221,7 +221,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_centos_7(self):
         self.Run("sudo -H yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm")
         self.Run("sudo -H subscription-manager repos –enable \"rhel-*-optional-rpms\" –enable \"rhel-*-extras-rpms\" –enable \"rhel-ha-for-rhel-*-server-rpms\"")
-        self.Run("sudo -H yum -y install gcc gcc-c++ make glibc-devel openssl-devel autoconf automake binutils bison flex gettext libtool patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elflutils indent patchutils curl libcurl-devel")
+        self.Run("sudo -H yum -y install gcc gcc-c++ make glibc-devel openssl-devel autoconf automake binutils bison flex gettext libtool patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elflutils indent patchutils curl libcurl-devel zstd")
+        self.Run("sudo curl -o /etc/yum.repos.d/konimex-neofetch-epel-7.repo https://copr.fedorainfracloud.org/coprs/konimex/neofetch/repo/epel-7/konimex-neofetch-epel-7.repo")
+        self.Run("sudo yum install -y neofetch")
         self.install_with_yum()
         self.install_ruby_new()
         self.install_git_new()
