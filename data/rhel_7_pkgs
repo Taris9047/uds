@@ -62,3 +62,4 @@ graphviz-devel
 avahi-compat-libdns_sd-devel
 doxygen
 ninja-build
+zstd
