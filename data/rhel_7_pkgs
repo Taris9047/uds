@@ -49,6 +49,7 @@ git
 git-lfs
 wget
 curl
+libcurl-devel
 valgrind
 valgrind-devel
 vim
