@@ -21,8 +21,9 @@ class InstGnuTLS < InstallStuff
     @conf_options = [
       '--disable-guile',
       '--with-included-unistring',
-      '--with-included-libtasn1'
-      ]
+      '--with-included-libtasn1',
+      '--without-p11-kit'
+    ]
 
     # Setting up compilers
     self.CompilerSet

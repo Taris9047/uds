@@ -63,3 +63,7 @@ avahi-compat-libdns_sd-devel
 doxygen
 ninja-build
 zstd
+glib2-devel
+gtk3-devel
+webkitgtk4-devel
+ncurses-devel

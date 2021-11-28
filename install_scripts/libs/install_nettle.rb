@@ -18,7 +18,10 @@ class InstNettle < InstallStuff
     @source_url = SRC_URL[@pkgname]
 
     # mpich build options
-    @conf_options = ['--disable-static']
+    @conf_options = [
+        '--disable-static',
+        '--enable-mini-gmp'
+    ]
 
     # Setting up compilers
     self.CompilerSet
