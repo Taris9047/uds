@@ -14,7 +14,7 @@ $include_path = '{env_path}/include'
 $fallback_compiler_path = '/usr/bin'
 
 $rpath = "-Wl,-rpath=. -Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64 -L/usr/lib -L/usr/lib64"
-$pkg_config_path = "{env_path}/lib/pkgconfig:{env_path}/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig"
+$pkg_config_path = "{env_path}/lib/pkgconfig:{env_path}/lib64/pkgconfig"
 
 class GetCompiler
 
@@ -144,11 +144,8 @@ class GetCompiler
       [ "CXX=\""+@CXX+"\"" ] + \
       [ "CFLAGS=\"#{@CFLAGS}\"" ] + \
       [ "CXXFLAGS=\"#{@CXXFLAGS}\"" ] + \
-      [ "LDFLAGS=\"#{@RPATH}\"" ]
-    
-    unless @PKG_CONFIG_PATH.empty?
-      env_ary += [ "PKG_CONFIG_PATH=\"#{@PKG_CONFIG_PATH}\"" ]
-    end
+      [ "LDFLAGS=\"#{@RPATH}\"" ] + \
+      [ "PKG_CONFIG_PATH=\"#{@PKG_CONFIG_PATH}\"" ]
     return env_ary
   end
 
@@ -163,11 +160,8 @@ class GetCompiler
       'CFLAGS' => @CFLAGS,
       'CXXFLAGS' => @CXXFLAGS,
       'LDFLAGS' => @RPATH,
+      'PKG_CONFIG_PATH' => @PKG_CONFIG_PATH,
     }
-
-    unless @PKG_CONFIG_PATH.empty?
-      env_hash = env_hash.merge({ 'PKG_CONFIG_PATH' => @PKG_CONFIG_PATH })
-    end
     return env_hash
   end
 
@@ -180,11 +174,8 @@ class GetCompiler
       [ "-DCMAKE_EXE_LINKER_FLAGS_INIT=\""+@RPATH+"\"" ] + \
       [ "-DCMAKE_SHARED_LINKER_FLAGS_INIT=\""+@RPATH+"\"" ] + \
       [ "-DCMAKE_MODULE_LINKER_FLAGS_INIT=\""+@RPATH+"\"" ] + \
-      [ "-DCMAKE_FIND_ROOT_PATH=#{@prefix}"]
-
-    unless @PKG_CONFIG_PATH.empty?
-      env_ary += [ "-DCMAKE_PKG_CONFIG_PATH=\"#{@PKG_CONFIG_PATH}\"" ]
-    end
+      [ "-DCMAKE_FIND_ROOT_PATH=#{@prefix}"] + \
+      [ "-DCMAKE_PKG_CONFIG_PATH=\"#{@PKG_CONFIG_PATH}\"" ]
     return env_ary
   end
 

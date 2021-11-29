@@ -38,21 +38,26 @@ class InstEmacs < InstallStuff
       '--with-x=yes',
       '--with-x-toolkit=gtk3',
       '--with-lcms2',
+      '--with-json',
       '--with-imagemagick',
-      '--with-pop',
+      '--without-pop',
       '--with-mailutils',
       '--with-xwidgets'    # needs webkitgtk4-dev
     ]
     
-    # os_release_name=`grep -i 'name' /etc/*-release`
-    # if os_release_name.include? 'Red Hat' or
-    #   os_release_name.include? 'CentOS' or
-    #   os_release_name.include? 'Alma'
-    #   @env = {
-    #     "CC" => UTILS.which("gcc"),
-    #     "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe -I#{@prefix}/include",
-    #   }
-    # end
+    os_release_name=`grep -i 'name' /etc/*-release`
+    if os_release_name.include? 'Red Hat' or
+      os_release_name.include? 'CentOS' or
+      os_release_name.include? 'Alma' or
+      os_release_name.include? 'Rocky'
+      @env = {
+        "CC" => UTILS.which("gcc"),
+        "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe",
+        "CPPFLAGS" => "-I#{@prefix}/include",
+        "LDFLAGS" => "-L#{@prefix}/lib",
+        "PKG_CONFIG_PATH" => "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
+      }
+    end
 
   end
 
@@ -97,6 +102,8 @@ class InstEmacs < InstallStuff
 
     # Ok let's roll!!
     cmds = [
+      "cd", src_extract_folder, "&&",
+      "./autogen.sh", "&&",
       "cd", src_build_folder, "&&",
       src_extract_folder+"/configure",
       opts.join(" "), "&&",
