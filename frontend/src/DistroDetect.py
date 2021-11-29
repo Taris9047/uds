@@ -84,6 +84,7 @@ class DistroPkgMap(GetDistro):
                 "centos_9": "rhel_9_pkgs",
                 "almalinux_8.3": "rhel_8_pkgs",
                 "rocky_8.4": "rhel_8_pkgs",
+                "rocky_8.5": "rhel_8_pkgs",
             },
             "fedora": {
                 "rhel_9": "rhel_9_pkgs",
@@ -118,7 +119,15 @@ class DistroPkgMap(GetDistro):
         except ValueError:
             distro_key = "rolling"
 
-        return self.distro_to_pkgfile_map[base][distro_key]
+        pkg_inst_list = None
+        try:
+            pkg_inst_list = self.distro_to_pkgfile_map[base][distro_key]
+        except KeyError:
+            print('{} seems unidentifiable!'.format(distro_key))
+            print('Selecting somewhat similar distro...')
+            pkg_inst_list = sorted(self.distro_to_pkgfile_map[base].keys())[-1]
+
+        return pkg_inst_list
 
 
 ### GetPackages ###
