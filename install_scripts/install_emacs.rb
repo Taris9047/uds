@@ -51,6 +51,7 @@ class InstEmacs < InstallStuff
       os_release_name.include? 'Alma' or
       os_release_name.include? 'Rocky'
       @conf_options -= ['--with-imagemagick']
+      @conf_options += ['--without-imagemagick']
       @env = {
         "CC" => UTILS.which("gcc"),
         "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe",
