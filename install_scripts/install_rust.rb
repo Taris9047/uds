@@ -17,7 +17,7 @@ require 'open3'
 $rust_utils_to_install = [
   "exa", "bat", "rm-improved", "diskonaut", "lsd",
   "cargo-update", "starship", "tokei", "fd-find", "procs",
-  "du-dust", "ripgrep", "hyperfine", "ytop", "zoxide",
+  "du-dust", "ripgrep", "hyperfine", "bottom", "zoxide",
   "gitui", "eureka", "ddh", "broot",
 ]
 

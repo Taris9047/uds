@@ -21,7 +21,7 @@ Rust_packages = [
     # "eureka",
     "ddh",
     # "gitui",
-    "ytop",
+    "bottom",
     # "grex",
     "zoxide",
     "broot",
