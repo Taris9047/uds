@@ -61,4 +61,4 @@ doxygen
 ninja-build
 gnome-shell-extension-pop-shell
 libtool
-
+zsh

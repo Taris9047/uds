@@ -62,3 +62,4 @@ ninja-build
 gnome-shell-extension-pop-shell
 libtool
 perl-FindBin
+zsh
