@@ -255,6 +255,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run(cmds)
         self.install_with_dnf()
 
+    def install_prereq_fedora_34(self):
+        self.install_prereq_fedora_33()
+
     def install_prereq_fedora_35(self):
         self.install_prereq_fedora_33()
 
