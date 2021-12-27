@@ -67,7 +67,7 @@ class DistroPkgMap(GetDistro):
                 "hamonikr_4.0": "ubuntu_20.04_pkgs",
                 "pop_20.04": "ubuntu_20.04_pkgs",
                 "pop_20.10": "ubuntu_20.10_pkgs",
-                "pop_21.04": "ubuntu_21.04_pkgs"
+                "pop_21.04": "ubuntu_21.04_pkgs",
                 "pop_21.10": "ubuntu_21.10_pkgs"
             },
             "debian": {
@@ -92,6 +92,7 @@ class DistroPkgMap(GetDistro):
                 "rhel_9": "rhel_9_pkgs",
                 "rhel_8.3": "rhel_8_pkgs",
                 "fedora_33": "fedora_33_pkgs",
+                "fedora_34": "fedora_34_pkgs",
                 "fedora_35": "fedora_35_pkgs"
             },
             "arch": {"rolling": "arch_pkgs"},
