@@ -183,6 +183,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_elementary_5(self):
         self.install_prereq_ubuntu_18()
 
+    def install_prereq_elementary_6(self):
+        self.install_prereq_ubuntu_20()
+
     def install_prereq_hamonikr_4(self):
         self.install_prereq_ubuntu_20()
         

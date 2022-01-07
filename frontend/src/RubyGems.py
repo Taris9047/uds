@@ -4,6 +4,7 @@
 
 from .Utils import RunCmd, Version
 
+from distutils.spawn import find_executable
 import os
 
 
@@ -16,16 +17,24 @@ gems_system_ruby = [
 class InstallSystemRubyGems(RunCmd):
     def __init__(self, system_ruby="/usr/bin/ruby"):
         RunCmd.__init__(self, verbose=True)
-        
+
         self.need_sudo = True
         # Trying to probe ruby at $HOME/.local
-        homebrew_ruby = \
-            os.path.isfile(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
-        if homebrew_ruby:
-            system_ruby=\
-                os.path.realpath(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
-            self.need_sudo = not os.access(os.environ.get("HOMEBREW"), os.W_OK)
-        
+        if os.environ.get('HOMEBREW') is not None:
+            homebrew_ruby = \
+                os.path.isfile(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
+            if os.path.isfile(homebrew_ruby):
+                system_ruby=\
+                    os.path.realpath(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
+            else:
+                system_ruby = find_executable('ruby')
+
+        else:
+            homebrew_ruby = find_executable('ruby')
+            system_ruby = find_executable('ruby')
+
+        self.need_sudo = not os.access(os.environ.get("HOMEBREW"), os.W_OK)
+
         ruby_ver_str = self.RunSilent(cmd="{} --version".format(system_ruby))
         print(ruby_ver_str)
         self.system_ruby_ver = \
