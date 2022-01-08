@@ -14,7 +14,7 @@
 # libgccjit-devel texinfo
 #
 
-$newest_gcc_ver = "10"
+$newest_gcc_ver = SRC_VER['gcc'].to_sA[0]
 
 require "fileutils"
 require_relative "../utils/utils.rb"
