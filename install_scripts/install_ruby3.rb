@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# this will handle Ruby 3.0.0 installation
+# this will handle Ruby
 
 require_relative '../utils/utils.rb'
 require_relative './install_stuff.rb'
@@ -17,8 +17,6 @@ $gems_to_install = [
     "tty-spinner",
   ]
 
-$pkg_name = 'ruby3'
-
 class InstRuby3 < InstallStuff
 
   def initialize(args)
@@ -30,19 +28,19 @@ class InstRuby3 < InstallStuff
 
     @source_url = SRC_URL[@pkgname]
 
-    # Ruby3 modules to install
+    # Ruby modules to install
     @ruby_gems = $gems_to_install
 
-    # Ruby3 build options
+    # Ruby build options
     @conf_options = [
-      "--enable-shared",
-      "--program-suffix=3"
+      "--enable-shared"
     ]
 
     # Setting up compilers
     self.CompilerSet(
-      cflags='-fno-semantic-interposition', cxxflags='-fno-semantic-interposition')
-
+      cflags='-fno-semantic-interposition',
+      cxxflags='-fno-semantic-interposition')
+      
   end
 
   def do_install
@@ -94,19 +92,22 @@ class InstRuby3 < InstallStuff
     ]
 
     puts "Compiling (with #{@Processors} processors) and Installing ..."
-    self.RunInstall( @env, cmds.join(" ") )
+    self.RunInstall( env: @env, cmd: cmds.join(" ") )
 
     inst_module_cmds = [
       mod_sudo,
-      File.join(@prefix,"bin/gem3"),
+      File.join(@prefix,"bin/gem"),
       "install",
       @ruby_gems.join(" ")
     ]
 
     puts "Installing additional gems..."
     self.RunInstall( env: @env, cmd: inst_module_cmds.join(" ") )
-    self.WriteInfo
 
+    self.WriteInfo(
+      build_system='make', 
+      pkg_type='tar.gz', 
+      destdir_inst_cmd="make DESTDIR=#{@stage_dir_pkg} install")
   end
 
 end # class InstRuby

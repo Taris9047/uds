@@ -123,8 +123,8 @@
     "script": "install_lua.rb",
     "class": "InstLua"
   },
-  "ruby": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.3.tar.gz",
+  "ruby2": {
+    "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.5.tar.gz",
     "type": "tarball",
     "alt-names": [
       "ruby2",
@@ -136,11 +136,12 @@
     "script": "install_ruby.rb",
     "class": "InstRuby"
   },
-  "ruby3": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.1.tar.gz",
+  "ruby": {
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.0.tar.gz",
     "type": "tarball",
     "alt-names": [
-      "Ruby3"
+      "Ruby",
+      "ruby"
     ],
     "dependency": [],
     "script": "install_ruby3.rb",
@@ -183,7 +184,8 @@
       "openssl",
       "tcl",
       "tk",
-      "libffi"
+      "libffi",
+      "sqlite3"
     ],
     "script": "install_python.rb",
     "class": "InstPython3"
@@ -358,9 +360,7 @@
       "nvim",
       "Neovim"
     ],
-    "dependency": [
-      "lua"
-    ],
+    "dependency": [],
     "script": "install_neovim.rb",
     "class": "InstNeovim"
   },

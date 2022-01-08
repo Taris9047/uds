@@ -1,4 +1,5 @@
 build-essential
+figlet
 flex
 bison
 zlib1g
