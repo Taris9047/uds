@@ -7,6 +7,8 @@ from .Utils import RunCmd, Version
 from distutils.spawn import find_executable
 import os
 
+# Default homebrew directory
+def_homebrew_dir = '~/.local'
 
 # Gems list for system.
 gems_system_ruby = [
@@ -33,7 +35,10 @@ class InstallSystemRubyGems(RunCmd):
             homebrew_ruby = find_executable('ruby')
             system_ruby = find_executable('ruby')
 
-        self.need_sudo = not os.access(os.environ.get("HOMEBREW"), os.W_OK)
+        if os.environ.get("HOMEBREW") is not None:
+            self.need_sudo = not os.access(os.environ.get("HOMEBREW"), os.W_OK)
+        else:
+            self.need_sudo = not os.access(def_homebrew_dir, os.W_OK)
 
         ruby_ver_str = self.RunSilent(cmd="{} --version".format(system_ruby))
         print(ruby_ver_str)
