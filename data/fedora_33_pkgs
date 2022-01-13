@@ -62,5 +62,9 @@ doxygen
 ninja-build
 gnome-shell-extension-pop-shell
 libtool
+perl-FindBin
 zsh
 libtool-ltdl-devel
+gtk3-devel
+webkit2gtk3-devel
+ncurses-devel
