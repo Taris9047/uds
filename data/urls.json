@@ -267,6 +267,18 @@
     "script": "install_rust.rb",
     "class": "InstRust"
   },
+  "duf": {
+    "url": "https://github.com/muesli/duf.git",
+    "type": "git",
+    "alt-names": [
+      "DUF"
+    ],
+    "dependency": [
+      "golang"
+    ],
+    "script": "install_duf.rb",
+    "class": "InstDUF"
+  },
   "ROOT": {
     "url": "https://github.com/root-project/root.git",
     "type": "git",

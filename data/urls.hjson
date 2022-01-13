@@ -210,6 +210,16 @@
     "class": "InstRust"
   },
 
+  # duf
+  "duf": {
+    "url": "https://github.com/muesli/duf.git",
+    "type": "git",
+    "alt-names": ["DUF"],
+    "dependency": ["golang"],
+    "script": "install_duf.rb",
+    "class": "InstDUF"
+  },
+
   # ROOT
   "ROOT": {
     "url": "https://github.com/root-project/root.git",
