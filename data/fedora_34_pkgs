@@ -63,3 +63,4 @@ ninja-build
 gnome-shell-extension-pop-shell
 libtool
 zsh
+libtool-ltdl-devel

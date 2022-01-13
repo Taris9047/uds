@@ -64,3 +64,4 @@ gnome-shell-extension-pop-shell
 libtool
 perl-FindBin
 zsh
+libtool-ltdl-devel
