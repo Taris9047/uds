@@ -117,8 +117,20 @@ class GetCompiler
       end
     end
 
-    @CC = File.expand_path(c_compiler.strip)
-    @CXX = File.expand_path(cxx_compiler.strip)
+    if c_compiler
+      @CC = File.expand_path(c_compiler.strip)
+    else
+      puts "Oh crap... we are missing a C compiler???????"
+      raise "NO CC!!!!"
+      exit(-1)
+    end
+    if cxx_compiler
+      @CXX = File.expand_path(cxx_compiler.strip)
+    else
+      puts "No G++ or any c++ compiler found in the system!!"
+      raise "NO C++ compiler!!"
+      exit (-1)
+    end
 
     unless File.exist?(@CC) or File.exist?(@CXX)
       puts "Detected C Compiler: #{@CC}, CXX Compiler: #{@CXX}"

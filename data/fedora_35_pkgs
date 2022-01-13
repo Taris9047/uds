@@ -31,6 +31,7 @@ openssl
 openssl-devel
 redhat-lsb-core
 gcc-gfortran
+gcc-c++
 pcre-devel
 mesa-libGL-devel
 mesa-libGLU-devel
