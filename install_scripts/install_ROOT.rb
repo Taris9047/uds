@@ -8,7 +8,7 @@ require 'open3'
 require_relative '../utils/utils.rb'
 require_relative './install_stuff.rb'
 
-$root_version = ["6", "24", "00"]
+$root_version = ["6", "24", "06"]
 
 class InstROOT < InstallStuff
 
@@ -62,10 +62,16 @@ class InstROOT < InstallStuff
     fnp = FNParser.new(py_src)
     py_ver = fnp.version
     cmake_opts = [
+      "-DCMAKE_C_COMPILER=clang",
+      "-DCMAKE_CXX_COMPILER=clang++",
       "-DCMAKE_BUILD_TYPE=Release",
       "-DLLVM_BUILD_TYPE=Release",
       "-DPYTHON_EXECUTABLE=#{@prefix}/bin/python#{py_ver[0]}",
 	    "-Drpath=ON",
+      "-DCMAKE_VERBOSE_MAKEFILE=TRUE",
+      "-DCMAKE_CXX_STANDARD=11",
+      "-DCXX_STANDARD_STRING=11",
+      "-Dcuda=TRUE"
     ]
 
     config_cmd = [
