@@ -62,8 +62,6 @@ class InstROOT < InstallStuff
     fnp = FNParser.new(py_src)
     py_ver = fnp.version
     cmake_opts = [
-      "-DCMAKE_C_COMPILER=clang",
-      "-DCMAKE_CXX_COMPILER=clang++",
       "-DCMAKE_BUILD_TYPE=Release",
       "-DLLVM_BUILD_TYPE=Release",
       "-DPYTHON_EXECUTABLE=#{@prefix}/bin/python#{py_ver[0]}",
