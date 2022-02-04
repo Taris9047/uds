@@ -323,7 +323,7 @@
     "dependency": [],
     "script": "install_julia.rb",
     "class": "InstJulia",
-    "src_version": ["1", "6", "3"]
+    "src_version": ["1", "6", "5"]
   },
 
   # ngspice
