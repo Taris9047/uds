@@ -169,7 +169,8 @@
       "openssl",
       "tcl",
       "tk",
-      "libffi"
+      "libffi",
+      "readline"
     ],
     "script": "install_python.rb",
     "class": "InstPython2"
@@ -185,7 +186,8 @@
       "tcl",
       "tk",
       "libffi",
-      "sqlite3"
+      "sqlite3",
+      "readline"
     ],
     "script": "install_python.rb",
     "class": "InstPython3"
@@ -501,6 +503,16 @@
     "dependency": [],
     "script": "libs/install_libffi.rb",
     "class": "InstLibffi"
+  },
+  "readline": {
+    "url": "https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz",
+    "type": "tarball",
+    "alt-names": [
+      "libreadline"
+    ],
+    "dependency": [],
+    "script": "libs/install_readline.rb",
+    "class": "InstLibreadline"
   },
   "libpng": {
     "url": "http://prdownloads.sourceforge.net/libpng/libpng-1.6.37.tar.xz",

@@ -237,41 +237,42 @@ class InstallStuff < RunConsole
     end
     self.Run(cmd.join(' && '))
 
-    require 'pathname'
-    @Installed_files = []
-    stage_dir_pkg_flist = \
-      Dir.glob(
-        "#{@stage_dir_pkg}/**/*", 
-        File::FNM_DOTMATCH).reject { |f| File.directory?(f) }
+    if Dir.exist?(@stage_dir_pkg)
+      require 'pathname'
+      @Installed_files = []
+      stage_dir_pkg_flist = \
+        Dir.glob(
+          "#{@stage_dir_pkg}/**/*", 
+          File::FNM_DOTMATCH).reject { |f| File.directory?(f) }
 
-    stage_dir_pkg_flist.each do |file|
-      abs_path = Pathname.new(file)
-      proj_root = Pathname.new(File.realpath(@stage_dir_pkg))
-      abs_root_removed = abs_path.relative_path_from(proj_root)
-      @Installed_files << File.join('/', abs_root_removed)
-    end
+      stage_dir_pkg_flist.each do |file|
+        abs_path = Pathname.new(file)
+        proj_root = Pathname.new(File.realpath(@stage_dir_pkg))
+        abs_root_removed = abs_path.relative_path_from(proj_root)
+        @Installed_files << File.join('/', abs_root_removed)
+      end
 
-    puts "Making package file for #{@pkgname} ... at #{@stage_dir_pkg}"
-    
-    make_tarball_cmd = ["cd #{@stage_dir}"]
-    tar_opt = {
-      'tar.gz' => 'z',
-      'tar.bz2' => 'j',
-      'tar.xz' => 'J'
-    }
-    case pkg_type
-    when 'tar.gz'
-      make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
-    when 'tar.bz2'
-      make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
-    when 'tar.xz'
-      make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
-    end
-    self.Run(make_tarball_cmd.join(' && '))
+      puts "Making package file for #{@pkgname} ... at #{@stage_dir_pkg}"
+      
+      make_tarball_cmd = ["cd #{@stage_dir}"]
+      tar_opt = {
+        'tar.gz' => 'z',
+        'tar.bz2' => 'j',
+        'tar.xz' => 'J'
+      }
+      case pkg_type
+      when 'tar.gz'
+        make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+      when 'tar.bz2'
+        make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+      when 'tar.xz'
+        make_tarball_cmd << "tar c#{tar_opt[pkg_type]}f #{@stage_dir_name}.#{pkg_type} #{@stage_dir_pkg}"
+      end
+      self.Run(make_tarball_cmd.join(' && '))
 
-    # Finishing up...
-    FileUtils.rm_rf(File.realpath(@stage_dir_pkg))
-
+      # Finishing up...
+      FileUtils.rm_rf(File.realpath(@stage_dir_pkg))
+    end # if Dir.exist?(@stage_dir_pkg)
   end
 
   # Uninstallation!

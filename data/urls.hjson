@@ -81,7 +81,6 @@
     "class": "InstGCC3Cadence"
   },
 
-
   # cmake
   "cmake": {
     "url": "https://github.com/Kitware/CMake/releases/download/v3.21.3/cmake-3.21.3.tar.gz",
@@ -135,7 +134,7 @@
     "url": "https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz",
     "type": "tarball",
     "alt-names": ["Python2"],
-    "dependency": ["openssl", "tcl", "tk", "libffi"],
+    "dependency": ["openssl", "tcl", "tk", "libffi", "readline"],
     "script": "install_python.rb",
     "class": "InstPython2"
   },
@@ -143,7 +142,7 @@
     "url": "https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tar.xz",
     "type": "tarball",
     "alt-names": ["Python3"],
-    "dependency": ["openssl", "tcl", "tk", "libffi", "sqlite3"],
+    "dependency": ["openssl", "tcl", "tk", "libffi", "sqlite3", "readline"],
     "script": "install_python.rb",
     "class": "InstPython3"
   },
@@ -377,7 +376,6 @@
     "class": "InstTk"
   },
 
-
   # libffi
   "libffi": {
     "url": "https://github.com/libffi/libffi/releases/download/v3.4.2/libffi-3.4.2.tar.gz",
@@ -386,6 +384,16 @@
     "dependency": [],
     "script": "libs/install_libffi.rb",
     "class": "InstLibffi"
+  },
+
+  # readline
+  "readline": {
+    "url": "https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libreadline"],
+    "dependency": [],
+    "script": "libs/install_readline.rb",
+    "class": "InstLibreadline"
   },
 
   # libpng
