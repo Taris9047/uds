@@ -94,6 +94,8 @@ class InstNode < InstallStuff
     puts "Let's install additional packages!"
     npm_cmd = File.join(@prefix,'bin/npm')
     self.RunInstall( cmd: "#{npm_cmd} install -g #{$npm_global_pkgs.join(' ')}" )
+    n_cmd = File.join(@prefix, 'bin/n')
+    self.RunInstall( cmd: "#{n_cmd} i latest" )
 
   end # do_bin_install
 
@@ -228,6 +230,8 @@ class InstNodeLTS < InstallStuff
     puts "Let's install additional packages!"
     npm_cmd = File.join(@prefix,'bin/npm')
     self.RunInstall( cmd: "#{npm_cmd} install -g #{$npm_global_pkgs.join(' ')}" )
+    n_cmd = File.join(@prefix, 'bin/n')
+    self.RunInstall( cmd: "#{n_cmd} i lts" )
 
   end # do_bin_install
 
