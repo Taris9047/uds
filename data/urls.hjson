@@ -231,7 +231,7 @@
 
   # MPICH
   "mpich": {
-    "url": "http://www.mpich.org/static/downloads/3.4.1/mpich-3.4.1.tar.gz",
+    "url": "http://www.mpich.org/static/downloads/4.0.1/mpich-4.0.1.tar.gz",
     "type": "tarball",
     "alt-names": ["MPICH"],
     "dependency": [],
@@ -239,7 +239,7 @@
     "class": "InstMPICH"
   },
   "hydra": {
-    "url": "http://www.mpich.org/static/downloads/3.4.1/hydra-3.4.1.tar.gz",
+    "url": "http://www.mpich.org/static/downloads/4.0.1/hydra-4.0.1.tar.gz",
     "type": "tarball",
     "alt-names": ["Hydra"],
     "dependency": ["gcc", "mpich"],

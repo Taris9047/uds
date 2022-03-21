@@ -22,7 +22,8 @@ class InstMPICH < InstallStuff
       "--with-device=ch4:ucx",
       "--enable-threads=multiple",
       "--enable-fast=O3",
-      "FFLAGS=-fallow-argument-mismatch"
+      "FFLAGS=-fallow-argument-mismatch",
+      "FCFLAGS=-fallow-argument-mismatch"
     ]
 
     # Setting up compilers
