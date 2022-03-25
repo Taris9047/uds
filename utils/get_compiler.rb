@@ -13,7 +13,7 @@ $cxxflags = $cflags
 $include_path = '{env_path}/include'
 $fallback_compiler_path = '/usr/bin'
 
-$rpath = "-Wl,-rpath=. -Wl,-rpath={env_path}/lib -Wl,-rpath={env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64 -L/usr/lib -L/usr/lib64"
+$rpath = "-Wl,-rpath,{env_path}/lib -Wl,-rpath,{env_path}/lib64 -L{env_path}/lib -L{env_path}/lib64 -L/usr/lib -L/usr/lib64"
 $pkg_config_path = "{env_path}/lib/pkgconfig:{env_path}/lib64/pkgconfig"
 
 class GetCompiler

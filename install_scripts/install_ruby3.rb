@@ -40,7 +40,12 @@ class InstRuby3 < InstallStuff
     self.CompilerSet(
       cflags='-fno-semantic-interposition',
       cxxflags='-fno-semantic-interposition')
-      
+    
+      @env = {
+        "CFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe",
+        "CXXFLAGS" => "-w -O3 -march=native -fomit-frame-pointer -pipe",
+        "LDFLAGS" => "-Wl,-rpath={prefix}/lib -Wl,-rpath={prefix}/lib64",
+      }
   end
 
   def do_install
