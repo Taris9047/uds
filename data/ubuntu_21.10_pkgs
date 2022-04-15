@@ -83,3 +83,7 @@ wget
 curl
 neofetch
 zsh
+tilix
+tmux
+openssl-server
+neovim
