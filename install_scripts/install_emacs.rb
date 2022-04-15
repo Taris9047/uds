@@ -40,6 +40,7 @@ class InstEmacs < InstallStuff
       '--with-lcms2',
       '--with-json',
       '--with-imagemagick',
+      '--with-gif=ifavailable',
       '--without-pop',
       '--with-mailutils',
       '--with-xwidgets'    # needs webkitgtk4-dev
@@ -54,11 +55,17 @@ class InstEmacs < InstallStuff
       @conf_options += ['--without-imagemagick']
       @env = {
         "CC" => UTILS.which("gcc"),
-        "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe",
+        "CFLAGS" => "-O3 -std=c99 -fomit-frame-pointer -march=native -pipe",
         "CPPFLAGS" => "-I#{@prefix}/include",
         "LDFLAGS" => "-L#{@prefix}/lib",
         "PKG_CONFIG_PATH" => "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
       }
+    end
+    
+    puts @CC_VER.major
+    if @CC_VER.major.to_i >= 11
+      @env["CFLAGS"] = "-O3 -std=c99 -fomit-frame-pointer -march=native -pipe"
+      @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
     end
 
   end

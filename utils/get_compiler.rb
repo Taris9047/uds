@@ -149,6 +149,9 @@ class GetCompiler
         puts "pkgconfig path: #{@PKG_CONFIG_PATH}"
       end
     end
+
+    get_cc_ver()
+
   end
 
   def get_settings
@@ -189,6 +192,26 @@ class GetCompiler
       [ "-DCMAKE_FIND_ROOT_PATH=#{@prefix}"] + \
       [ "-DCMAKE_PKG_CONFIG_PATH=\"#{@PKG_CONFIG_PATH}\"" ]
     return env_ary
+  end
+
+  def get_cc_ver
+    if @CC.include?'gcc'
+      gcc_ver_str = `#{@CC} --version`.split()[3]
+      ver_str = gcc_ver_str
+      
+    elsif @CC.include?'clang'
+      clang_ver_str = `#{@CC} --version`.split()[3]
+      if clang_ver_str.include?('-')
+        clang_ver_str = clang_ver_str.split('-')[0]
+      end
+      ver_str = clang_ver_str
+    end
+
+    @CC_VER = Version.new(ver_str)
+  end
+
+  def cc_ver
+    return @CC_VER
   end
 
 end

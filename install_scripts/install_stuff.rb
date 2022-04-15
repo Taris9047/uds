@@ -98,7 +98,7 @@ class InstallStuff < RunConsole
 
     }
     puts info_txt
-    sleep(2.5)
+    sleep(0.5)
   end
 
   # Checking versin between installed ones and current url.
@@ -161,6 +161,7 @@ class InstallStuff < RunConsole
     @cmake_comp_settings += gc.get_cmake_settings
     @comp_settings += gc.get_env_str
     @env = @env.merge(gc.get_env_settings) {|key, oldval, newval| oldval+oldval}
+    @CC_VER = gc.cc_ver
   end
 
   # Qt5 existence check. (more likely qmake executable.)
