@@ -113,7 +113,7 @@
 
   # Ruby3
   "ruby": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.1.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.2.tar.gz",
     "type": "tarball",
     "alt-names": ["Ruby", "ruby"],
     "dependency": [],
@@ -311,7 +311,7 @@
     "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang",
-    "src_version": ["1", "17", "6"]
+    "src_version": ["1", "18", "1"]
   },
 
   # Julia
@@ -322,7 +322,7 @@
     "dependency": [],
     "script": "install_julia.rb",
     "class": "InstJulia",
-    "src_version": ["1", "6", "5"]
+    "src_version": ["1", "7", "2"]
   },
 
   # ngspice
@@ -337,7 +337,7 @@
 
   # Gnuplot
   "gnuplot": {
-    "url": "http://ftp.cstug.cz/pub/CTAN/graphics/gnuplot/5.2.6/gnuplot-5.2.6.tar.gz",
+    "url": "http://ftp.cstug.cz/pub/CTAN/graphics/gnuplot/5.2.6/gnuplot-5.2.8.tar.gz",
     "type": "tarball",
     "alt-names": ["Gnuplot"],
     "dependency": ["libpng", "libjpeg-turbo", "libgd" ,"lua"],
@@ -357,10 +357,9 @@
 
   # Libraries
   #
-
   # tcl and tk (Tcl/Tk) (just library)
   "tcl": {
-    "url": "https://downloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz",
+    "url": "https://downloads.sourceforge.net/tcl/tcl8.6.12-src.tar.gz",
     "type": "tarball",
     "alt-names": ["Tcl", "tcl-devel", "tcl-dev"],
     "dependency": [],
@@ -368,7 +367,7 @@
     "class": "InstTcl"
   },
   "tk": {
-    "url": "https://downloads.sourceforge.net/tcl/tk8.6.11.1-src.tar.gz",
+    "url": "https://downloads.sourceforge.net/tcl/tk8.6.12-src.tar.gz",
     "type": "tarball",
     "alt-names": ["Tk", "tk-devel", "tk-dev"],
     "dependency": ["tcl"],
