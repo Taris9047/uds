@@ -41,7 +41,7 @@ class InstGolang < InstallStuff
     self.WriteInfo
 
     golang_inst_mag = %Q(
-Ok, golang has been installed!! let's install it!
+Ok, golang has been installed!!
 Make sure you add env stuff in your bashrc
 GOPATH=#{go_dir}
 Also, make sure to add #{go_dir}/bin to your PATH
