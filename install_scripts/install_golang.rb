@@ -38,7 +38,7 @@ class InstGolang < InstallStuff
       env: {"GOROOT_BOOTSTRAP" => bootstrap_dir}, 
       cmd: "cd #{go_dir}/src && ./all.bash" )
 
-    self.WriteInfo
+    # self.WriteInfo
 
     golang_inst_mag = %Q(
 Ok, golang has been installed!!
