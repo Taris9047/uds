@@ -317,7 +317,7 @@
     "class": "InstHydra"
   },
   "emacs": {
-    "url": "http://ftp.gnu.org/gnu/emacs/emacs-27.2.tar.xz",
+    "url": "http://ftp.gnu.org/gnu/emacs/emacs-28.1.tar.xz",
     "type": "tarball",
     "alt-names": [
       "Emacs",
