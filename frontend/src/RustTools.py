@@ -56,7 +56,7 @@ class InstallRustTools(RunCmd):
         for rpk in Rust_packages:
             self.Run(f"{self.cargo_exec} install {rpk}")
         # self.Run(f"{self.cargo_exec} install cargo-update")
-        self.Run(f"{self.rustup_exec} update")
+        self.Run(f"{self.rustup_exec} update stable")
         self.Run(f"{self.cargo_exec} install-update -a")
 
     def InstallNew(self):
