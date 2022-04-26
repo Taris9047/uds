@@ -15,26 +15,26 @@ class RunCmd(object):
         # At this moment, just bash is supported! Let's see if it works out!
         self.shell_type = shell_type
         self.verbose = verbose
+        self.exit_code = None
 
     def Run(self, cmd=None, env=None):
+        logs = []
         if isinstance(cmd, str):
             return self.RunACmd(cmd, env)
 
         elif isinstance(cmd, list) and (not env or isinstance(env, str)):
-            logs = []
             for cm in cmd:
-                log = self.RunACmd(cm, env)
+                log, self.exit_code = self.RunACmd(cm, env)
                 logs.append(log)
 
-            return logs
+            return logs, self.exit_code
 
         elif isinstance(cmd, list) and isinstance(env, list):
-            logs = []
             for cm, ev in zip(cmd, env):
-                log = self.RunACmd(cm, ev)
+                log, self.exit_code = self.RunACmd(cm, ev)
                 logs.append(log)
 
-            return logs
+            return logs, self.exit_code
 
     def RunACmd(self, cmd=None, env=None):
         if not cmd:
@@ -46,11 +46,11 @@ class RunCmd(object):
             self.cmd_to_run = "{} {}".format(env, cmd)
 
         if self.verbose:
-            result_log = self.RunVerbose()
+            result_log, exit_code = self.RunVerbose()
         else:
-            result_log = self.RunSilent()
+            result_log, exit_code = self.RunSilent()
 
-        return result_log
+        return result_log, exit_code
 
     def RunVerbose(self, cmd=None):
         if cmd:
@@ -66,8 +66,8 @@ class RunCmd(object):
             sys.stdout.flush()
             log += "{}{}".format(ln, os.linesep)
         p.stdout.close()
-        p.wait()
-        return log
+        exit_code = p.wait()
+        return log, exit_code
 
     def RunSilent(self, cmd=None):
         if cmd:
@@ -81,8 +81,8 @@ class RunCmd(object):
             ln = line.decode("utf-8").strip()
             log += "{}{}".format(ln, os.linesep)
         p.stdout.close()
-        p.wait()
-        return log
+        exit_code = p.wait()
+        return log, exit_code
 
 
 ### Version Parsor ###

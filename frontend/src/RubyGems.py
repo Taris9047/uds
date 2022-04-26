@@ -4,7 +4,8 @@
 
 from .Utils import RunCmd, Version
 
-from distutils.spawn import find_executable
+# from distutils.spawn import find_executable
+from shutil import which
 import os
 
 # Default homebrew directory
@@ -29,11 +30,14 @@ class InstallSystemRubyGems(RunCmd):
                 system_ruby=\
                     os.path.realpath(os.path.join(os.environ.get("HOMEBREW"),'bin','ruby'))
             else:
-                system_ruby = find_executable('ruby')
+                # system_ruby = find_executable('ruby')
+                system_ruby = which('ruby')
 
         else:
-            homebrew_ruby = find_executable('ruby')
-            system_ruby = find_executable('ruby')
+            # homebrew_ruby = find_executable('ruby')
+            homebrew_ruby = which('ruby')
+            # system_ruby = find_executable('ruby')
+            system_ruby = which('ruby')
 
         if os.environ.get("HOMEBREW") is not None:
             self.need_sudo = not os.access(os.environ.get("HOMEBREW"), os.W_OK)
@@ -41,9 +45,8 @@ class InstallSystemRubyGems(RunCmd):
             self.need_sudo = not os.access(def_homebrew_dir, os.W_OK)
 
         ruby_ver_str = self.RunSilent(cmd="{} --version".format(system_ruby))
-        print(ruby_ver_str)
         self.system_ruby_ver = \
-            Version(ruby_ver_str.split(" ")[1].split("p")[0])
+            Version(ruby_ver_str[0].split(" ")[1].split("p")[0])
         self.new_ruby_ver = Version("2.7.0")
         self.system_gem = system_ruby.replace("ruby", "gem")
 

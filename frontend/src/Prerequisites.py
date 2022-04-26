@@ -6,6 +6,7 @@ from .DistroDetect import GetPackages
 from .Utils import RunCmd
 
 import os
+import sys
 import re
 import subprocess
 
@@ -161,14 +162,25 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     # Installation methods...
     #
     def install_with_apt(self):
+        print(">> Updating Repository.")
         self.Run(cmd="sudo -H apt-get -y update")
+        print(">> Upgrading outdated packages")
         self.Run(cmd="sudo -H apt-get -y upgrade")
-        self.Run(cmd=f"sudo -H apt-get -y install {' '.join(self.pkgs_to_install)}")
+        print(">> Installing packages...")
+        pkgs_to_install_str = ' '.join(self.pkgs_to_install)
+        log, exit_code = self.Run(cmd="sudo -H apt-get -y install {}".format(pkgs_to_install_str))
+        
+        if exit_code != 0:
+            print("There was an error with package installation!!")
+            sys.exit(exit_code)
 
     def install_prereq_ubuntu_20(self):
         self.install_with_apt()
 
     def install_prereq_ubuntu_21(self):
+        self.install_with_apt()
+
+    def install_prereq_ubuntu_22(self):
         self.install_with_apt()
 
     def install_prereq_ubuntu_18(self):

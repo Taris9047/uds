@@ -83,3 +83,4 @@ wget
 curl
 neofetch
 zsh
+openssh-server
