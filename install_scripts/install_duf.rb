@@ -38,11 +38,17 @@ class InstDUF < InstallStuff
       inst_cmd = [ "sudo", inst_cmd ].join(' ')
     end
 
+    go_path = "#{@prefix}/.opt/go/bin" 
+    go_cmd = "#{@prefix}/.opt/go/bin/go"
+    if not File.exist?(go_cmd)
+      raise "#{go_cmd} not found!! Please install go first!"
+    end
+
     compile_cmd = [
       "cd",
       @build_dir,
       "&&",
-      "go build",
+      "GOPATH=#{go_path} #{go_cmd} build",
       "&&",
       inst_cmd
     ]

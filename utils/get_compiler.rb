@@ -8,8 +8,13 @@
 require_relative './src_urls.rb'
 require_relative './misc_utils.rb'
 
-$cflags = "-O3 -march=native -fomit-frame-pointer -pipe"
-$cxxflags = $cflags
+sys_gcc_dumpmachine = `/usr/bin/gcc -dumpmachine`
+sys_gcc_major_ver = `/usr/bin/gcc --version | grep gcc | awk '{print $3}' | tr "." " " | awk '{print $1}'`
+$sys_gcc_lib_dir = "/usr/lib/gcc/#{sys_gcc_dumpmachine.strip}/#{sys_gcc_major_ver.strip}"
+
+$ldflags_static = "-L#{$sys_gcc_lib_dir}"
+$cflags = "-O3 -march=native -fomit-frame-pointer -pipe #{$ldflags_static}"
+$cxxflags = "#{$cflags}"
 $include_path = '{env_path}/include'
 $fallback_compiler_path = '/usr/bin'
 

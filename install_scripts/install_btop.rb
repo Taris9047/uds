@@ -31,9 +31,9 @@ class InstBTOP < InstallStuff
 
     # BTOP Doesn't have conventional configure script. It's all makefile.
     @make_opts = [
-      "STATIC=true",
-      "ADDFLAGS=\"-march=native -fomit-frame-pointer\"",
-      "LD_LIBRARY_PATH=\"#{@prefix}/lib64:/usr/lib:/usr/lib64:/lib:/lib64\""
+      "STATIC=false",
+      "ADDFLAGS=\"-march=native -fomit-frame-pointer -pipe #{$ldflags_static}\"",
+      "LD_LIBRARY_PATH=\"#{@prefix}:#{$sys_gcc_lib_dir}/lib64:/usr/lib:/usr/lib64:/lib:/lib64\""
     ]
 
     if @need_sudo
