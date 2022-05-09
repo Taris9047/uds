@@ -487,7 +487,7 @@
   },
   # OpenSSL
   "openssl": {
-    "url": "https://www.openssl.org/source/openssl-1.1.1n.tar.gz",
+    "url": "https://www.openssl.org/source/openssl-1.1.1o.tar.gz",
     "type": "tarball",
     "alt-names": ["OpenSSL"],
     "dependency": [],
