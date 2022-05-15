@@ -96,7 +96,8 @@ class DistroPkgMap(GetDistro):
                 "rhel_8.3": "rhel_8_pkgs",
                 "fedora_33": "fedora_33_pkgs",
                 "fedora_34": "fedora_34_pkgs",
-                "fedora_35": "fedora_35_pkgs"
+                "fedora_35": "fedora_35_pkgs",
+                "fedora_36": "fedora_36_pkgs",
             },
             "arch": {"rolling": "arch_pkgs"},
             "solus": {
