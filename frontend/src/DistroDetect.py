@@ -70,7 +70,8 @@ class DistroPkgMap(GetDistro):
                 "pop_20.04": "ubuntu_20.04_pkgs",
                 "pop_20.10": "ubuntu_20.10_pkgs",
                 "pop_21.04": "ubuntu_21.04_pkgs",
-                "pop_21.10": "ubuntu_21.10_pkgs"
+                "pop_21.10": "ubuntu_21.10_pkgs",
+                "pop_22.04": "ubuntu_22.04_pkgs"
             },
             "debian": {
                 "ubuntu_22.04": "ubuntu_22.04_pkgs",
@@ -88,8 +89,13 @@ class DistroPkgMap(GetDistro):
                 "centos_8": "rhel_8_pkgs",
                 "centos_9": "rhel_9_pkgs",
                 "almalinux_8.3": "rhel_8_pkgs",
+                "almalinux_8.4": "rhel_8_pkgs",
+                "almalinux_8.5": "rhel_8_pkgs",
+                "almalinux_8.6": "rhel_8_pkgs",
+                "rocky_8.3": "rhel_8_pkgs",
                 "rocky_8.4": "rhel_8_pkgs",
                 "rocky_8.5": "rhel_8_pkgs",
+                "rocky_8.6": "rhel_8_pkgs",
             },
             "fedora": {
                 "rhel_9": "rhel_9_pkgs",
