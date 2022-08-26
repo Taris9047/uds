@@ -573,7 +573,7 @@
     "class": "InstLibungif"
   },
   "imagemagick": {
-    "url": "https://www.imagemagick.org/download/releases/ImageMagick-7.1.0-4.tar.xz",
+    "url": "https://imagemagick.org/archive/ImageMagick.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Imagemagick",
