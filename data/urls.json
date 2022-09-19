@@ -1,6 +1,6 @@
 {
   "gcc": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-12.1.0/gcc-12.1.0.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz",
     "type": "tarball",
     "alt-names": [
       "gcc-11",
@@ -11,7 +11,7 @@
     "class": "InstGCC"
   },
   "gcc-jit": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-12.1.0/gcc-12.1.0.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz",
     "type": "tarball",
     "alt-names": [
       "gccjit",
@@ -32,7 +32,7 @@
     "class": "InstGCCLatest"
   },
   "gcc-10": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
     "type": "tarball",
     "alt-names": [
       "gcc-10"
@@ -176,7 +176,7 @@
     "class": "InstPython2"
   },
   "python3": {
-    "url": "https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tar.xz",
+    "url": "https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tar.xz",
     "type": "tarball",
     "alt-names": [
       "Python3"
@@ -633,7 +633,7 @@
     "class": "InstLibWebp"
   },
   "openssl": {
-    "url": "https://www.openssl.org/source/openssl-1.1.1o.tar.gz",
+    "url": "https://www.openssl.org/source/openssl-1.1.1q.tar.gz",
     "type": "tarball",
     "alt-names": [
       "OpenSSL"
