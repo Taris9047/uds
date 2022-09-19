@@ -37,13 +37,7 @@ libzmq3-dev
 libtool-bin
 dos2unix
 liblzma-dev
-lzma
-pkg-config
-libbz2-dev
-libncurses5-dev
-libexpat1-dev
-libgdbm-dev
-tk-dev
+lzmahttps://www.python.org/downloads/release/python-3107/
 libgc-dev
 libnuma-dev
 python-cffi
@@ -89,3 +83,4 @@ neofetch
 zsh
 gettext
 openssh-server
+nala
