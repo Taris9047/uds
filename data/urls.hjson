@@ -308,7 +308,7 @@
     "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang",
-    "src_version": ["1", "18", "3"]
+    "src_version": ["1", "19", "2"]
   },
 
   # Julia
