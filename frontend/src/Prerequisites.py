@@ -282,6 +282,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_fedora_36(self):
         self.install_prereq_fedora_33()
 
+    def install_prereq_fedora_37(self):
+        self.install_prereq_fedora_33()
+
     def install_prereq_almalinux_8(self):
         # print("Almalinux detected! Activating CentOS repo!")
         self.install_prereq_centos_8()

@@ -42,6 +42,7 @@ class UDSBrew(RunCmd):
         else:
             self.system_ruby = self.fallback_ruby
             if not program_exists(self.system_ruby):
+                self.InstallRuby()
                 print("Fallback ruby detection failed!! Exiting...")
                 sys.exit(1)
 
@@ -138,6 +139,19 @@ class UDSBrew(RunCmd):
                 self.Run(f"{self.system_ruby} {self.uds_backend} {self.opt_verbose} -u {pkg}")
 
             sys.exit(0)
+
+    def InstallRuby(self):
+        print ('Installing Ruby before running this script...')
+        if program_exists('/usr/bin/apt'):
+            self.Run('sudo apt update && sudo apt install ruby')
+        elif program_exists('/usr/bin/apg-get'):
+            self.Run('sudo apt-get update && sudo apt-get install ruby')
+        elif program_exists('/usr/bin/dnf'):
+            self.Run('sudo dnf update && sudo dnf install ruby')
+        elif program_exists('/usr/bin/yum'):
+            self.Run('sudo yum update && sudo yum install ruby')
+        else:
+            print('Please install Ruby using built-in package manager!')
 
     def InstallPrerequisiteStuffs(self):
         """

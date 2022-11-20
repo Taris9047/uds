@@ -70,8 +70,7 @@ class InstallRustTools(RunCmd):
         self.Run(f"source {env_script}")
         self.InstallPackages()
         print(
-            f"Check up your {self.home_dir}/.bashrc or .zshrc to check up if additional cargo env line added."
-        )
+            f"Check up your shell environment files (i.e. .bashrc) if additional cargo env line added.")
 
     def InstallPackages(self):
         self.Run(f"{self.rustup_exec} component add rust-src")

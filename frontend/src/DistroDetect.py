@@ -4,7 +4,7 @@
 
 import os
 
-### Get distro crom /etc/os-release ###
+### Get distro from /etc/os-release ###
 class GetDistro(object):
     def __init__(self, release_info="/etc/os-release"):
         if not os.path.exists(release_info):
@@ -104,6 +104,7 @@ class DistroPkgMap(GetDistro):
                 "fedora_34": "fedora_34_pkgs",
                 "fedora_35": "fedora_35_pkgs",
                 "fedora_36": "fedora_36_pkgs",
+                "fedora_37": "fedora_37_pkgs",
             },
             "arch": {"rolling": "arch_pkgs"},
             "solus": {
