@@ -577,6 +577,7 @@
     "type": "tarball",
     "alt-names": [
       "Imagemagick",
+      "ImageMagick",
       "ImageMagick-7"
     ],
     "dependency": [

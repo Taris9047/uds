@@ -43,10 +43,9 @@ class InstImagemagick < InstallStuff
     
     # Parsing name and version
     @src_tarball_fname = @source_url.split('/')[-1]
-    #@Version = @src_tarball_fname.split('-')[-2].split('.')
-    #@dashVer = @src_tarball_fname.split('-')[-1].split('.')[0]
-    @Version = ['7','1','0']
-    @dashVer = '46'
+    @VerString = `tar --exclude="*/*" -tf #{src_tarball_path}`
+    @Version = @VerString.split('-')[-2].split('.')
+    @dashVer = @VerString.split('-')[-1].chop!
 
     # puts src_tarball_fname, src_tarball_bname, major, minor, patch
     src_extract_folder = File.join(File.realpath(@build_dir), "ImageMagick-#{@Version.join('.')}-#{@dashVer}")

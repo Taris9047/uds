@@ -449,7 +449,7 @@
   "imagemagick": {
     "url": "https://imagemagick.org/archive/ImageMagick.tar.gz",
     "type": "tarball",
-    "alt-names": ["Imagemagick", "ImageMagick-7"],
+    "alt-names": ["Imagemagick", "ImageMagick", "ImageMagick-7"],
     "dependency": ["libpng", "libjpeg-turbo", "libtiff", "libwebp", "giflib"],
     "script": "libs/install_imagemagick.rb",
     "class": "InstImagemagick"
