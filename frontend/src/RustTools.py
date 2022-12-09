@@ -11,7 +11,7 @@ Rust_packages = [
     "diskonaut",
     "lsd",
     "cargo-update",
-    "starship",
+    # "starship", # Starship needs additional parameter when installing with cargo.
     "tokei",
     "fd-find",
     "procs",
@@ -70,8 +70,10 @@ class InstallRustTools(RunCmd):
         self.Run(f"source {env_script}")
         self.InstallPackages()
         print(
-            f"Check up your shell environment files (i.e. .bashrc) if additional cargo env line added.")
+            f"Check up your shell environment files (i.e. .bashrc) if additional cargo env line was added.")
 
     def InstallPackages(self):
         self.Run(f"{self.rustup_exec} component add rust-src")
         self.Run(f"{self.cargo_exec} install {' '.join(self.pkgs_to_install)}")
+        # Installing starship with '--locked' parameter
+        self.Run(f"{self.cargo_exec} install starship --locked")
