@@ -352,6 +352,16 @@
     "class": "InstSqlite3"
   },
 
+  # Miniconda
+  "conda": {
+    "url": "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh",
+    "type": "shell_script",
+    "alt-names": ["miniconda", "Miniconda"],
+    "dependency": [],
+    "script": "install_miniconda.rb",
+    "class": "InstMiniconda"
+  }
+
   # Libraries
   #
   # tcl and tk (Tcl/Tk) (just library)

@@ -456,6 +456,17 @@
     "script": "install_sqlite3.rb",
     "class": "InstSqlite3"
   },
+  "conda": {
+    "url": "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh",
+    "type": "shell_script",
+    "alt-names": [
+      "miniconda",
+      "Miniconda"
+    ],
+    "dependency": [],
+    "script": "install_miniconda.rb",
+    "class": "InstMiniconda"
+  },
   "tcl": {
     "url": "https://downloads.sourceforge.net/tcl/tcl8.6.12-src.tar.gz",
     "type": "tarball",
