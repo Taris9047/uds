@@ -14,7 +14,7 @@ class InstallEditors(GetDistro, RunCmd):
 
     pkgman_to_name_map = {
         "apt": ["ubuntu", "debian", "elementary", "pop", "linuxmint"],
-        "dnf": ["fedora", "rhel", "Red Hat Enterprise Linux", "CentOS Linux"],
+        "dnf": ["fedora", "rhel", "Red Hat Enterprise Linux", "CentOS Linux", "almalinux", "rocky"],
         "zypper": ["openSUSE Leap"],
         "pacman": ["manjaro", "Arch Linux"],
     }
@@ -180,8 +180,8 @@ class InstallEditors(GetDistro, RunCmd):
             print("Installilng Visual Studio Code ...")
             cmds = [
                 "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
-                "sudo sh -c 'echo -e \"[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\" > /etc/yum.repos.d/vscode.repo'",
-                "sudo dnf -y check-update && sudo dnf -y install code",
+                "sudo sh -c 'echo -e \"[vscode]\nname=packages.microsoft.com\nbaseurl=https://packages.microsoft.com/yumrepos/vscode/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\nmetadata_expire=1h\" > /etc/yum.repos.d/vscode.repo'",
+                "sudo dnf -y check-update && sudo dnf -y update && sudo dnf -y install code",
             ]
 
             self.Run(cmds)
