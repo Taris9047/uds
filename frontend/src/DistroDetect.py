@@ -92,6 +92,7 @@ class DistroPkgMap(GetDistro):
                 "almalinux_8.4": "rhel_8_pkgs",
                 "almalinux_8.5": "rhel_8_pkgs",
                 "almalinux_8.6": "rhel_8_pkgs",
+                "almalinux_9.1": "rhel_9_pkgs",
                 "rocky_8.3": "rhel_8_pkgs",
                 "rocky_8.4": "rhel_8_pkgs",
                 "rocky_8.5": "rhel_8_pkgs",

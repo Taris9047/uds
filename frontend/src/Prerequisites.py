@@ -216,6 +216,12 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_rocky_8(self):
         self.install_prereq_centos_8()
 
+    def install_prereq_almalinux_8(self):
+        self.install_prereq_centos_8()
+
+    def install_prereq_almalinux_9(self):
+        self.install_prereq_centos_9()
+
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
         self.Run(f"sudo -H dnf -y install {' '.join(self.pkgs_to_install)}")
