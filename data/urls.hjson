@@ -130,7 +130,7 @@
   },
   
   # Ruby3 Compat
-  "ruby": {
+  "ruby3compat": {
     "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.5.tar.gz",
     "type": "tarball",
     "alt-names": ["Rubycompat", "rubycompat", "Ruby3compat", "ruby3compat"],

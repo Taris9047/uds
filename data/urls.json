@@ -137,6 +137,19 @@
     "class": "InstRuby"
   },
   "ruby": {
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.3.tar.gz",
+    "type": "tarball",
+    "alt-names": [
+      "Ruby",
+      "ruby",
+      "Ruby3",
+      "ruby3"
+    ],
+    "dependency": [],
+    "script": "install_ruby3.rb",
+    "class": "InstRuby3"
+  },
+  "ruby3compat": {
     "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.5.tar.gz",
     "type": "tarball",
     "alt-names": [
