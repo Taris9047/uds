@@ -46,7 +46,11 @@ class InstGolang < InstallStuff
 
     puts "Let's build Golang version (#{@Version})"
     puts "Building golang #{@Version}..."
-    self.Run( "cd #{@src_dir} && sudo rm -rf #{go_dir} && git clone #{@source_url} #{go_dir} && cd #{go_dir} && git checkout go#{@Version}" )
+    if Dir.exists?(go_dir)
+      puts "Removing previous golang directory..."
+      FileUtils.remove_dir(go_dir)
+    end
+    self.Run( "cd #{@src_dir} && git clone #{@source_url} #{go_dir} && cd #{go_dir} && git checkout go#{@Version}" )
     self.RunInstall( 
       env: {"GOROOT_BOOTSTRAP" => bootstrap_dir}, 
       cmd: "cd #{go_dir}/src && ./all.bash" )

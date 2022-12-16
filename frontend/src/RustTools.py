@@ -25,7 +25,8 @@ Rust_packages = [
     # "grex",
     "zoxide",
     "broot",
-    "git-delta"
+    "git-delta",
+    "hjson"
 ]
 
 

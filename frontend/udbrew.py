@@ -28,7 +28,7 @@ class UDSBrew(RunCmd):
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.update_self_repo()
-
+        self.update_database()
         self.find_out_version()
         self.fallback_ruby = "/usr/bin/ruby"  # Fallback. Does not work with many situations.
 
@@ -300,6 +300,10 @@ class UDSBrew(RunCmd):
         print("Running self update ...")
         self.Run('git pull')
 
+    # Runs hjson update
+    def update_database(self):
+        print("Running Database update ...")
+        self.Run('sh -c ./data/update_json.sh')
 
 if __name__ == "__main__":
     UDSBrew(sys.argv)
