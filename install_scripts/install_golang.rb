@@ -21,7 +21,8 @@ class InstGolang < InstallStuff
     @Version = SRC_VER[@pkgname].join('.')
 
     # Checking golang version if it is installed at the Homebrew directory.
-    if UTILS.which(File.join("#{@prefix}", '.opt', 'go', 'bin', 'go'))
+    @go_cmd = UTILS.which(File.join("#{@prefix}", '.opt', 'go', 'bin', 'go'))
+    if @go_cmd
       go_version = `#{@go_cmd} version`.split(' ')[-2].tr('go','')
       @InstalledVersion = Version.new(go_version)
       @SRCVersion = Version.new(@Version)
