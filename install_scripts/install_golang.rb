@@ -19,7 +19,20 @@ class InstGolang < InstallStuff
     @source_url = SRC_URL[@pkgname]
     @bootstrap_url = SRC_URL['golang-bootstrap']
     @Version = SRC_VER[@pkgname].join('.')
-  end
+
+    # Checking golang version if it is installed at the Homebrew directory.
+    if UTILS.which(File.join("#{@prefix}", '.opt', 'go', 'bin', 'go'))
+      go_version = `#{@go_cmd} version`.split(' ')[-2].tr('go','')
+      @InstalledVersion = Version.new(go_version)
+      @SRCVersion = Version.new(@Version)
+
+      if @InstalledVersion >= @SRCVersion
+        puts "We have golang version #{@Versoin} already installed!! Skipping!"
+        return
+      end  
+    end
+
+  end # def initialize(args)
 
   def do_install
 
@@ -32,13 +45,14 @@ class InstGolang < InstallStuff
     go_dir = File.join(@prefix, '.opt', 'go')
 
     puts "Let's build Golang version (#{@Version})"
-    FileUtils.rm_rf("#{go_dir}")
-    self.Run( "cd #{@src_dir} && git clone #{@source_url} #{go_dir} && cd #{go_dir} && git checkout go#{@Version}" )
+    puts "Building golang #{@Version}..."
+    self.Run( "cd #{@src_dir} && sudo rm -rf #{go_dir} && git clone #{@source_url} #{go_dir} && cd #{go_dir} && git checkout go#{@Version}" )
     self.RunInstall( 
       env: {"GOROOT_BOOTSTRAP" => bootstrap_dir}, 
       cmd: "cd #{go_dir}/src && ./all.bash" )
 
-    # self.WriteInfo
+    puts "Installing additional golang tools"
+    self.Run ("#{File.join(go_dir,'bin','go')} install golang.org/x/tools/gopls@latest")
 
     golang_inst_mag = %Q(
 Ok, golang has been installed!!
@@ -48,7 +62,7 @@ Also, make sure to add #{go_dir}/bin to your PATH
 )
     puts golang_inst_mag
     
-  end
+  end # def do_install
 
   def WriteInfo
     puts "Writing package info for #{@pkgname}..."

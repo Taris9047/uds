@@ -111,7 +111,7 @@
 
   # Ruby
   "ruby2": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.5.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.7.tar.gz",
     "type": "tarball",
     "alt-names": ["ruby2", "Ruby2"],
     "dependency": ["node"],
@@ -123,7 +123,17 @@
   "ruby": {
     "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.3.tar.gz",
     "type": "tarball",
-    "alt-names": ["Ruby", "ruby"],
+    "alt-names": ["Ruby", "ruby", "Ruby3", "ruby3"],
+    "dependency": [],
+    "script": "install_ruby3.rb",
+    "class": "InstRuby3"
+  },
+  
+  # Ruby3 Compat
+  "ruby": {
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.5.tar.gz",
+    "type": "tarball",
+    "alt-names": ["Rubycompat", "rubycompat", "Ruby3compat", "ruby3compat"],
     "dependency": [],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
@@ -147,7 +157,7 @@
     "class": "InstPython2"
   },
   "python3": {
-    "url": "https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tar.xz",
+    "url": "https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz",
     "type": "tarball",
     "alt-names": ["Python3"],
     "dependency": ["openssl", "tcl", "tk", "libffi", "sqlite3", "readline"],
@@ -188,7 +198,7 @@
 
   # Boost
   "boost": {
-    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2",
+    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2",
     "type": "tarball",
     "alt-names": ["Boost"],
     "dependency": [],
@@ -308,7 +318,7 @@
     "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang",
-    "src_version": ["1", "19", "2"]
+    "src_version": ["1", "19", "4"]
   },
 
   # Julia
@@ -494,7 +504,7 @@
   },
   # OpenSSL
   "openssl": {
-    "url": "https://www.openssl.org/source/openssl-1.1.1q.tar.gz",
+    "url": "https://www.openssl.org/source/openssl-1.1.1s.tar.gz",
     "type": "tarball",
     "alt-names": ["OpenSSL"],
     "dependency": [],
