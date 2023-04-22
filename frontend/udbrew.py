@@ -301,9 +301,9 @@ class UDSBrew(RunCmd):
         self.Run('git pull')
 
     # Runs hjson update
-    def update_database(self):
-        print("Running Database update ...")
-        self.Run('sh -c ./data/update_json.sh')
+    #def update_database(self):
+    #    print("Running Database update ...")
+    #    self.Run('sh -c ./data/update_json.sh')
 
 if __name__ == "__main__":
     UDSBrew(sys.argv)
