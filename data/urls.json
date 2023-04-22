@@ -21,16 +21,6 @@
     "script": "install_gcc.rb",
     "class": "InstGCCJit"
   },
-  "gcc-11": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
-    "type": "tarball",
-    "alt-names": [
-      "gcc-latest"
-    ],
-    "dependency": [],
-    "script": "install_gcc.rb",
-    "class": "InstGCCLatest"
-  },
   "gcc-10": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
     "type": "tarball",
@@ -40,6 +30,16 @@
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCC"
+  },
+  "gcc-11": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
+    "type": "tarball",
+    "alt-names": [
+      "gcc-latest"
+    ],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCCLatest"
   },
   "gcc8": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.5.0/gcc-8.5.0.tar.gz",
@@ -137,7 +137,7 @@
     "class": "InstRuby"
   },
   "ruby": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.3.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Ruby",
@@ -150,7 +150,7 @@
     "class": "InstRuby3"
   },
   "ruby3compat": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.5.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.6.tar.xz",
     "type": "tarball",
     "alt-names": [
       "Rubycompat",
