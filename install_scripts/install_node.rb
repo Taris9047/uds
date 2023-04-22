@@ -283,4 +283,4 @@ class InstNodeLTS < InstallStuff
     self.RunInstall( cmd: "#{npm_cmd} install -g #{$npm_global_pkgs.join(' ')}" )
 
   end # do_src_install
-end # class InstNode
+end # class InstNodeLTS
