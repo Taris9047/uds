@@ -111,7 +111,7 @@ class InstNode < InstallStuff
     src_extract_folder = File.join(@build_dir, src_tarball_bname)
     @src_build_dir = src_extract_folder
 
-    if Dir.exists?(src_extract_folder)
+    if Dir.exist?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
       puts "Deleting it"
       self.Run( ['rm -rf', src_extract_folder].join(' ') )
@@ -246,7 +246,7 @@ class InstNodeLTS < InstallStuff
     src_extract_folder = File.join(@build_dir, src_tarball_bname)
     @src_build_dir = src_extract_folder
 
-    if Dir.exists?(src_extract_folder)
+    if Dir.exist?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
       puts "Deleting it"
       self.Run( ['rm -rf', src_extract_folder].join(' ') )

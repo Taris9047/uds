@@ -44,7 +44,7 @@ class Download < RunConsole
   end
 
   def direct_download
-    if File.exists? @outf_path
+    if File.exist? @outf_path
       puts "File seems to be already downloaded!"
       return 0
     end
@@ -72,7 +72,7 @@ class Download < RunConsole
   end
 
   def wget_download
-    if File.exists? @outf_path
+    if File.exist? @outf_path
       puts "File seems to be already downloaded!"
       return 0
     end
@@ -87,7 +87,7 @@ class Download < RunConsole
   end
 
   def git_clone
-    if File.exists? @outf_path
+    if File.exist? @outf_path
       puts "Repository seems to be already downloaded!"
       return 0
     end

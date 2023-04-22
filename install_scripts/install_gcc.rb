@@ -129,7 +129,7 @@ class InstGCC < InstallStuff
     bld_dir = extracted_src_dir + "-#{@pkgname}-build"
     @src_build_dir = bld_dir
 
-    if Dir.exists?(extracted_src_dir)
+    if Dir.exist?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!"
     else
       puts "Extracting..."
@@ -141,7 +141,7 @@ class InstGCC < InstallStuff
     self.Run("cd " + File.realpath(extracted_src_dir) + " && " + "./contrib/download_prerequisites")
 
     # Let's build!!
-    unless Dir.exists?(bld_dir)
+    unless Dir.exist?(bld_dir)
       puts "Build dir missing... making one..."
     else
       puts "Build dir exists, cleaning up before work!!"
@@ -275,7 +275,7 @@ class InstGCCLatest < InstallStuff
     bld_dir = extracted_src_dir + "-#{@pkgname}-build"
     @src_build_dir = bld_dir
 
-    if Dir.exists?(extracted_src_dir)
+    if Dir.exist?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!"
     else
       puts "Extracting..."
@@ -287,7 +287,7 @@ class InstGCCLatest < InstallStuff
     self.Run("cd " + File.realpath(extracted_src_dir) + " && " + "./contrib/download_prerequisites")
 
     # Let's build!!
-    unless Dir.exists?(bld_dir)
+    unless Dir.exist?(bld_dir)
       puts "Build dir missing... making one..."
     else
       puts "Build dir exists, cleaning up before work!!"
@@ -535,14 +535,14 @@ class InstGCC4 < InstGCC
     bld_dir = extracted_src_dir + "-build"
     @src_build_dir = bld_dir
 
-    if Dir.exists?(extracted_src_dir)
+    if Dir.exist?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!"
     else
       puts "Extracting..."
       self.Run("tar xf " + source_file + " -C " + @build_dir)
     end
 
-    unless Dir.exists?(@prefix)
+    unless Dir.exist?(@prefix)
       FileUtils.mkdir_p(@prefix)
     end
 
@@ -563,7 +563,7 @@ class InstGCC4 < InstGCC
     self.Run(patch_cmd.join(" && "))
 
     # Let's build!!
-    unless Dir.exists?(bld_dir)
+    unless Dir.exist?(bld_dir)
       puts "Build dir missing... making one..."
     else
       puts "Build dir exists, cleaning up before work!!"
@@ -689,14 +689,14 @@ class InstGCC4Sen < InstGCC
     bld_dir = extracted_src_dir + "-build"
     @src_build_dir = bld_dir
 
-    if Dir.exists?(extracted_src_dir)
+    if Dir.exist?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!"
     else
       puts "Extracting..."
       self.Run("tar xf " + source_file + " -C " + @build_dir)
     end
 
-    unless Dir.exists?(@prefix)
+    unless Dir.exist?(@prefix)
       FileUtils.mkdir_p(@prefix)
     end
 
@@ -717,7 +717,7 @@ class InstGCC4Sen < InstGCC
     self.Run(patch_cmd.join(" && "))
 
     # Let's build!!
-    unless Dir.exists?(bld_dir)
+    unless Dir.exist?(bld_dir)
       puts "Build dir missing... making one..."
     else
       puts "Build dir exists, cleaning up before work!!"
@@ -848,14 +848,14 @@ class InstGCC4Cadence < InstGCC
     bld_dir = extracted_src_dir + "-build"
     @src_build_dir = bld_dir
 
-    if Dir.exists?(extracted_src_dir)
+    if Dir.exist?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!"
     else
       puts "Extracting..."
       self.Run("tar xf " + source_file + " -C " + @build_dir)
     end
 
-    unless Dir.exists?(@prefix)
+    unless Dir.exist?(@prefix)
       FileUtils.mkdir_p(@prefix)
     end
 
@@ -876,7 +876,7 @@ class InstGCC4Cadence < InstGCC
     #self.Run(patch_cmd.join(" && "))
 
     # Let's build!!
-    unless Dir.exists?(bld_dir)
+    unless Dir.exist?(bld_dir)
       puts "Build dir missing... making one..."
     else
       puts "Build dir exists, cleaning up before work!!"
@@ -993,14 +993,14 @@ class InstGCC3Cadence < InstGCC
     bld_dir = extracted_src_dir + "-build"
     @src_build_dir = bld_dir
 
-    if Dir.exists?(extracted_src_dir)
+    if Dir.exist?(extracted_src_dir)
       puts "Extracted folder has been found. Using it!"
     else
       puts "Extracting..."
       self.Run("tar xf " + source_file + " -C " + @build_dir)
     end
 
-    unless Dir.exists?(@prefix)
+    unless Dir.exist?(@prefix)
       FileUtils.mkdir_p(@prefix)
     end
 
@@ -1046,7 +1046,7 @@ class InstGCC3Cadence < InstGCC
     self.Run(patch_cmd.join(" && "))
 
     # Let's build!!
-    unless Dir.exists?(bld_dir)
+    unless Dir.exist?(bld_dir)
       puts "Build dir missing... making one..."
     else
       puts "Build dir exists, cleaning up before work!!"

@@ -41,7 +41,7 @@ class InstBoost < InstallStuff
 
     src_extracted_folder = File.join(@build_dir,src_tarball_bname)
     @src_build_dir = src_extracted_folder
-    if File.exists?(src_extracted_folder)
+    if File.exist?(src_extracted_folder)
       puts "Previous Boost installation exists"
       puts "Using it."
     else

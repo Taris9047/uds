@@ -182,7 +182,7 @@ class InstallStuff < RunConsole
     # actually installs Qt themselves.
     qmake_cmd = File.join(qt5_path, 'qmake')
     self.patch_qt5_pkgconfig(qt5_path)
-    if File.exists? qmake_cmd
+    if File.exist? qmake_cmd
       # If the qmake command is provided by Ubuntu package manager (or other package managers...)
       if qmake_cmd == '/usr/bin/qmake'
         puts "System installed qt5! Be sure to have Qt5Svg module!!!"

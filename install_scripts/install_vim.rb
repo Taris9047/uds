@@ -32,7 +32,7 @@ class InstVim < InstallStuff
     #
     @build_dir = @src_dir
 
-    # if Dir.exists?(@build_dir) == false
+    # if Dir.exist?(@build_dir) == false
     #   puts "Build dir missing.. making one.."
     # else
     #   puts "Build dir exists, cleaning up before work!!"

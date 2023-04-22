@@ -138,7 +138,7 @@ class InstEmacsNC < InstallStuff
     src_build_folder = File.join(File.realpath(@build_dir), "#{@pkgname}-build")
     @src_build_dir = src_build_folder
 
-    if Dir.exists?(src_build_folder)
+    if Dir.exist?(src_build_folder)
       puts "Build folder found!! Removing it for 'pure' experience!!"
       self.Run("rm -rf " + src_build_folder)
     else

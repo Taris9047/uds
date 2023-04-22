@@ -24,7 +24,7 @@ class InstPDFLib < InstallStuff
     @source_url = SRC_URL[@pkgname]
 
     @run_install = true
-    if File.exists? (File.join(@prefix, 'lib/libpdf.a')) and File.exists? (File.join(@prefix, 'include/pdflib.h'))
+    if File.exist? (File.join(@prefix, 'lib/libpdf.a')) and File.exist? (File.join(@prefix, 'include/pdflib.h'))
       puts "Looks like pdflib has already been installed!!"
       @run_install = false
     end
@@ -48,7 +48,7 @@ class InstPDFLib < InstallStuff
     src_extract_folder = File.join(File.realpath(@build_dir), @src_tarball_bname)
     src_build_folder = File.join(File.realpath(@build_dir), @src_tarball_bname+'-build')
 
-    if Dir.exists?(src_extract_folder)
+    if Dir.exist?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
     else
       puts "Extracting"

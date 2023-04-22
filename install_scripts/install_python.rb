@@ -84,14 +84,14 @@ what you are doing!!
     src_build_folder = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
     @src_build_dir = src_build_folder
 
-    if Dir.exists?(src_extract_folder)
+    if Dir.exist?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
     else
       puts "Extracting"
       self.Run( "tar xf "+File.realpath(File.join(@src_dir, src_tarball_fname))+" -C "+@build_dir )
     end
 
-    if Dir.exists?(src_build_folder)
+    if Dir.exist?(src_build_folder)
       puts "Build folder found!! Removing it for 'pure' experience!!"
       self.Run( "rm -rfv "+src_build_folder )
     else
@@ -132,7 +132,7 @@ what you are doing!!
     # Changed to system instead of self.Run due to deprecation error message.
     system( inst_pip_cmds.join(" ") )
     pip_post_install_cmd = []
-    if File.exists?(File.join(@prefix,"bin/pip"))
+    if File.exist?(File.join(@prefix,"bin/pip"))
       pip_post_install_cmd = [
         pip_inst_sudo,
         'mv -fv',
@@ -194,14 +194,14 @@ class InstPython3 < InstallStuff
     src_build_folder = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
     @src_build_dir = src_build_folder
 
-    if Dir.exists?(src_extract_folder)
+    if Dir.exist?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
     else
       puts "Extracting"
       self.Run( "tar xf "+File.realpath(File.join(@src_dir, src_tarball_fname))+" -C "+@build_dir )
     end
 
-    if Dir.exists?(src_build_folder)
+    if Dir.exist?(src_build_folder)
       puts "Build folder found!! Removing it for 'pure' experience!!"
       self.Run( "rm -rfv "+src_build_folder )
     else
@@ -230,7 +230,7 @@ class InstPython3 < InstallStuff
     ]
     self.RunInstall( env: @env, cmd: cmds.join(" ") )
 
-    if File.exists?(File.join(@src_dir, 'get-pip.py'))
+    if File.exist?(File.join(@src_dir, 'get-pip.py'))
       puts "Found get-pip.py"
     else
       Download.new(@get_pip_url, @src_dir)

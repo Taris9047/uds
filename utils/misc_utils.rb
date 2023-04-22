@@ -158,7 +158,7 @@ module UTILS
   # Which command eqv.
   # https://stackoverflow.com/a/5471032
   def which(cmd)
-    if File.exists? cmd
+    if File.exist? cmd
       return cmd
     end
     

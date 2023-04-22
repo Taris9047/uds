@@ -37,7 +37,7 @@ class InstGiflib < InstallStuff
     src_extract_folder = File.join(File.realpath(@build_dir), src_tarball_bname)
     @src_build_dir = src_extract_folder
 
-    if Dir.exists?(src_extract_folder)
+    if Dir.exist?(src_extract_folder)
       puts "Source file folder exists in "+src_extract_folder
       puts "Deleting ... "
       FileUtils.rm_rf(src_extract_folder)

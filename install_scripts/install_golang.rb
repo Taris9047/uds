@@ -47,7 +47,7 @@ class InstGolang < InstallStuff
 
     puts "Let's build Golang version (#{@Version})"
     puts "Building golang #{@Version}..."
-    if Dir.exists?(go_dir)
+    if Dir.exist?(go_dir)
       puts "Removing previous golang directory..."
       FileUtils.remove_dir(go_dir)
     end
