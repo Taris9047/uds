@@ -65,7 +65,7 @@ class InstBTOP < InstallStuff
     fp = File.open(@pkginfo_file, 'w')
     compile_info_json = {
       "Package Name" => @pkgname,
-      "Version" => @Version,
+      "Version" => ['0','0','0'],
       "Installed Files" => @Installed_files
     }
     fp.write(compile_info_json.to_json)
