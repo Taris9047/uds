@@ -150,7 +150,7 @@
     "class": "InstRuby3"
   },
   "ruby3compat": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.0/ruby-3.0.6.tar.xz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.1/ruby-3.1.4.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Rubycompat",
