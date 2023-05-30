@@ -238,7 +238,7 @@ class UDSBrew(RunCmd):
             "--editors",
             metavar="<external_editor>",
             nargs="*",
-            choices=["sublime-text", "subl", "vscode", "atom"],
+            choices=["sublime-text", "subl", "sublime", "vscode", "code", "atom", "jedit"],
             default=[],
             help="Installs some pre-built editors such as sublime-text, Visual Studio Code, Atom.",
         )

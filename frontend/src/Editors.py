@@ -17,7 +17,19 @@ class InstallEditors(GetDistro, RunCmd):
         "dnf": ["fedora", "rhel", "Red Hat Enterprise Linux", "CentOS Linux", "almalinux", "rocky"],
         "zypper": ["openSUSE Leap"],
         "pacman": ["manjaro", "Arch Linux"],
+        "java": [""]
     }
+
+    subl_cmd_list = [
+        "subl",
+        "sublime",
+        "sublime-text"
+    ]
+
+    vscode_list = [
+        "code",
+        "vscode"
+    ]
 
     def __init__(self, list_of_editors_to_install=None):
         GetDistro.__init__(self)
@@ -39,14 +51,21 @@ class InstallEditors(GetDistro, RunCmd):
 
         editors_to_inst = []
         for edi in list_of_editors_to_install:
-            if edi.lower() == "sublime-text":
+            if edi.lower() in self.subl_cmd_list:
                 editors_to_inst.append("subl")
+            elif edi.lower() in self.vscode_list:
+                editors_to_inst.append("code")
             else:
-                editors_to_inst.append(edi.lower())
+                editors_to_inst.append(edi)
+
+            editor_to_inst = list(set(editors_to_inst))
 
         self.methods_to_run = []
         for edi in editors_to_inst:
-            self.methods_to_run.append(f"install_{edi}_{pkgman}")
+            if edi.lower() == "jedit":
+                self.methods_to_run.append("install_{}_{}".format('jedit','java'))
+            else:
+                self.methods_to_run.append(f"install_{edi}_{pkgman}")
 
         self.RunInstall()
 
@@ -67,8 +86,8 @@ class InstallEditors(GetDistro, RunCmd):
         if not program_exists("subl"):
             print("Installilng Sublime Text ...")
             cmds = [
-                "wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -",
-                'echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list',
+                "wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null",
+                "echo \"deb https://download.sublimetext.com/ apt/stable/\" | sudo tee /etc/apt/sources.list.d/sublime-text.list",
                 "sudo apt-get -y update && sudo apt-get -y install sublime-text sublime-merge",
             ]
             self.Run(cmds)
@@ -220,3 +239,44 @@ class InstallEditors(GetDistro, RunCmd):
         else:
             print("Updating Visual Studio Code ...")
             self.Run("sudo zypper refresh && sudo zypper update")
+
+
+    def install_jedit_java(self):
+        if not program_exists("jedit"):
+            if not program_exists("java"):
+                raise "It seems we need to install Java to start with!!"
+            
+            print("Installing Jedit from jar file...")
+
+            jedit_download_link = "https://sourceforge.net/projects/jedit/files/jedit/5.6.0/jedit5.6.0install.jar/download"
+            jedit_ver_str = jedit_download_link.split('/')[-3]
+
+            def_inst_dir = os.path.join(os.getenv("HOME"),".local")
+            if os.path.exists(def_inst_dir):
+                print("Installing jEdit to...{}".format(def_inst_dir))
+                jedit_inst_dir = os.path.join(def_inst_dir, ".opt", "jEdit", jedit_ver_str)
+                jedit_shortcut_dir = os.path.join(def_inst_dir, "bin")
+                jedit_man_dir = os.path.join(def_inst_dir, "man", "man1")
+                jedit_inst_cmd = "mkdir -p {} && java -jar ./jedit.jar auto {} unix-script={} unix-man={}".format(
+                    jedit_inst_dir,
+                    jedit_inst_dir,
+                    jedit_shortcut_dir,
+                    jedit_man_dir)
+            else:
+                print("{} does not exist! Summoning non interactive mode!!".format(def_inst_dir))
+                jedit_inst_cmd = "java -jar ./jedit.jar"
+
+
+            cmd_list = [
+                "cd /tmp",
+                "wget https://sourceforge.net/projects/jedit/files/jedit/5.6.0/jedit5.6.0install.jar/download -O jedit.jar",
+                jedit_inst_cmd,
+                "cd -"
+            ]
+
+
+            cmds = ' && '.join(cmd_list)
+
+            self.Run(cmds)
+
+                                
