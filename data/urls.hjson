@@ -1,9 +1,9 @@
 {
   # GCC
   "gcc": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz",
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-12.3.0/gcc-12.3.0.tar.xz",
     "type": "tarball",
-    "alt-names": ["gcc-11", "gcc-current"],
+    "alt-names": ["gcc-12", "gcc-current"],
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCC"
@@ -19,7 +19,7 @@
   "gcc-11": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
     "type": "tarball",
-    "alt-names": ["gcc-10"],
+    "alt-names": ["gcc-11"],
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCC"
