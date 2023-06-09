@@ -21,16 +21,6 @@
     "script": "install_gcc.rb",
     "class": "InstGCCJit"
   },
-  "gcc-10": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
-    "type": "tarball",
-    "alt-names": [
-      "gcc-10"
-    ],
-    "dependency": [],
-    "script": "install_gcc.rb",
-    "class": "InstGCC"
-  },
   "gcc-11": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
     "type": "tarball",
@@ -40,6 +30,16 @@
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCCLatest"
+  },
+  "gcc-10": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
+    "type": "tarball",
+    "alt-names": [
+      "gcc-10"
+    ],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC"
   },
   "gcc8": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.5.0/gcc-8.5.0.tar.gz",
@@ -252,7 +252,7 @@
     "bin_url": "https://nodejs.org/dist/v18.16.0/node-v18.16.0-linux-x64.tar.xz"
   },
   "boost": {
-    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2",
+    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2",
     "type": "tarball",
     "alt-names": [
       "Boost"

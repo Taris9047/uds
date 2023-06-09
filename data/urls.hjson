@@ -198,7 +198,7 @@
 
   # Boost
   "boost": {
-    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2",
+    "url": "https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2",
     "type": "tarball",
     "alt-names": ["Boost"],
     "dependency": [],
