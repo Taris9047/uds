@@ -314,12 +314,22 @@
   "golang": {
     "url": "https://go.googlesource.com/go",
     "type": "git",
-    "alt-names": ["go", "Golang"],
+    "alt-names": ["go", "Golang", "golang'"],
     "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang",
-    "src_version": ["1", "19", "4"]
+    "src_version": ["1", "18", "4"]
   },
+  "golang-binary": {
+    "url": "https://go.dev/dl/go1.20.5.linux-amd64.tar.gz",
+    "type": "bin",
+    "alt-names": ["go-bin", "Golang-bin", "golang-bin"],
+    "dependency": [],
+    "script": "install_golang.rb",
+    "class": "InstGolang",
+    "src_version": ["1", "20", "5"]
+  },
+
 
   # Julia
   "julia": {
