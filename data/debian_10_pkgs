@@ -4,7 +4,7 @@ bison
 zlib1g
 zlib1g-dev
 policykit-1-gnome
-openss l
+openssl
 libssl-dev
 libsqlite3-dev
 libncursesw5-dev

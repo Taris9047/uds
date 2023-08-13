@@ -49,7 +49,8 @@ class InstallRustTools(RunCmd):
 
         # Checking up if Rust in our local directory exists.
         if program_exists(self.cargo_exec) and program_exists(self.rustup_exec):
-            self.CargoUpdate()
+            #self.CargoUpdate()
+            self.InstallPackages()
         else:
             self.InstallNew()
 
