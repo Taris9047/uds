@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-
 import os
 import sys
-import subprocess
+# import subprocess
 
 import argparse
 
 from src.Utils import RunCmd, program_exists
 from src.RustTools import InstallRustTools
+
 
 class UDSBrewPi(RunCmd):
     """
@@ -18,20 +18,20 @@ class UDSBrewPi(RunCmd):
     def __init__(self, args):
         """
             Initialize the class.
+
         """
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
         self.args = args
         self.parse_args()
 
-
         print("Updating the Pi with apt...")
-        self.Run(f"sudo apt update && sudo apt -y upgrade")
+        self.Run("sudo apt update && sudo apt -y upgrade")
 
         self.package_list = []
         this_dir = os.path.realpath(__file__)
         self.package_file = os.path.join(
-            os.path.dirname(this_dir),'..','data','Raspbian_pkgs')
+            os.path.dirname(this_dir), 'data', 'Raspbian_pkgs')
 
         self.ReadInPkgList()
 
@@ -39,18 +39,19 @@ class UDSBrewPi(RunCmd):
             self.InstallPiPackages()
             self.InstallNodeJS()
 
-            self.pi_model = self.Run('sudo cat  /sys/firmware/devicetree/base/model')[0]
+            self.pi_model = \
+                self.Run('sudo cat /sys/firmware/devicetree/base/model')[0]
             if 'Raspberry Pi 4' in self.pi_model:
                 self.InstallVSCode()
             self.InstallBTop()
 
         if self.p_args.rust_tools:
-            InstallRustTools()
+            InstallRustTools(raspberry_pi=True)
 
     def ReadInPkgList(self):
         self.package_list = []
         with open(self.package_file, 'r') as fp:
-            pkg_list = [ _.strip() for _ in fp.readlines() ]
+            pkg_list = [_.strip() for _ in fp.readlines()]
             for pkg in pkg_list:
                 if '#' in pkg:
                     self.package_list.append(pkg.split('#')[0].strip())
@@ -61,7 +62,8 @@ class UDSBrewPi(RunCmd):
                 self.package_list.append('pkg')
 
         self.package_list = pkg_list
-        print('Total {} packages will be installed via apt'.format(len(self.package_list)))
+        print('Total {} packages will be installed via apt'
+              .format(len(self.package_list)))
 
     def InstallPiPackages(self):
         if self.package_list:
@@ -84,9 +86,11 @@ class UDSBrewPi(RunCmd):
 
         print("Installing NodeJS")
         if inst_ver == 'LTS':
-            self.Run("curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -")
+            self.Run("curl -fsSL https://deb.nodesource.com/setup_lts.x "
+                     "| sudo -E bash -")
         elif inst_ver == 'Current':
-            self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -")
+            self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x "
+                     "| sudo -E bash -")
         self.Run("sudo apt install nodejs")
 
     def InstallVSCode(self):
@@ -103,12 +107,18 @@ class UDSBrewPi(RunCmd):
         print("Installing VSCode")
         vscode_install_cmds = [
             "cd /tmp",
-            "wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg",
-            "sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/",
-            "sudo sh -c \'echo \"deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main\" > /etc/apt/sources.list.d/vscode.list\'",
+            "wget -qO- https://packages.microsoft.com/keys/microsoft.asc "
+            "| gpg --dearmor > packages.microsoft.gpg",
+            "sudo install -o root -g root -m 644 packages.microsoft.gpg "
+            "/etc/apt/trusted.gpg.d/",
+            "sudo sh -c \'echo \"deb [arch=amd64,arm64,armhf "
+            "signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] "
+            "https://packages.microsoft.com/repos/code stable main\" "
+            "> /etc/apt/sources.list.d/vscode.list\'",
             "sudo apt install -y apt-transport-https",
             "sudo apt update && sudo apt install -y code",
-            "cd -" ]
+            "cd -"
+            ]
         self.Run(cmd=' && '.join(vscode_install_cmds))
 
     def InstallBTop(self):
@@ -124,8 +134,11 @@ class UDSBrewPi(RunCmd):
             return
 
         print("Installing BTop++")
-        self.Run("cd /tmp && wget -qO btop.tbz https://github.com/aristocratos/btop/releases/latest/download/btop-armv7l-linux-musleabihf.tbz && sudo tar xf btop.tbz --strip-components=2 -C /usr/local ./btop/bin/btop")
-
+        self.Run("cd /tmp && wget -qO btop.tbz "
+                 "https://github.com/aristocratos/btop/releases/"
+                 "latest/download/btop-armv7l-linux-musleabihf.tbz "
+                 "&& sudo tar xf btop.tbz --strip-components=2 -C "
+                 "/usr/local ./btop/bin/btop")
 
     def parse_args(self):
         p = argparse.ArgumentParser(prog="unix_dev_setup_pi")
@@ -154,4 +167,3 @@ class UDSBrewPi(RunCmd):
 
 if __name__ == "__main__":
     UDSBrewPi(sys.argv)
-
