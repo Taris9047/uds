@@ -26,7 +26,7 @@ class UDSBrewPi(RunCmd):
         self.parse_args()
 
         print("Updating the Pi with apt...")
-        self.Run("sudo apt update && sudo apt -y upgrade")
+        self.Run("sudo -H apt-get update && sudo apt-get -y upgrade")
 
         self.package_list = []
         this_dir = os.path.realpath(__file__)
@@ -40,8 +40,9 @@ class UDSBrewPi(RunCmd):
             self.InstallNodeJS()
 
             self.pi_model = \
-                self.Run('sudo cat /sys/firmware/devicetree/base/model')[0]
-            if 'Raspberry Pi 4' in self.pi_model:
+                self.RunSilent('sudo -H cat /sys/firmware/devicetree/base/model')[0]
+            self.pi_gen = int(self.pi_model.split(' ')[2])
+            if self.pi_gen >= 4:
                 self.InstallVSCode()
             self.InstallBTop()
 
@@ -70,7 +71,9 @@ class UDSBrewPi(RunCmd):
             print("Installing packages...")
 
             pkg_list_inline = ' '.join(self.package_list)
-            self.Run('sudo apt -y install {}'.format(pkg_list_inline))
+            self.Run('sudo -H apt-get -y install {}'.format(pkg_list_inline))
+
+            print("Done!!")
 
         else:
             pass
@@ -91,7 +94,7 @@ class UDSBrewPi(RunCmd):
         elif inst_ver == 'Current':
             self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x "
                      "| sudo -E bash -")
-        self.Run("sudo apt install nodejs")
+        self.Run("sudo apt-get install nodejs")
 
     def InstallVSCode(self):
         """
@@ -102,6 +105,11 @@ class UDSBrewPi(RunCmd):
         """
 
         if program_exists('code'):
+            return
+
+        if self.pi_gen < 4:
+            print("Pi Generation {} is not powerful enough"
+                  .format(self.pi_gen))
             return
 
         print("Installing VSCode")
@@ -115,8 +123,8 @@ class UDSBrewPi(RunCmd):
             "signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] "
             "https://packages.microsoft.com/repos/code stable main\" "
             "> /etc/apt/sources.list.d/vscode.list\'",
-            "sudo apt install -y apt-transport-https",
-            "sudo apt update && sudo apt install -y code",
+            "sudo apt-get install -y apt-transport-https",
+            "sudo apt-get update && sudo apt install -y code",
             "cd -"
             ]
         self.Run(cmd=' && '.join(vscode_install_cmds))
