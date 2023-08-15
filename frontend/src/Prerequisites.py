@@ -34,13 +34,24 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.prefix = self.set_prefix()
 
         self.InstallPackages()
+        self.InstallStarship()
 
     def need_sudo(self):
         return not os.access(os.environ.get("HOMEBREW"), os.W_OK)
 
     def InstallPackages(self):
         self.switcher()
-        
+    
+    def InstallStarship(self):
+        """
+            Installs starship shell extension
+
+        """
+        if program_exists('starship'):
+            return
+
+        self.Run("curl -sS https://starship.rs/install.sh | sh")
+
     def GetCPUCount(self):
         try:
             m = re.search(r'(?m)^Cpus_allowed:\s*(.*)$',

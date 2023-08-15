@@ -34,3 +34,5 @@ libffi-dev
 libicu-dev
 libbz2-dev
 libncurses5-dev
+fonts-noto-color-emoji
+

@@ -45,6 +45,8 @@ class UDSBrewPi(RunCmd):
             if self.pi_gen >= 4:
                 self.InstallVSCode()
             self.InstallBTop()
+            self.InstallRubyPkgs()
+            self.InstallStarship()
 
         if self.p_args.rust_tools:
             InstallRustTools(raspberry_pi=True)
@@ -147,6 +149,29 @@ class UDSBrewPi(RunCmd):
                  "latest/download/btop-armv7l-linux-musleabihf.tbz "
                  "&& sudo tar xf btop.tbz --strip-components=2 -C "
                  "/usr/local ./btop/bin/btop")
+
+    def InstallStarship(self):
+        """
+            Installing starship shell extension.
+
+        """
+        if program_exists('starship'):
+            return
+
+        self.Run("curl -sS https://starship.rs/install.sh | sh")
+
+    def InstallRubyPkgs(self):
+        """
+            Installing some ruby packages to run the main
+            script
+
+        """
+        if not program_exists('ruby') or not program_exists('gem'):
+            raise "We need Ruby package manager!!"
+
+        self.Run("sudo -H gem install tty-spinner ruby-progressbar")
+
+
 
     def parse_args(self):
         p = argparse.ArgumentParser(prog="unix_dev_setup_pi")

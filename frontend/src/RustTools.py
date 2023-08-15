@@ -97,4 +97,9 @@ class InstallRustTools(RunCmd):
         self.Run(f"{self.rustup_exec} component add rust-src")
         self.Run(f"{self.cargo_exec} install {' '.join(self.pkgs_to_install)}")
         # Installing starship with '--locked' parameter
-        self.Run(f"{self.cargo_exec} install starship --locked")
+        # self.Run(f"{self.cargo_exec} install starship --locked")
+        # Now we aren't particularily interested in the starship via 
+        # cargo installation. 
+        # We would rather use binary installation...
+
+

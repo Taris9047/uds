@@ -9,7 +9,8 @@ require_relative './utils/utils.rb'
 # follow up the newest changes in libc 2.26
 
 # Version
-$version = ['1', '0', '11']
+ver_string = File.read('./VERSION')
+$version = ver_string.strip.split(".")
 
 # title
 $title = "Unix Development Environment setup"
