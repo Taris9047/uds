@@ -4,6 +4,7 @@
 
 from .DistroDetect import GetPackages
 from .Utils import RunCmd
+from .Utils import NerdFonts
 
 import os
 import sys
@@ -13,14 +14,25 @@ import subprocess
 new_ruby_ver='2.7.4'
 new_git_ver='2.33.0'
 
+Nerd_Fonts_To_Install = [
+    "BitstreamVeraSansMono", 
+    "SourceCodePro",
+    "SpaceMono",
+    "Noto",
+    "FiraCode",
+    "RobotoMono",
+    "Mononoki",
+]
+
 ### InstallPkgs ###
 ###
 ### Actually installs packages using proper package manager.
 ###
-class InstallPrereqPkgs(GetPackages, RunCmd):
+class InstallPrereqPkgs(GetPackages, RunCmd, NerdFonts):
     def __init__(self, verbose=True):
         GetPackages.__init__(self)
         RunCmd.__init__(self, shell_type="bash", verbose=verbose)
+        NerdFonts.__init__(self, NerdFontNames=Nerd_Fonts_To_Install)
 
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()

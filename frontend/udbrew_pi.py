@@ -7,6 +7,14 @@ import argparse
 
 from src.Utils import RunCmd, program_exists
 from src.RustTools import InstallRustTools
+from src.NerdFonts import NerdFonts
+
+Nerd_Fonts_To_Install = [
+    "BitstreamVeraSansMono", 
+    "FiraCode",
+    "RobotoMono",
+    "Mononoki",
+]
 
 
 class UDSBrewPi(RunCmd):
@@ -47,6 +55,8 @@ class UDSBrewPi(RunCmd):
             self.InstallBTop()
             self.InstallRubyPkgs()
             self.InstallStarship()
+            
+            self.NFInst = NerdFonts(NerdFontNames=Nerd_Fonts_To_Install)
 
         if self.p_args.rust_tools:
             InstallRustTools(raspberry_pi=True)
