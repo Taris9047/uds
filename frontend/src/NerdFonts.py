@@ -10,6 +10,7 @@ import zipfile
 import shutil
 
 from .Utils import RunCmd
+from .Utils import mkdirp
 
 
 class NerdFonts(RunCmd):
@@ -40,11 +41,11 @@ class NerdFonts(RunCmd):
 						 'fonts', 'NerdFonts')
 
 		if not os.path.isdir(self.DefaultFontPath):
-			os.mkdir(self.DefaultFontPath)
+			mkdirp(self.DefaultFontPath)
 			
 		self.TempDownloadDir = './.nf_tmp'
 		if not os.path.isdir(self.TempDownloadDir):
-			os.mkdir(self.TempDownloadDir)
+			mkdirp(self.TempDownloadDir)
 
 		if Nuke:
 			shutil.rmtree(self.DefaultFontPath)
@@ -80,7 +81,7 @@ class NerdFonts(RunCmd):
 			fnt_dir = os.path.join(self.DefaultFontPath, fnt)
 			if os.path.isdir(fnt_dir):
 				shutil.rmtree(fnt_dir)
-			os.mkdir(fnt_dir)
+			mkdirp(fnt_dir)
 			
 			with zipfile.ZipFile(
 				os.path.join(

@@ -7,9 +7,11 @@ import sys
 import re
 import subprocess as sbp
 
-### Run Console (Bash.. currently...) ###
 
+"""
+    Runs Command
 
+"""
 class RunCmd(object):
     def __init__(self, shell_type="bash", verbose=False):
         # At this moment, just bash is supported! Let's see if it works out!
@@ -84,8 +86,10 @@ class RunCmd(object):
         exit_code = p.wait()
         return log, exit_code
 
+"""
+    Version Parsor
 
-### Version Parsor ###
+"""
 class Version(object):
     def __init__(self, ver_info):
         self.ver_info = [0]
@@ -156,6 +160,7 @@ class Version(object):
 
 
 # Checks up whether a command line program exists or not.
+#
 def program_exists(program=None):
     def is_exe(prog):
         return os.path.isfile(prog) and os.access(prog, os.X_OK)
@@ -171,3 +176,15 @@ def program_exists(program=None):
                 return True
 
     return False
+    
+    
+# Makes directory with parents
+# Compatibility code for Python < 3.4.1
+#
+def mkdirp(path):
+    try:
+        os.makedirs(path)
+    except OSError:
+        if not os.path.isdir(path):
+            raise
+

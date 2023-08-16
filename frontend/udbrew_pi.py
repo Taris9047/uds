@@ -55,7 +55,6 @@ class UDSBrewPi(RunCmd):
             self.InstallBTop()
             self.InstallRubyPkgs()
             self.InstallStarship()
-            
             self.NFInst = NerdFonts(NerdFontNames=Nerd_Fonts_To_Install)
 
         if self.p_args.rust_tools:
@@ -180,8 +179,6 @@ class UDSBrewPi(RunCmd):
             raise "We need Ruby package manager!!"
 
         self.Run("sudo -H gem install tty-spinner ruby-progressbar")
-
-
 
     def parse_args(self):
         p = argparse.ArgumentParser(prog="unix_dev_setup_pi")
