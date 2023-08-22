@@ -53,7 +53,6 @@ class NerdFonts(RunCmd):
 			return
 		
 		self.InstallNerdFonts()
-		
 		self.Cleanup()
 		
 	def InstallNerdFonts(self):

@@ -6,7 +6,7 @@ import subprocess
 
 import argparse
 
-from src.Utils import RunCmd, program_exists
+from src.Utils import RunCmd, program_exists, Version
 from src.Editors import InstallEditors
 from src.RubyGems import InstallSystemRubyGems
 from src.Prerequisites import InstallPrereqPkgs
@@ -142,9 +142,9 @@ class UDSBrew(RunCmd):
 
     def InstallRuby(self):
         print ('Installing Ruby before running this script...')
-        if program_exists('/usr/bin/apt'):
-            self.Run('sudo apt update && sudo apt install ruby')
-        elif program_exists('/usr/bin/apg-get'):
+        #if program_exists('/usr/bin/apt'):
+        #    self.Run('sudo apt update && sudo apt install ruby')
+        if program_exists('/usr/bin/apg-get'):
             self.Run('sudo apt-get update && sudo apt-get install ruby')
         elif program_exists('/usr/bin/dnf'):
             self.Run('sudo dnf update && sudo dnf install ruby')
@@ -272,22 +272,30 @@ class UDSBrew(RunCmd):
 
     def find_out_version(self):
         """
-        Extracts version info from the backend
-        unix_dev_setup.rb
+			Extracts version from the VERSION file.
+			
         """
         self.uds_backend = "./unix_dev_setup.rb"
         if os.path.exists("./unix_dev_setup"):
             self.uds_backend = "./unix_dev_setup"
 
+        self.VERSION_file = os.path.join(os.path.realpath('./'), "VERSION")
+        if not os.path.exists(self.VERSION_file):
+            raise FileNotFoundError("Version file does not exist!!: {}".format(self.VERSION_file))
+
         self.version = None
 
-        with open(self.uds_backend, "r") as fp:
+        with open(self.VERSION_file, "r") as fp:
             while True:
+                print(self.VERSION_file)
                 line = fp.readline()
-                if "$version" in line:
-                    ver = line.split("=")[-1]
-                    self.version = eval(ver)
+                if line:
+                    ver = line.strip()
+                    self.version = Version(ver)
+                    print(self.version)
+                else:
                     break
+
 
             if not self.version:
                 print("Unable to obtain version information from backend!!")

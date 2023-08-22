@@ -3,8 +3,8 @@
 # Handles prerequisite package (using system's package manager) installation
 
 from .DistroDetect import GetPackages
-from .Utils import RunCmd
-from .Utils import NerdFonts
+from .Utils import RunCmd, program_exists
+from .NerdFonts import NerdFonts
 
 import os
 import sys
@@ -28,11 +28,10 @@ Nerd_Fonts_To_Install = [
 ###
 ### Actually installs packages using proper package manager.
 ###
-class InstallPrereqPkgs(GetPackages, RunCmd, NerdFonts):
+class InstallPrereqPkgs(GetPackages, RunCmd):
     def __init__(self, verbose=True):
         GetPackages.__init__(self)
         RunCmd.__init__(self, shell_type="bash", verbose=verbose)
-        NerdFonts.__init__(self, NerdFontNames=Nerd_Fonts_To_Install)
 
         self.base = self.BaseDistro()
         self.pkgs_to_install = self.GetPkgNames()
@@ -46,6 +45,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd, NerdFonts):
         self.prefix = self.set_prefix()
 
         self.InstallPackages()
+        self.Install_NerdFonts()
         self.InstallStarship()
 
     def need_sudo(self):
@@ -53,6 +53,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd, NerdFonts):
 
     def InstallPackages(self):
         self.switcher()
+        
+    def Install_NerdFonts(self):
+        nf = NerdFonts(NerdFontNames=Nerd_Fonts_To_Install)
     
     def InstallStarship(self):
         """
