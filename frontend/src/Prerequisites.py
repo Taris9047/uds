@@ -65,7 +65,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         if program_exists('starship'):
             return
 
-        self.Run("curl -sS https://starship.rs/install.sh | sh")
+        self.Run("curl -sS https://starship.rs/install.sh | sh -s -- -y")
 
     def GetCPUCount(self):
         try:
