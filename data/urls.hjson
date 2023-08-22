@@ -114,7 +114,7 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.7.tar.gz",
     "type": "tarball",
     "alt-names": ["ruby2", "Ruby2"],
-    "dependency": ["node"],
+    "dependency": ["node", "openssl"],
     "script": "install_ruby.rb",
     "class": "InstRuby"
   },
@@ -124,7 +124,7 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz",
     "type": "tarball",
     "alt-names": ["Ruby", "ruby", "Ruby3", "ruby3"],
-    "dependency": [],
+    "dependency": ["openssl", "libffi"],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
   },
@@ -404,7 +404,7 @@
 
   # libffi
   "libffi": {
-    "url": "https://github.com/libffi/libffi/releases/download/v3.4.2/libffi-3.4.2.tar.gz",
+    "url": "https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz",
     "type": "tarball",
     "alt-names": ["libffi-dev", "libffi-devel", "ffi-devel"],
     "dependency": [],
@@ -514,7 +514,7 @@
   },
   # OpenSSL
   "openssl": {
-    "url": "https://www.openssl.org/source/openssl-1.1.1s.tar.gz",
+    "url": "https://www.openssl.org/source/openssl-1.1.1v.tar.gz",
     "type": "tarball",
     "alt-names": ["OpenSSL"],
     "dependency": [],

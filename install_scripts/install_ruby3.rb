@@ -32,14 +32,14 @@ class InstRuby3 < InstallStuff
     @ruby_gems = $gems_to_install
 
     # Ruby build options
-    @conf_options = [
-      "--enable-shared"
-    ]
+    @conf_options = []
 
     # Setting up compilers
+    ruby_cflags = "-fno-semantic-interposition -I/usr/include -Wl,-rpath=/usr"
     self.CompilerSet(
-      cflags='-fno-semantic-interposition',
-      cxxflags='-fno-semantic-interposition')
+      cflags=ruby_cflags,
+      cxxflags=ruby_cflags)
+
   end
 
   def do_install
