@@ -54,7 +54,7 @@ class InstallEditors(GetDistro, RunCmd):
             if edi.lower() in self.subl_cmd_list:
                 editors_to_inst.append("subl")
             elif edi.lower() in self.vscode_list:
-                editors_to_inst.append("code")
+                editors_to_inst.append("vscode")
             else:
                 editors_to_inst.append(edi)
 
