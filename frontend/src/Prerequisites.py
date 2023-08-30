@@ -5,6 +5,7 @@
 from .DistroDetect import GetPackages
 from .Utils import RunCmd, program_exists
 from .NerdFonts import NerdFonts
+from .NanumFonts import NanumFonts
 
 import os
 import sys
@@ -46,6 +47,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
         self.InstallPackages()
         self.Install_NerdFonts()
+        self.Install_NanumFonts()
         self.InstallStarship()
 
     def need_sudo(self):
@@ -56,6 +58,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         
     def Install_NerdFonts(self):
         nf = NerdFonts(NerdFontNames=Nerd_Fonts_To_Install)
+
+    def Install_NanumFonts(self):
+        nanum_f = NanumFonts()
     
     def InstallStarship(self):
         """
