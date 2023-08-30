@@ -24,7 +24,7 @@ class NanumFonts(RunCmd):
 
         self.HomeDir = os.environ.get('HOME')
         self.font_install_dir = \
-            os.path.join(self.HomeDir, '.local', 'fonts', 'NanumFonts')
+            os.path.join(self.HomeDir, '.local','share', 'fonts', 'NanumFonts')
 
         if os.path.isdir(self.font_install_dir):
             shutil.rmtree(self.font_install_dir)
