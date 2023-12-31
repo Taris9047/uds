@@ -16,6 +16,12 @@ Nerd_Fonts_To_Install = [
     "Mononoki",
 ]
 
+HomeBrewDir = os.path.join('{}'.format(os.environ['HOME']), '.local')
+
+GoLangVersion = '1.21.5'
+GoLangTGTDir = os.path.join(HomeBrewDir, '.opt') + os.sep
+DufGit = 'https://github.com/muesli/duf.git'
+
 
 class UDSBrewPi(RunCmd):
     """
@@ -43,13 +49,15 @@ class UDSBrewPi(RunCmd):
 
         self.ReadInPkgList()
 
+        self.pi_model = None
+        self.pi_gen = None
+        self.architecture = ''
+        self.ProbeOS()
+
         if self.p_args.prereq:
             self.InstallPiPackages()
             self.InstallNodeJS()
 
-            self.pi_model = \
-                self.RunSilent('sudo -H cat /sys/firmware/devicetree/base/model')[0]
-            self.pi_gen = int(self.pi_model.split(' ')[2])
             if self.pi_gen >= 4:
                 self.InstallVSCode()
             self.InstallBTop()
@@ -59,6 +67,15 @@ class UDSBrewPi(RunCmd):
 
         if self.p_args.rust_tools:
             InstallRustTools(raspberry_pi=True)
+
+        if self.p_args.nodejs:
+            self.InstallNodeJS()
+        
+        if self.p_args.golang:
+            self.InstallGolang()
+        
+        if self.p_args.duf:
+            self.InstallDuf()
 
     def ReadInPkgList(self):
         self.package_list = []
@@ -76,6 +93,29 @@ class UDSBrewPi(RunCmd):
         self.package_list = pkg_list
         print('Total {} packages will be installed via apt'
               .format(len(self.package_list)))
+
+    def ProbeOS(self):
+        """
+            Detecting hardware specification.
+            Mainly the pi's generation and OS bits.
+
+        """
+
+        # self.pi_model = None
+        # self.pi_gen = None
+        # self.architecture = ''
+
+        self.pi_model = \
+            self.RunSilent('sudo -H cat /sys/firmware/devicetree/base/model')[0]
+        self.pi_gen = int(self.pi_model.split(' ')[2])
+
+        uname_m = self.RunSilent('uname -m')
+
+        if uname_m == 'aarch64':
+            self.architecture = 'arm64'
+        elif 'armv' in uname_m:
+            self.architecture = 'arm32'
+
 
     def InstallPiPackages(self):
         if self.package_list:
@@ -107,6 +147,66 @@ class UDSBrewPi(RunCmd):
                      "| sudo -E bash -")
         self.Run("sudo apt-get install nodejs")
 
+    def InstallGolang(self, inst_ver=GoLangVersion):
+        """
+            Installing golang from binary. Arm64 only!!
+
+        """
+
+        if program_exists('go'):
+            print('Golang is already installed!!')
+            return
+
+        print("Installing Golang")
+
+        if self.architecture == 'arm32':
+            platform = 'armv6l'
+        elif self.architecture == 'arm64':
+            platform = self.architecture
+
+        GoLangLink = 'https://go.dev/dl/go{}.linux-{}.tar.gz'\
+                .format(inst_ver, platform)
+        GoLangBinArchName = GoLangLink.split('/')[-1]
+
+        InstDir = GoLangTGTDir
+        if not os.path.exists(InstDir):
+            os.mkdirs(InstDir)
+        
+        install_cmds = [
+            "cd /tmp",
+            "wget -qO- {}".format(GoLangLink),
+            "tar xf {} -C {}".format(GoLangBinArchName, InstDir),
+            "cd -"
+        ] 
+
+        self.Run(cmd=' && '.join(install_cmds))
+
+    def InstallDuf(self):
+        """
+            Installing the disk space checking utility 'duf'
+
+        """
+
+        self.InstallGolang()
+
+        if program_exists('duf'):
+            print('duf is already installed!!')
+            return
+
+        current_dir = self.RunSilent('pwd')
+
+        InstDir = ''
+        inst_cmds = [
+            "cd /tmp",
+            "git clone {}".format(DufGit),
+            "cd /tmp/duf",
+            "go build",
+            "cp -f ./duf {}".format(os.path.join(HomeBrewDir, 'bin', os.sep)),
+            "cd {}".format(current_dir)
+        ]
+
+        self.Run(cmd=' && '.join(install_cmds))
+
     def InstallVSCode(self):
         """
             Installing the VSCode via command line.
@@ -119,7 +219,7 @@ class UDSBrewPi(RunCmd):
             return
 
         if self.pi_gen < 4:
-            print("Pi Generation {} is not powerful enough"
+            print("Pi Generation {} is not powerful enough to run VSCode!!"
                   .format(self.pi_gen))
             return
 
@@ -188,15 +288,39 @@ class UDSBrewPi(RunCmd):
             '--rust_tools',
             action='store_true',
             default=False,
-            help='Installs Rust written stuff!'
+            help='Installs Rust tools and stuff!'
         )
 
         p.add_argument(
             '-pr',
             '--prereq',
             action='store_true',
-            default=True,
+            default=False,
             help='Installs packages for doing some stuff!'
+        )
+
+        p.add_argument(
+            '-n',
+            '--nodejs',
+            action='store_true',
+            default=False,
+            help='Installs NodeJS related stuffs'
+        )
+
+        p.add_argument(
+            '-go',
+            '--golang',
+            action='store_true',
+            default=False,
+            help='Installs the Golang binary'
+        )
+
+        p.add_argument(
+            '-duf',
+            '--duf',
+            action='store_true',
+            default=False,
+            help='Installs Duf, a golang based disk space tool'
         )
 
         if len(self.args) > 1:
