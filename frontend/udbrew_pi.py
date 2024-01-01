@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
+"""
+    udbrew_pi.py
+
+    A simple utility installation script for Raspberry PI's Raspbian
+    environment. This script is a kind of extension of udbrew.py
+    for the Raspbian environment and not here to replace the original
+    one. 
+
+"""
+
 import os
 import sys
-# import subprocess
-
 import argparse
 
 from src.Utils import RunCmd, program_exists
 from src.RustTools import InstallRustTools
 from src.NerdFonts import NerdFonts
 
+# Some Nerdfonts to install
 Nerd_Fonts_To_Install = [
     "BitstreamVeraSansMono", 
     "FiraCode",
@@ -16,11 +25,21 @@ Nerd_Fonts_To_Install = [
     "Mononoki",
 ]
 
-HomeBrewDir = os.path.join('{}'.format(os.environ['HOME']), '.local')
+# Default installation path for programs and scripts. It is the default
+# homebrew directory of udbrew.py: $HOME$/.local
+#
+HomeBrewDir = os.path.join(os.environ['HOME'], '.local')
 
+# Golang and Duf
+#
 GoLangVersion = '1.21.5'
 GoLangTGTDir = os.path.join(HomeBrewDir, '.opt') + os.sep
 DufGit = 'https://github.com/muesli/duf.git'
+
+# Essential programs to run this script. Obviously python is needed to 
+# run this program.
+#
+prereq_commands = ['git', 'wget', 'curl', 'apt-get', 'tar']
 
 
 class UDSBrewPi(RunCmd):
@@ -38,6 +57,8 @@ class UDSBrewPi(RunCmd):
 
         self.args = args
         self.parse_args()
+        
+        self.TestCMDs()
 
         print("Updating the Pi with apt...")
         self.Run("sudo -H apt-get update && sudo apt-get -y upgrade")
@@ -101,20 +122,29 @@ class UDSBrewPi(RunCmd):
 
         """
 
-        # self.pi_model = None
-        # self.pi_gen = None
-        # self.architecture = ''
-
         self.pi_model = \
             self.RunSilent('sudo -H cat /sys/firmware/devicetree/base/model')[0]
         self.pi_gen = int(self.pi_model.split(' ')[2])
 
-        uname_m = self.RunSilent('uname -m')
+        uname_m = self.RunSilent('uname -m')[0]
 
         if uname_m == 'aarch64':
             self.architecture = 'arm64'
         elif 'armv' in uname_m:
             self.architecture = 'arm32'
+
+    def TestCMDs(self):
+        """
+            Testing out critical commands if they exists in the system.
+        
+        """
+        
+        for pcmd in prereq_commands:
+            if not program_exists(pcmd):
+                print("We need {} to run this script!".format(pcmd))
+                sys.exit(1)
+        
+        print("Prerequisite command test done!!")
 
 
     def InstallPiPackages(self):
@@ -174,12 +204,19 @@ class UDSBrewPi(RunCmd):
         
         install_cmds = [
             "cd /tmp",
-            "wget -qO- {}".format(GoLangLink),
+            "wget {} -O {}".format(GoLangLink, GoLangBinArchName),
             "tar xf {} -C {}".format(GoLangBinArchName, InstDir),
             "cd -"
         ] 
 
-        self.Run(cmd=' && '.join(install_cmds))
+        res = self.Run(cmd=' && '.join(install_cmds))[1]
+        
+        if res == 0:
+            print("Make sure {} is in your path! And GOPATH".format(
+                os.path.join(InstDir, 'bin')))
+        else:
+            print("Golang installation failed!")
+
 
     def InstallDuf(self):
         """
@@ -193,15 +230,16 @@ class UDSBrewPi(RunCmd):
             print('duf is already installed!!')
             return
 
-        current_dir = self.RunSilent('pwd')
+        current_dir = self.RunSilent('pwd')[0]
 
-        InstDir = ''
-        inst_cmds = [
+        InstDir = HomeBrewDir
+        install_cmds = [
             "cd /tmp",
+            "rm -rf /tmp/duf",
             "git clone {}".format(DufGit),
             "cd /tmp/duf",
             "go build",
-            "cp -f ./duf {}".format(os.path.join(HomeBrewDir, 'bin', os.sep)),
+            "cp -vf ./duf {}{}".format(os.path.join(InstDir, 'bin'), os.sep),
             "cd {}".format(current_dir)
         ]
 
