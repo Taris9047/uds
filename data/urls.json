@@ -21,16 +21,6 @@
     "script": "install_gcc.rb",
     "class": "InstGCCJit"
   },
-  "gcc-11": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
-    "type": "tarball",
-    "alt-names": [
-      "gcc-latest"
-    ],
-    "dependency": [],
-    "script": "install_gcc.rb",
-    "class": "InstGCCLatest"
-  },
   "gcc-10": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
     "type": "tarball",
@@ -40,6 +30,16 @@
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCC"
+  },
+  "gcc-11": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
+    "type": "tarball",
+    "alt-names": [
+      "gcc-latest"
+    ],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCCLatest"
   },
   "gcc8": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.5.0/gcc-8.5.0.tar.gz",
@@ -230,7 +230,7 @@
     ]
   },
   "node": {
-    "url": "https://nodejs.org/dist/v20.0.0/node-v20.0.0.tar.gz",
+    "url": "https://nodejs.org/dist/v21.6.0/node-v21.6.0.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Node.JS",
@@ -240,7 +240,7 @@
     "dependency": [],
     "script": "install_node.rb",
     "class": "InstNode",
-    "bin_url": "https://nodejs.org/dist/v20.0.0/node-v20.0.0-linux-x64.tar.xz"
+    "bin_url": "https://nodejs.org/dist/v21.6.0/node-v21.6.0-linux-x64.tar.xz"
   },
   "node-lts": {
     "url": "https://nodejs.org/dist/v18.16.0/node-v18.16.0.tar.gz",
@@ -682,7 +682,7 @@
     "class": "InstLibWebp"
   },
   "openssl": {
-    "url": "https://www.openssl.org/source/openssl-1.1.1v.tar.gz",
+    "url": "https://www.openssl.org/source/openssl-1.1.1w.tar.gz",
     "type": "tarball",
     "alt-names": [
       "OpenSSL"

@@ -178,13 +178,13 @@
 
   # Node.JS
   "node": {
-    "url": "https://nodejs.org/dist/v20.0.0/node-v20.0.0.tar.gz",
+    "url": "https://nodejs.org/dist/v21.6.0/node-v21.6.0.tar.gz",
     "type": "tarball",
     "alt-names": ["Node.JS", "node.js", "nodejs"],
     "dependency": [],
     "script": "install_node.rb",
     "class": "InstNode",
-    "bin_url": "https://nodejs.org/dist/v20.0.0/node-v20.0.0-linux-x64.tar.xz"
+    "bin_url": "https://nodejs.org/dist/v21.6.0/node-v21.6.0-linux-x64.tar.xz"
   },
   "node-lts": {
     "url": "https://nodejs.org/dist/v18.16.0/node-v18.16.0.tar.gz",
@@ -514,7 +514,7 @@
   },
   # OpenSSL
   "openssl": {
-    "url": "https://www.openssl.org/source/openssl-1.1.1v.tar.gz",
+    "url": "https://www.openssl.org/source/openssl-1.1.1w.tar.gz",
     "type": "tarball",
     "alt-names": ["OpenSSL"],
     "dependency": [],
