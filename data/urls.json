@@ -138,7 +138,7 @@
     "class": "InstRuby"
   },
   "ruby": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.3.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Ruby",
