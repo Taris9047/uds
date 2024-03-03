@@ -21,16 +21,6 @@
     "script": "install_gcc.rb",
     "class": "InstGCCJit"
   },
-  "gcc-10": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
-    "type": "tarball",
-    "alt-names": [
-      "gcc-10"
-    ],
-    "dependency": [],
-    "script": "install_gcc.rb",
-    "class": "InstGCC"
-  },
   "gcc-11": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
     "type": "tarball",
@@ -40,6 +30,16 @@
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCCLatest"
+  },
+  "gcc-10": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
+    "type": "tarball",
+    "alt-names": [
+      "gcc-10"
+    ],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCC"
   },
   "gcc8": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.5.0/gcc-8.5.0.tar.gz",
@@ -132,13 +132,14 @@
     ],
     "dependency": [
       "node",
-      "openssl"
+      "openssl",
+      "libyaml"
     ],
     "script": "install_ruby.rb",
     "class": "InstRuby"
   },
   "ruby": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.3.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.0.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Ruby",
@@ -148,7 +149,8 @@
     ],
     "dependency": [
       "openssl",
-      "libffi"
+      "libffi",
+      "libyaml"
     ],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
@@ -195,7 +197,7 @@
     "class": "InstPython2"
   },
   "python3": {
-    "url": "https://www.python.org/ftp/python/3.11.7/Python-3.11.7.tgz",
+    "url": "https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz",
     "type": "tarball",
     "alt-names": [
       "Python3"
@@ -541,6 +543,17 @@
     "dependency": [],
     "script": "libs/install_libffi.rb",
     "class": "InstLibffi"
+  },
+  "libyaml": {
+    "url": "https://github.com/yaml/libyaml/releases/download/0.2.5/yaml-0.2.5.tar.gz",
+    "type": "tarball",
+    "alt-names": [
+      "libyaml-dev",
+      "libyaml-devel"
+    ],
+    "dependency": [],
+    "script": "libs/install_libyaml.rb",
+    "class": "InstLibyaml"
   },
   "readline": {
     "url": "https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz",

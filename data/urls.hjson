@@ -114,17 +114,17 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.7.tar.gz",
     "type": "tarball",
     "alt-names": ["ruby2", "Ruby2"],
-    "dependency": ["node", "openssl"],
+    "dependency": ["node", "openssl", "libyaml"],
     "script": "install_ruby.rb",
     "class": "InstRuby"
   },
 
   # Ruby3
   "ruby": {
-    "url": "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.3.tar.gz",
+    "url": "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.0.tar.gz",
     "type": "tarball",
     "alt-names": ["Ruby", "ruby", "Ruby3", "ruby3"],
-    "dependency": ["openssl", "libffi"],
+    "dependency": ["openssl", "libffi", "libyaml"],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
   },
@@ -157,7 +157,7 @@
     "class": "InstPython2"
   },
   "python3": {
-    "url": "https://www.python.org/ftp/python/3.11.7/Python-3.11.7.tgz",
+    "url": "https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz",
     "type": "tarball",
     "alt-names": ["Python3"],
     "dependency": ["openssl", "tcl", "tk", "libffi", "sqlite3", "readline"],
@@ -410,6 +410,16 @@
     "dependency": [],
     "script": "libs/install_libffi.rb",
     "class": "InstLibffi"
+  },
+
+  # libyaml
+  "libyaml": {
+    "url": "https://github.com/yaml/libyaml/releases/download/0.2.5/yaml-0.2.5.tar.gz",
+    "type": "tarball",
+    "alt-names": ["libyaml-dev", "libyaml-devel"],
+    "dependency": [],
+    "script": "libs/install_libyaml.rb",
+    "class": "InstLibyaml"
   },
 
   # readline
