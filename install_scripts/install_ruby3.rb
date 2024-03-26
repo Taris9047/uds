@@ -52,13 +52,16 @@ class InstRuby3 < InstallStuff
     major, minor, patch = fp.version
 
     if Dir.exist?(@rbenv_dir)
-      puts "#{@rbenv_dir} exists! Perhaps we don't need to install another?"
-      exit 0
+      puts "#{@rbenv_dir} exists! Trying to use existing rbenv!"
+    else 
+      rbenv_install_cmds = [
+        "git clone 'https://github.com/rbenv/rbenv.git' #{@rbenv_dir}",
+        "git clone 'https://github.com/rbenv/ruby-build.git' #{File.join(@rbenv_dir, 'plugins', 'ruby-build')}",
+      ]
+      self.RunInstall( cmd: rbenv_install_cmds.join(' && ') )
     end
 
     cmds = [
-      "git clone 'https://github.com/rbenv/rbenv.git' #{@rbenv_dir}",
-      "git clone 'https://github.com/rbenv/ruby-build.git' #{File.join(@rbenv_dir, 'plugins', 'ruby-build')}",
       "PATH=#{@rbenv_dir}/bin:\$PATH rbenv install #{major}.#{minor}.#{patch}",
       "PATH=#{@rbenv_dir}/bin:\$PATH rbenv global #{major}.#{minor}.#{patch}",
       "PATH=#{@rbenv_dir}/shims:\$PATH gem install #{$gems_to_install.join(' ')}"
