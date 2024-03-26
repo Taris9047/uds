@@ -27,6 +27,9 @@ class UDSBrew(RunCmd):
         """
         RunCmd.__init__(self, shell_type="bash", verbose=True)
 
+        self.script_path = os.path.realpath(__file__)
+        self.exec_path = os.path.join(self.script_path, '..')
+
         self.update_self_repo()
         # self.update_database()
         self.find_out_version()
@@ -43,8 +46,6 @@ class UDSBrew(RunCmd):
             self.system_ruby = self.fallback_ruby
             if not program_exists(self.system_ruby):
                 self.InstallRuby()
-                print("Fallback ruby detection failed!! Exiting...")
-                sys.exit(1)
 
             print("Using system wide ruby...: {}".format(self.system_ruby))
 
@@ -144,14 +145,16 @@ class UDSBrew(RunCmd):
         print ('Installing Ruby before running this script...')
         #if program_exists('/usr/bin/apt'):
         #    self.Run('sudo apt update && sudo apt install ruby')
-        if program_exists('/usr/bin/apg-get'):
+        if program_exists('/usr/bin/apt-get'):
             self.Run('sudo apt-get update && sudo apt-get install ruby')
         elif program_exists('/usr/bin/dnf'):
             self.Run('sudo dnf update && sudo dnf install ruby')
         elif program_exists('/usr/bin/yum'):
             self.Run('sudo yum update && sudo yum install ruby')
         else:
-            print('Please install Ruby using built-in package manager!')
+            self.Run("/bin/sh {}".format(os.path.join(self.exec_path, "install_rbenv.sh")))
+            print("Run . ~/.bashrc or something similar and run this script again!!")
+            sys.exit(0)
 
     def InstallPrerequisiteStuffs(self):
         """
