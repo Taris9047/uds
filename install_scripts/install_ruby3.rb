@@ -15,7 +15,8 @@ $gems_to_install = [
     "hjson",
     "ruby-progressbar",
     "tty-spinner",
-  ]
+    "lolcat"
+]
 
 class InstRuby3 < InstallStuff
 
@@ -35,78 +36,29 @@ class InstRuby3 < InstallStuff
     @conf_options = []
 
     # Setting up compilers
-    ruby_cflags = "-fno-semantic-interposition -I/usr/include -Wl,-rpath=/usr"
+    ruby_cflags = "-O3 -fomit-frame-pointer -fno-semantic-interposition -march=native -pipe"
     self.CompilerSet(
       cflags=ruby_cflags,
       cxxflags=ruby_cflags)
 
+    @rbenv_dir = File.join(ENV["HOME"], '.rbenv')
+    @prefix = @rbenv_dir
+
   end
 
   def do_install
-
-    dl = Download.new(@source_url, @src_dir)
-    src_tarball_path = dl.GetPath
-
     fp = FNParser.new(@source_url)
     src_tarball_fname, src_tarball_bname = fp.name
     major, minor, patch = fp.version
 
-    # puts src_tarball_fname, src_tarball_bname, major, minor, patch
-    src_extract_folder = File.join(File.realpath(@build_dir), src_tarball_bname)
-    src_build_folder = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
-    @src_build_dir = src_build_folder
-
-    if Dir.exist?(src_extract_folder)
-      puts "Source file folder exists in "+src_extract_folder
-    else
-      puts "Extracting"
-      self.Run( "tar xf "+File.realpath(File.join(@src_dir, src_tarball_fname))+" -C "+@build_dir )
-    end
-
-    if Dir.exist?(src_build_folder)
-      puts "Build folder found!! Removing it for 'pure' experience!!"
-      self.Run( "rm -rfv "+src_build_folder )
-    else
-      puts "Ok, let's make a build folder"
-    end
-    self.Run( "mkdir -p "+src_build_folder )
-
-    opts = ["--prefix="+@prefix]+@conf_options
-
-    if @need_sudo
-      inst_cmd = "sudo make install"
-      mod_sudo = "sudo -H"
-    else
-      inst_cmd = "make install"
-      mod_sudo = ""
-    end
-
-    # Ok let's roll!!
     cmds = [
-      "cd", src_build_folder, "&&",
-      src_extract_folder+"/configure",
-      opts.join(" "), "&&",
-      "nice make -j", @Processors.to_s, "&&",
-      inst_cmd
+      "git clone 'https://github.com/rbenv/rbenv.git' #{@rbenv_dir}",
+      "git clone 'https://github.com/rbenv/ruby-build.git' #{File.join(@rbenv_dir, 'plugins', 'ruby-build')}",
+      "PATH=#{@rbenv_dir}/bin:\$PATH rbenv install #{major}.#{minor}.#{patch}",
+      "PATH=#{@rbenv_dir}/shims:\$PATH gem install #{$gems_to_install.join(' ')}"
     ]
 
-    puts "Compiling (with #{@Processors} processors) and Installing ..."
-    self.RunInstall( env: @env, cmd: cmds.join(" ") )
+    self.RunInstall( cmd: cmds.join(' && ') )
 
-    inst_module_cmds = [
-      mod_sudo,
-      File.join(@prefix,"bin/gem"),
-      "install",
-      @ruby_gems.join(" ")
-    ]
-
-    puts "Installing additional gems..."
-    self.RunInstall( env: @env, cmd: inst_module_cmds.join(" ") )
-
-    self.WriteInfo(
-      build_system='make', 
-      pkg_type='tar.gz', 
-      destdir_inst_cmd="make DESTDIR=#{@stage_dir_pkg} install")
   end
-
 end # class InstRuby

@@ -114,7 +114,7 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.7.tar.gz",
     "type": "tarball",
     "alt-names": ["ruby2", "Ruby2"],
-    "dependency": ["node", "openssl", "libyaml"],
+    "dependency": ["node"],
     "script": "install_ruby.rb",
     "class": "InstRuby"
   },
@@ -124,7 +124,7 @@
     "url": "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.0.tar.gz",
     "type": "tarball",
     "alt-names": ["Ruby", "ruby", "Ruby3", "ruby3"],
-    "dependency": ["openssl", "libffi", "libyaml"],
+    "dependency": [],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
   },
