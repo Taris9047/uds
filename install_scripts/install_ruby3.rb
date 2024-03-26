@@ -75,13 +75,14 @@ class InstRuby3 < InstallStuff
     bashrc=File.join(home_dir, '.bashrc')
     zshrc=File.join(home_dir, '.zshrc')
     
+    rbenv_str = '"$HOME/.rbenv/bin/rbenv" init -'
     if File.exist?(bashrc)
-      if not File.readlines(bashrc).grep(/$("$HOME/.rbenv/bin/rbenv" init - bash)/)
+      unless File.readlines(bashrc).grep(rbenv_str)
         File.write(bashrc, 'eval "$("$HOME/.rbenv/bin/rbenv" init - bash)"', mode:'a+')
       end
     end
     if File.exist?(zshrc)
-      if not File.readlines(zshrc).grep(/$("$HOME/.rbenv/bin/rbenv" init - zsh)/)
+      unless File.readlines(zshrc).grep(rbenv_str)
         File.write(zshrc, 'eval "$("$HOME/.rbenv/bin/rbenv" init - zsh)"', mode:'a+')
       end
     end
