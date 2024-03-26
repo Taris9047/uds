@@ -55,10 +55,25 @@ class InstRuby3 < InstallStuff
       "git clone 'https://github.com/rbenv/rbenv.git' #{@rbenv_dir}",
       "git clone 'https://github.com/rbenv/ruby-build.git' #{File.join(@rbenv_dir, 'plugins', 'ruby-build')}",
       "PATH=#{@rbenv_dir}/bin:\$PATH rbenv install #{major}.#{minor}.#{patch}",
+      "PATH=#{@rbenv_dir}/bin:\$PATH rbenv global #{major}.#{minor}.#{patch}",
       "PATH=#{@rbenv_dir}/shims:\$PATH gem install #{$gems_to_install.join(' ')}"
     ]
 
+    puts "Installing Ruby #{major}.#{minor}.#{patch} via rbenv!"
     self.RunInstall( cmd: cmds.join(' && ') )
 
+    puts "Appending environment stuffs for rbenv."
+    HOME_DIR=ENV['HOME']
+    BASHRC=File.join(HOME_DIR, '.bashrc')
+    ZSHRC=File.join(HOME_DIR, '.zshrc')
+    
+    if File.exist?(BASHRC)
+      File.write(BASHRC, 'eval $($HOME/.rbenv/bin/rbenv init - bash)', mode:'a+')
+    end
+    if File.exist?(ZSHRC)
+      File.write(ZSHRC, 'eval $($HOME/.rbenv/bin/rbenv init - zsh)', mode:'a+')
+    end
+    # TODO: For mac... gotta check up with actual machine
+
   end
-end # class InstRuby
+end # class InstRuby3

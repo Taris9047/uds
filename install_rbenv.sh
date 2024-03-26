@@ -82,6 +82,10 @@ append_source() {
 }
 
 # Appending .bashrc with rbenv stuffs...
-append_source "${HOME}/.bashrc" "export RBENV_ROOT=${RBENV_DIR}"
-append_source "${HOME}/.bashrc" "export PATH=${RBENV_DIR}/bin:\$PATH"
-append_source "${HOME}/.bashrc" 'eval $(rbenv init - bash)'
+if [ -d "${HOME}/.settings/dotfiles" ]; then
+  append_source "${HOME}/.bashrc" ". ${HOME}/.settings/dotfiles/rbenv.sh"
+else
+  append_source "${HOME}/.bashrc" "export RBENV_ROOT=${RBENV_DIR}"
+  append_source "${HOME}/.bashrc" "export PATH=${RBENV_DIR}/bin:\$PATH"
+  append_source "${HOME}/.bashrc" 'eval $(rbenv init - bash)'
+fi
