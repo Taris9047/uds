@@ -41,11 +41,11 @@ class InstMiniconda < InstallStuff
     ]
 
     puts "Running Miniconda installation script!!"
-    system("#{cmds.join(" ")} -b -p #{conda_install_path} -f")
+    self.Run("#{cmds.join(" ")} -b -p #{conda_install_path} -f")
 
     puts "Activating Conda"
-    system("eval \"$(#{conda_install_path}/bin/conda shell.#{shell_name} hook)\"")
-    system("conda init")
+    self.Run("eval \"$(#{conda_install_path}/bin/conda shell.#{shell_name} hook)\"")
+    self.Run("conda init")
   end
 
 end # class InstMiniconda
