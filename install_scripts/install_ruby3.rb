@@ -73,10 +73,10 @@ class InstRuby3 < InstallStuff
     zshrc=File.join(home_dir, '.zshrc')
     
     if File.exist?(bashrc)
-      File.write(bashrc, 'eval $($HOME/.rbenv/bin/rbenv init - bash)', mode:'a+')
+      File.write(bashrc, 'eval \"$(\"$HOME/.rbenv/bin/rbenv\" init - bash)\"', mode:'a+')
     end
     if File.exist?(zshrc)
-      File.write(zshrc, 'eval $($HOME/.rbenv/bin/rbenv init - zsh)', mode:'a+')
+      File.write(zshrc, 'eval \"$(\"$HOME/.rbenv/bin/rbenv\" init - zsh)\"', mode:'a+')
     end
     # TODO: For mac... gotta check up with actual machine
 
