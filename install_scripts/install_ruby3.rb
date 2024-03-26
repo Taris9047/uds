@@ -51,6 +51,11 @@ class InstRuby3 < InstallStuff
     src_tarball_fname, src_tarball_bname = fp.name
     major, minor, patch = fp.version
 
+    if Dir.exist?(@rbenv_dir)
+      puts "#{@rbenv_dir} exists! Perhaps we don't need to install another?"
+      exit 0
+    end
+
     cmds = [
       "git clone 'https://github.com/rbenv/rbenv.git' #{@rbenv_dir}",
       "git clone 'https://github.com/rbenv/ruby-build.git' #{File.join(@rbenv_dir, 'plugins', 'ruby-build')}",
@@ -63,15 +68,15 @@ class InstRuby3 < InstallStuff
     self.RunInstall( cmd: cmds.join(' && ') )
 
     puts "Appending environment stuffs for rbenv."
-    HOME_DIR=ENV['HOME']
-    BASHRC=File.join(HOME_DIR, '.bashrc')
-    ZSHRC=File.join(HOME_DIR, '.zshrc')
+    home_dir=ENV['HOME']
+    bashrc=File.join(home_dir, '.bashrc')
+    zshrc=File.join(home_dir, '.zshrc')
     
-    if File.exist?(BASHRC)
-      File.write(BASHRC, 'eval $($HOME/.rbenv/bin/rbenv init - bash)', mode:'a+')
+    if File.exist?(bashrc)
+      File.write(bashrc, 'eval $($HOME/.rbenv/bin/rbenv init - bash)', mode:'a+')
     end
-    if File.exist?(ZSHRC)
-      File.write(ZSHRC, 'eval $($HOME/.rbenv/bin/rbenv init - zsh)', mode:'a+')
+    if File.exist?(zshrc)
+      File.write(zshrc, 'eval $($HOME/.rbenv/bin/rbenv init - zsh)', mode:'a+')
     end
     # TODO: For mac... gotta check up with actual machine
 
