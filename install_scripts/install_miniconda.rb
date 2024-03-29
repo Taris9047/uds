@@ -44,8 +44,9 @@ class InstMiniconda < InstallStuff
     self.Run("#{cmds.join(" ")} -b -p #{conda_install_path} -f")
 
     puts "Activating Conda"
-    self.Run("eval \"$(#{conda_install_path}/bin/conda shell.#{shell_name} hook)\"")
-    self.Run("conda init")
+    # Strangely, self.Run isn't possible here...
+    system("eval \"$(#{conda_install_path}/bin/conda shell.#{shell_name} hook)\"")
+    system("conda init")
   end
 
 end # class InstMiniconda
