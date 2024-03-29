@@ -3,7 +3,13 @@
 require 'open3'
 require 'securerandom'
 require 'fileutils'
-require 'tty-spinner'
+
+NoTTYSpin = false
+begin
+  require 'tty-spinner'
+rescue LoadError
+  NoTTYSpin = true
+end
 
 class RunConsole
 
@@ -44,11 +50,15 @@ class RunConsole
   end
 
   def __run_quiet( env, cmds, opts )
-    spinner = TTY::Spinner.new("[Working] :title ... :spinner", format: :bouncing_ball, hide_cursor: true)
-    spinner.update(title: @title)
-    spinner.auto_spin
+    unless NoTTYSpin
+      spinner = TTY::Spinner.new("[Working] :title ... :spinner", format: :bouncing_ball, hide_cursor: true)
+      spinner.update(title: @title)
+      spinner.auto_spin
+    end
     o, e, s = Open3.capture3( env, cmds )
-    spinner.stop('(done!)')
+    unless NoTTYSpin
+      spinner.stop('(done!)')
+    end
 
     unless @log_file_name.empty?
       unless File.file?(@log_file_name)
@@ -61,10 +71,14 @@ class RunConsole
     fp.close
 
     if !s.success?
-      spinner.error("(Not this crap again!)")
+      unless NoTTYSpin
+        spinner.error("(Not this crap again!)")
+      end
       self.WhenCrapHappens(env, cmds)
     else
-      spinner.success("(OK!)")
+      unless NoTTYSpin
+        spinner.success("(OK!)")
+      end
     end
 
     return 0
