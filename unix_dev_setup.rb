@@ -1,15 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'fileutils'
-
-NoTTYSpin = false
-
-begin
-  require 'tty-spinner'
-rescue LoadError
-  NoTTYSpin = true
-end
-  
 require_relative './utils/utils.rb'
 
 # Note that installing old gcc (gcccuda) is disabled due to libc 2.26 issue.
@@ -145,8 +136,6 @@ class UnixDevSetup
     # Resolve dependencies.
     require './utils/utils.rb'
     if @uninstall_mode
-      # Let's not worry about any dependency as of now...
-      #
       # @pkgs_to_install = dep_resolve.GetUninstList()
       puts "List of packages to uninstall..."
       puts ""
@@ -325,10 +314,6 @@ class UnixDevSetup
     # Some edge cases... cleaning and installing prereq
     if @parameters.include?('purge')
       puts "Purging everything!!!"
-      unless NoTTYSpin
-        spinner = TTY::Spinner.new("[Purging] ... :spinner", format: :bouncing_ball)
-        spinner.auto_spin
-      end
       FileUtils.rm_rf(@work_dir_root)
       FileUtils.rm_rf(@pkginfo_dir_path)
       prefix_kill_list = Dir.entries(@prefix_dir_path)
@@ -338,46 +323,30 @@ class UnixDevSetup
       prefix_kill_list.each do |k|
         FileUtils.rm_rf(File.join(@prefix_dir_path, k))
       end
-      spinner.stop
       puts "Purged everything!! Now you are free of cruds."
       exit(0)
     end
     if @parameters.include?('--purge')
       puts "Performing purge install..."
-      unless NoTTYSpin
-        spinner = TTY::Spinner.new("[Purging] .. :spinner", format: :bouncing_ball)
-        spinner.auto_spin
-      end
       FileUtils.rm_rf(@pkginfo_dir_path)
       FileUtils.rm_rf(@work_dir_root)
-      spinner.stop
       puts "Deleted every build stuff!!"
     end
 
     if @parameters.include?('clean')
       puts "Cleaning up source files and build dirs..."
-      unless NoTTYSpin
-        spinner = TTY::Spinner.new("[Cleaning] ... :spinner", format: :bouncing_ball)
-        spinner.auto_spin
-      end
       FileUtils.rm_rf(@work_dir_root)
       log_files = Dir[File.join(@pkginfo_dir_path, '*.log')]
       log_files.each do |log_f|
         FileUtils.rm_rf(log_f)
       end
-      spinner.stop
       puts "Cleaned up source files to save space!!"
       exit(0)
     end
     if @parameters.include?('--clean')
       puts "Performing clean install..."
       puts "Cleaning up source files and build dirs..."
-      unless NoTTYSpin
-        spinner = TTY::Spinner.new("[Cleaning] ... :spinner", format: :bouncing_ball)
-        spinner.auto_spin
-      end
       FileUtils.rm_rf(@work_dir_root)
-      spinner.stop
       puts "Cleaned up source files to save space!!"
     end
     
@@ -470,10 +439,6 @@ class UnixDevSetup
     
     # Uninstallation loop
     else
-      unless NoTTYSpin
-        spinner = TTY::Spinner.new("[Uninstalling] ... :spinner", format: :bouncing_ball)
-        spinner.auto_spin
-      end
       @pkgs_to_install.each do |pkg|
         if @Installed_pkg_list.include?(pkg)
           pkg_info = self.ReadPkgInfo(pkg)
@@ -500,7 +465,6 @@ class UnixDevSetup
           FileUtils.rm_rf(File.join(File.realpath(@pkginfo_dir), pkg+'.log'))
         end
       end # @pkgs_to_install.each do |pkg|
-      spinner.stop
       puts "Uninstallation complete!"
     end
 
