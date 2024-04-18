@@ -44,7 +44,7 @@ class InstNeovim < InstallStuff
     # Setting up install prefix and configuration options...
     compile_cmd = [
       "cd", @build_dir, "&&",
-      "git switch release-0.9", "&&",
+      "git checkout v0.9.5", "&&",
       "make distclean", "&&",
       "nice make #{@makefile_options}", "&&",
       inst_cmd
