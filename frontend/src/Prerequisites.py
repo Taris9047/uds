@@ -55,13 +55,13 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def InstallPackages(self):
         self.switcher()
-        
+
     def Install_NerdFonts(self):
         nf = NerdFonts(NerdFontNames=Nerd_Fonts_To_Install)
 
     def Install_NanumFonts(self):
         nanum_f = NanumFonts()
-    
+
     def InstallStarship(self):
         """
             Installs starship shell extension
@@ -177,7 +177,6 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
             pass
 
         raise Exception('Can not determine number of CPUs on this system')
-        
 
     def set_prefix(self):
         prefix = os.environ.get("HOMEBREW")
@@ -200,7 +199,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         print(">> Installing packages...")
         pkgs_to_install_str = ' '.join(self.pkgs_to_install)
         log, exit_code = self.Run(cmd="sudo -H apt-get -y install {}".format(pkgs_to_install_str))
-        
+
         if exit_code != 0:
             print("There was an error with package installation!!")
             sys.exit(exit_code)
@@ -212,6 +211,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.install_with_apt()
 
     def install_prereq_ubuntu_22(self):
+        self.install_with_apt()
+
+    def install_prereq_ubuntu_24(self):
         self.install_with_apt()
 
     def install_prereq_ubuntu_18(self):
@@ -231,10 +233,10 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_prereq_hamonikr_4(self):
         self.install_prereq_ubuntu_20()
-        
+
     def install_prereq_pop_20(self):
         self.install_prereq_ubuntu_20()
-    
+
     def install_prereq_pop_21(self):
         self.install_prereq_ubuntu_21()
 
@@ -243,7 +245,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_prereq_solus_4(self):
         self.install_prereq_solus_4dot2()
-        
+
     def install_prereq_rocky_8(self):
         self.install_prereq_centos_8()
 
