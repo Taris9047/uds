@@ -114,7 +114,7 @@ class UDSBrewPi(RunCmd):
         self.package_list = pkg_list
         print('Total {} packages will be installed via apt'
               .format(len(self.package_list)))
-
+00000000000000000000000000000000000000000000000
     def ProbeOS(self):
         """
             Detecting hardware specification.
@@ -126,12 +126,14 @@ class UDSBrewPi(RunCmd):
             self.RunSilent('sudo -H cat /sys/firmware/devicetree/base/model')[0]
         self.pi_gen = int(self.pi_model.split(' ')[2])
 
-        uname_m = self.RunSilent('uname -m')[0]
+        uname_m = self.RunSilent('uname -m')[0].rstrip()
 
         if uname_m == 'aarch64':
             self.architecture = 'arm64'
         elif 'armv' in uname_m:
             self.architecture = 'arm32'
+
+        print("RPi Architecture: {}".format(self.architecture))
 
     def TestCMDs(self):
         """
