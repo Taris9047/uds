@@ -70,6 +70,8 @@ class InstallRustTools(RunCmd):
             self.InstallNew()
 
     def CargoUpdate(self):
+        print("Upgrading rustc")
+        self.Run(f"rustup upgrade")
         print("Updating currently installed Rust packages!!")
         for rpk in self.Packages:
             self.Run(f"{self.cargo_exec} install {rpk}")
