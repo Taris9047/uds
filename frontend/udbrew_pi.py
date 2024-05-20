@@ -114,7 +114,7 @@ class UDSBrewPi(RunCmd):
         self.package_list = pkg_list
         print('Total {} packages will be installed via apt'
               .format(len(self.package_list)))
-00000000000000000000000000000000000000000000000
+    
     def ProbeOS(self):
         """
             Detecting hardware specification.
