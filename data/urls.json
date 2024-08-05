@@ -447,8 +447,8 @@
     "class": "InstJulia",
     "src_version": [
       "1",
-      "9",
-      "0"
+      "10",
+      "4"
     ]
   },
   "ngspice": {
