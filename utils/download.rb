@@ -4,7 +4,14 @@
 
 require 'open-uri'
 require 'net/http'
-require 'ruby-progressbar'
+
+NoPBar = false
+begin
+  require 'ruby-progressbar'
+rescue LoadError
+  NoPBar = true
+end
+
 
 require_relative './run_console.rb'
 
@@ -51,20 +58,29 @@ class Download < RunConsole
 
     pbar = ''
     fname = @URL.split('/')[-1]
-    URI.open(@URL, "rb",
-      :content_length_proc => lambda {|t|
-        if t && 0 < t
-          pbar = ProgressBar.create(title: fname, total:t, progress_mark: '█'.encode('utf-8'))
-        end
-      },
-      :progress_proc => lambda {|s|
-        pbar.progress = s if pbar
-      }) do |page|
-      File.open("#{@outf_path}", "wb") do |f|
-        while chunk = page.read(1024)
-          f.write(chunk)
+    unless NoPBar
+      URI.open(@URL, "rb",
+        :content_length_proc => lambda {|t|
+          if t && 0 < t
+            pbar = ProgressBar.create(title: fname, total:t, progress_mark: '█'.encode('utf-8'))
+          end
+        },
+        :progress_proc => lambda {|s|
+          pbar.progress = s if pbar
+        }) do |page|
+        File.open("#{@outf_path}", "wb") do |f|
+          while chunk = page.read(1024)
+            f.write(chunk)
+          end
         end
       end
+      else
+        open(@URL) do |file|
+          File.open("#{@outf_path}", 'wb') do
+            |local_file|
+              local_file.write(file.read)
+          end
+        end
     end
 
     # dn = URI.open(@URL)

@@ -71,9 +71,11 @@ class DistroPkgMap(GetDistro):
                 "pop_20.10": "ubuntu_20.10_pkgs",
                 "pop_21.04": "ubuntu_21.04_pkgs",
                 "pop_21.10": "ubuntu_21.10_pkgs",
-                "pop_22.04": "ubuntu_22.04_pkgs"
+                "pop_22.04": "ubuntu_22.04_pkgs",
+                "pop_24.04": "ubuntu_24.04_pkgs",
             },
             "debian": {
+                "ubuntu_24.04": "ubuntu_24.04_pkgs",
                 "ubuntu_22.04": "ubuntu_22.04_pkgs",
                 "ubuntu_21.10": "ubuntu_21.10_pkgs",
                 "ubuntu_21.04": "ubuntu_21.04_pkgs",
@@ -108,6 +110,9 @@ class DistroPkgMap(GetDistro):
                 "fedora_35": "fedora_35_pkgs",
                 "fedora_36": "fedora_36_pkgs",
                 "fedora_37": "fedora_37_pkgs",
+                "fedora_38": "fedora_38_pkgs",
+                "fedora_39": "fedora_39_pkgs",
+                "fedora_40": "fedora_40_pkgs",
             },
             "arch": {"rolling": "arch_pkgs"},
             "solus": {

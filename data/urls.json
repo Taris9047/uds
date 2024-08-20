@@ -131,9 +131,7 @@
       "Ruby2"
     ],
     "dependency": [
-      "node",
-      "openssl",
-      "libyaml"
+      "node"
     ],
     "script": "install_ruby.rb",
     "class": "InstRuby"
@@ -147,11 +145,7 @@
       "Ruby3",
       "ruby3"
     ],
-    "dependency": [
-      "openssl",
-      "libffi",
-      "libyaml"
-    ],
+    "dependency": [],
     "script": "install_ruby3.rb",
     "class": "InstRuby3"
   },
@@ -453,8 +447,8 @@
     "class": "InstJulia",
     "src_version": [
       "1",
-      "9",
-      "0"
+      "10",
+      "4"
     ]
   },
   "ngspice": {

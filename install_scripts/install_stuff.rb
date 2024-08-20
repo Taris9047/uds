@@ -110,7 +110,11 @@ class InstallStuff < RunConsole
       @ver_source = SRC_VER[@pkgname]
       if File.file?(@pkginfo_file)
         data_hash = JSON.parse(File.read(@pkginfo_file))
-        @ver_current = Version.new(data_hash['Version'].join('.'))
+        if data_hash['Version'].instance_of?(String)
+          @ver_current = Version.new(data_hash['Version'])
+        else
+          @ver_current = Version.new(data_hash['Version'].join('.'))
+        end
         if (@ver_current >= @ver_source)
           puts "===================================================="
           puts "It seems Current version of #{@pkgname} is not so behind!"

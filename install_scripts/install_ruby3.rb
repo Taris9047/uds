@@ -15,7 +15,8 @@ $gems_to_install = [
     "hjson",
     "ruby-progressbar",
     "tty-spinner",
-  ]
+    "lolcat"
+]
 
 class InstRuby3 < InstallStuff
 
@@ -35,78 +36,57 @@ class InstRuby3 < InstallStuff
     @conf_options = []
 
     # Setting up compilers
-    ruby_cflags = "-fno-semantic-interposition -I/usr/include -Wl,-rpath=/usr"
+    ruby_cflags = "-O3 -fomit-frame-pointer -fno-semantic-interposition -march=native -pipe"
     self.CompilerSet(
       cflags=ruby_cflags,
       cxxflags=ruby_cflags)
 
+    @rbenv_dir = File.join(ENV["HOME"], '.rbenv')
+    @prefix = @rbenv_dir
+
   end
 
   def do_install
-
-    dl = Download.new(@source_url, @src_dir)
-    src_tarball_path = dl.GetPath
-
     fp = FNParser.new(@source_url)
     src_tarball_fname, src_tarball_bname = fp.name
     major, minor, patch = fp.version
 
-    # puts src_tarball_fname, src_tarball_bname, major, minor, patch
-    src_extract_folder = File.join(File.realpath(@build_dir), src_tarball_bname)
-    src_build_folder = File.join(File.realpath(@build_dir), src_tarball_bname+'-build')
-    @src_build_dir = src_build_folder
-
-    if Dir.exist?(src_extract_folder)
-      puts "Source file folder exists in "+src_extract_folder
-    else
-      puts "Extracting"
-      self.Run( "tar xf "+File.realpath(File.join(@src_dir, src_tarball_fname))+" -C "+@build_dir )
+    if Dir.exist?(@rbenv_dir)
+      puts "#{@rbenv_dir} exists! Trying to use existing rbenv!"
+    else 
+      rbenv_install_cmds = [
+        "git clone 'https://github.com/rbenv/rbenv.git' #{@rbenv_dir}",
+        "git clone 'https://github.com/rbenv/ruby-build.git' #{File.join(@rbenv_dir, 'plugins', 'ruby-build')}",
+      ]
+      self.RunInstall( cmd: rbenv_install_cmds.join(' && ') )
     end
 
-    if Dir.exist?(src_build_folder)
-      puts "Build folder found!! Removing it for 'pure' experience!!"
-      self.Run( "rm -rfv "+src_build_folder )
-    else
-      puts "Ok, let's make a build folder"
-    end
-    self.Run( "mkdir -p "+src_build_folder )
-
-    opts = ["--prefix="+@prefix]+@conf_options
-
-    if @need_sudo
-      inst_cmd = "sudo make install"
-      mod_sudo = "sudo -H"
-    else
-      inst_cmd = "make install"
-      mod_sudo = ""
-    end
-
-    # Ok let's roll!!
     cmds = [
-      "cd", src_build_folder, "&&",
-      src_extract_folder+"/configure",
-      opts.join(" "), "&&",
-      "nice make -j", @Processors.to_s, "&&",
-      inst_cmd
+      "PATH=#{@rbenv_dir}/bin:\$PATH rbenv install #{major}.#{minor}.#{patch}",
+      "PATH=#{@rbenv_dir}/bin:\$PATH rbenv global #{major}.#{minor}.#{patch}",
+      "PATH=#{@rbenv_dir}/shims:\$PATH gem install #{$gems_to_install.join(' ')}"
     ]
 
-    puts "Compiling (with #{@Processors} processors) and Installing ..."
-    self.RunInstall( env: @env, cmd: cmds.join(" ") )
+    puts "Installing Ruby #{major}.#{minor}.#{patch} via rbenv!"
+    self.RunInstall( cmd: cmds.join(' && ') )
 
-    inst_module_cmds = [
-      mod_sudo,
-      File.join(@prefix,"bin/gem"),
-      "install",
-      @ruby_gems.join(" ")
-    ]
+    puts "Appending environment stuffs for rbenv."
+    home_dir=ENV['HOME']
+    bashrc=File.join(home_dir, '.bashrc')
+    zshrc=File.join(home_dir, '.zshrc')
+    
+    rbenv_str = '"$HOME/.rbenv/bin/rbenv" init -'
+    if File.exist?(bashrc)
+      unless File.readlines(bashrc).grep(rbenv_str)
+        File.write(bashrc, 'eval "$("$HOME/.rbenv/bin/rbenv" init - bash)"', mode:'a+')
+      end
+    end
+    if File.exist?(zshrc)
+      unless File.readlines(zshrc).grep(rbenv_str)
+        File.write(zshrc, 'eval "$("$HOME/.rbenv/bin/rbenv" init - zsh)"', mode:'a+')
+      end
+    end
+    # TODO: For mac... gotta check up with actual machine
 
-    puts "Installing additional gems..."
-    self.RunInstall( env: @env, cmd: inst_module_cmds.join(" ") )
-
-    self.WriteInfo(
-      build_system='make', 
-      pkg_type='tar.gz', 
-      destdir_inst_cmd="make DESTDIR=#{@stage_dir_pkg} install")
   end
-
-end # class InstRuby
+end # class InstRuby3
