@@ -97,6 +97,8 @@ class DistroPkgMap(GetDistro):
                 "rocky_8.4": "rhel_8_pkgs",
                 "rocky_8.5": "rhel_8_pkgs",
                 "rocky_8.6": "rhel_8_pkgs",
+                "rocky_9.3": "rhel_9_pkgs",
+                "rocky_9.4": "rhel_9_pkgs",
             },
             "fedora": {
                 "rhel_9": "rhel_9_pkgs",
