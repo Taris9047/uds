@@ -23,6 +23,7 @@ Nerd_Fonts_To_Install = [
     "FiraCode",
     "RobotoMono",
     "Mononoki",
+    "JetBrainsMono"
 ]
 
 ### InstallPkgs ###

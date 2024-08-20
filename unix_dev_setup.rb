@@ -373,9 +373,8 @@ class UnixDevSetup
     if @parameters.include?('prereq')
       puts ""
       puts "========================================================="
-      puts "| It's recommended to run prereq. installation script!  |"
-      puts "|                                                       |"
-      puts "| Prereq. installation script: install_prereq.sh        |"
+      puts "| Prerequisite installation feature is noe handled by   |"
+      puts "| Python script. Use 'udbrew' instead of this script.   |"
       puts "========================================================="
       puts ""
       exit(0)

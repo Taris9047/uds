@@ -3,6 +3,7 @@
 # Contains Linux distro (or other OS, perhaps) detection part.
 
 import os
+# import json
 
 ### Get distro from /etc/os-release ###
 class GetDistro(object):
