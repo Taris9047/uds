@@ -375,6 +375,7 @@
   "neovim": {
     "url": "https://github.com/neovim/neovim.git",
     "type": "git",
+    "git_checkout_ver": "0.10.1",
     "alt-names": [
       "nvim",
       "Neovim"

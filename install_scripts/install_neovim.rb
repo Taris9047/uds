@@ -14,6 +14,7 @@ class InstNeovim < InstallStuff
     end
 
     super(@pkgname, @prefix, @work_dirs, @ver_check, @verbose_mode)
+    @chkout_ver = SRC_VER[@pkgname]
 
     self.CompilerSet
 
@@ -44,7 +45,7 @@ class InstNeovim < InstallStuff
     # Setting up install prefix and configuration options...
     compile_cmd = [
       "cd", @build_dir, "&&",
-      "git checkout v0.9.5", "&&",
+      "git checkout v#{@chkout_ver}", "&&",
       "make distclean", "&&",
       "nice make #{@makefile_options}", "&&",
       inst_cmd

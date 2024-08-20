@@ -21,8 +21,7 @@ Rust_packages = [
     "bottom",
     "zoxide",
     "broot",
-    "git-delta",
-    "hjson"
+    "git-delta"
 ]
 
 Rust_packages_pi = [
@@ -31,8 +30,7 @@ Rust_packages_pi = [
     "rm-improved",
     "cargo-update",
     "fd-find",
-    "du-dust",
-    "hjson"
+    "du-dust"
 ]
 
 

@@ -65,6 +65,10 @@ class ParseHjson
     return @URL_DB[pkg_name]["script"]
   end
 
+  def GetGitCheckoutVer(pkg_name)
+    return @URL_DB[pkg_name]["git_checkout_ver"]
+  end
+
   def GetClass(pkg_name)
     return @URL_DB[pkg_name]["class"]
   end
@@ -226,6 +230,11 @@ module SRC_VER
         src_ver = Version.new(fnp.version().join('.'))
       else
         src_ver = Version.new(SRC_TYPE[pkg_name])
+      end
+
+      if SRC_TYPE[pkg_name] == "git"
+        chkout_ver_str = json_parse.GetGitCheckoutVer(pkg_name)
+        src_ver = Version.new(chkout_ver_str)
       end
 
       return src_ver
