@@ -256,7 +256,7 @@
 
   # Emacs
   "emacs": {
-    "url": "http://ftp.gnu.org/gnu/emacs/emacs-29.2.tar.xz",
+    "url": "http://ftp.gnu.org/gnu/emacs/emacs-29.4.tar.xz",
     "type": "tarball",
     "alt-names": ["Emacs", "EMAC"],
     "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
