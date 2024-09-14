@@ -226,6 +226,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     def install_prereq_linuxmint_20(self):
         self.install_prereq_ubuntu_20()
 
+    def install_prereq_linuxmint_21(self):
+        self.install_prereq_ubuntu_22()
+
     def install_prereq_elementary_5(self):
         self.install_prereq_ubuntu_18()
 

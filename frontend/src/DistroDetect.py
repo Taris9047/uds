@@ -62,6 +62,9 @@ class DistroPkgMap(GetDistro):
         #
         self.distro_to_pkgfile_map = {
             "ubuntu": {
+                "linuxmint_21.3": "ubuntu_22.04_pkgs",
+                "linuxmint_21.2": "ubuntu_22.04_pkgs",
+                "linuxmint_21.1": "ubuntu_22.04_pkgs",
                 "linuxmint_20.3": "ubuntu_20.04_pkgs",
                 "linuxmint_20.2": "ubuntu_20.04_pkgs",
                 "linuxmint_20.1": "ubuntu_20.04_pkgs",
