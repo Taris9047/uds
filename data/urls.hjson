@@ -322,13 +322,13 @@
     "src_version": ["1", "23", "2"]
   },
   "golang-binary": {
-    "url": "https://go.dev/dl/go1.20.5.linux-amd64.tar.gz",
+    "url": "https://go.dev/dl/go1.23.2.linux-amd64.tar.gz",
     "type": "bin",
     "alt-names": ["go-bin", "Golang-bin", "golang-bin"],
     "dependency": [],
     "script": "install_golang.rb",
     "class": "InstGolang",
-    "src_version": ["1", "20", "5"]
+    "src_version": ["1", "23", "2"]
   },
 
 

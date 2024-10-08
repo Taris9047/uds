@@ -421,7 +421,7 @@
     ]
   },
   "golang-binary": {
-    "url": "https://go.dev/dl/go1.20.5.linux-amd64.tar.gz",
+    "url": "https://go.dev/dl/go1.23.2.linux-amd64.tar.gz",
     "type": "bin",
     "alt-names": [
       "go-bin",
@@ -433,8 +433,8 @@
     "class": "InstGolang",
     "src_version": [
       "1",
-      "20",
-      "5"
+      "23",
+      "2"
     ]
   },
   "julia": {
