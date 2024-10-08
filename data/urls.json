@@ -416,8 +416,8 @@
     "class": "InstGolang",
     "src_version": [
       "1",
-      "18",
-      "4"
+      "23",
+      "2"
     ]
   },
   "golang-binary": {
