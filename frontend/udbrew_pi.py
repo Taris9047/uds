@@ -23,6 +23,7 @@ Nerd_Fonts_To_Install = [
     "FiraCode",
     "RobotoMono",
     "Mononoki",
+    "JetBrainsMono"
 ]
 
 # Default installation path for programs and scripts. It is the default
@@ -57,7 +58,6 @@ class UDSBrewPi(RunCmd):
 
         self.args = args
         self.parse_args()
-        
         self.TestCMDs()
 
         print("Updating the Pi with apt...")
@@ -91,10 +91,8 @@ class UDSBrewPi(RunCmd):
 
         if self.p_args.nodejs:
             self.InstallNodeJS()
-        
         if self.p_args.golang:
             self.InstallGolang()
-        
         if self.p_args.duf:
             self.InstallDuf()
 
@@ -114,7 +112,7 @@ class UDSBrewPi(RunCmd):
         self.package_list = pkg_list
         print('Total {} packages will be installed via apt'
               .format(len(self.package_list)))
-    
+
     def ProbeOS(self):
         """
             Detecting hardware specification.
@@ -138,14 +136,11 @@ class UDSBrewPi(RunCmd):
     def TestCMDs(self):
         """
             Testing out critical commands if they exists in the system.
-        
         """
-        
         for pcmd in prereq_commands:
             if not program_exists(pcmd):
                 print("We need {} to run this script!".format(pcmd))
                 sys.exit(1)
-        
         print("Prerequisite command test done!!")
 
 
@@ -202,17 +197,16 @@ class UDSBrewPi(RunCmd):
 
         InstDir = GoLangTGTDir
         if not os.path.exists(InstDir):
-            os.mkdirs(InstDir)
-        
+            os.mkdir(InstDir)
+
         install_cmds = [
             "cd /tmp",
             "wget {} -O {}".format(GoLangLink, GoLangBinArchName),
             "tar xf {} -C {}".format(GoLangBinArchName, InstDir),
             "cd -"
-        ] 
+        ]
 
         res = self.Run(cmd=' && '.join(install_cmds))[1]
-        
         if res == 0:
             print("Make sure {} is in your path! And GOPATH".format(
                 os.path.join(InstDir, 'bin')))
@@ -275,7 +269,7 @@ class UDSBrewPi(RunCmd):
             "https://packages.microsoft.com/repos/code stable main\" "
             "> /etc/apt/sources.list.d/vscode.list\'",
             "sudo apt-get install -y apt-transport-https",
-            "sudo apt-get update && sudo apt install -y code",
+            "sudo apt-get update && sudo apt-get install -y code",
             "cd -"
             ]
         self.Run(cmd=' && '.join(vscode_install_cmds))
