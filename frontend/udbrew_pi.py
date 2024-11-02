@@ -18,10 +18,11 @@ from src.RustTools import InstallRustTools
 from src.NerdFonts import NerdFonts
 
 # Some Nerdfonts to install
+#  Do not add more fonts than those... 
+#  It can prevent GUI to run
+#
 Nerd_Fonts_To_Install = [
     "BitstreamVeraSansMono",
-    "FiraCode",
-    "RobotoMono",
     "Mononoki",
     "JetBrainsMono"
 ]
