@@ -19,7 +19,7 @@ from src.NerdFonts import NerdFonts
 
 # Some Nerdfonts to install
 Nerd_Fonts_To_Install = [
-    "BitstreamVeraSansMono", 
+    "BitstreamVeraSansMono",
     "FiraCode",
     "RobotoMono",
     "Mononoki",
@@ -33,7 +33,7 @@ HomeBrewDir = os.path.join(os.environ['HOME'], '.local')
 
 # Golang and Duf
 #
-GoLangVersion = '1.21.5'
+GoLangVersion = '1.23.2'
 GoLangTGTDir = os.path.join(HomeBrewDir, '.opt') + os.sep
 DufGit = 'https://github.com/muesli/duf.git'
 
@@ -300,7 +300,8 @@ class UDSBrewPi(RunCmd):
         """
         if program_exists('starship'):
             return
-
+        
+        print("\n\n\nInstalling Starship\n\n\n")
         self.Run("curl -sS https://starship.rs/install.sh | sh")
 
     def InstallRubyPkgs(self):

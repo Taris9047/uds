@@ -18,8 +18,6 @@ zlib1g
 zlib1g-dev
 libssl-dev
 libsqlite3-dev
-tk
-tk-dev
 valgrind
 ttf-bitstream-vera
 subversion
