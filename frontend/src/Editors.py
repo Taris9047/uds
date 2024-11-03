@@ -171,7 +171,7 @@ class InstallEditors(GetDistro, RunCmd):
         if not program_exists("atom"):
             print("Installilng Atom ...")
             cmds = [
-                "sudo sh -c 'echo -e \"[Atom]\nname=Atom Editor\nbaseurl=https://packagecloud.io/AtomEditor/atom/el/7/\$basearch\nenabled=1\ntype=rpm-md\ngpgcheck=0\nrepo_gpgcheck=1\ngpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey\" > /etc/zypp/repos.d/atom.repo'",
+                "sudo sh -c 'echo -e \"[Atom]\nname=Atom Editor\nbaseurl=https://packagecloud.io/AtomEditor/atom/el/7/$basearch\nenabled=1\ntype=rpm-md\ngpgcheck=0\nrepo_gpgcheck=1\ngpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey\" > /etc/zypp/repos.d/atom.repo'",
                 "sudo zypper --gpg-auto-import-keys refresh",
                 "sudo zypper install atom",
             ]
@@ -199,7 +199,7 @@ class InstallEditors(GetDistro, RunCmd):
             print("Installilng Visual Studio Code ...")
             cmds = [
                 "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
-                "secho "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null",
+                "echo \"deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main\" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null",
                 "sudo dnf -y check-update && sudo dnf -y update && sudo dnf -y install code",
             ]
 

@@ -22,7 +22,7 @@ class NerdFonts(RunCmd):
 	
 	NerdFontsToInstall = []
 	DefaultFontPath = ''
-	NerdFontVersion = 'v3.0.2'
+	NerdFontVersion = 'v3.2.1'
 	
 	def __init__(self, NerdFontNames='', verbose=True, Nuke=False):
 		RunCmd.__init__(self, shell_type="bash", verbose=verbose)

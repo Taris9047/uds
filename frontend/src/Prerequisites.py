@@ -6,6 +6,7 @@ from .DistroDetect import GetPackages
 from .Utils import RunCmd, program_exists
 from .NerdFonts import NerdFonts
 from .NanumFonts import NanumFonts
+from .FigletFonts import FigletFonts
 
 import os
 import sys
@@ -52,6 +53,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.InstallPackages()
         self.Install_NerdFonts()
         self.Install_NanumFonts()
+        self.Install_FigletFonts()
         self.InstallStarship()
 
     def need_sudo(self):
@@ -65,6 +67,9 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def Install_NanumFonts(self):
         nanum_f = NanumFonts()
+        
+    def Install_FigletFonts(self):
+        figlet_f_inst = FigletFonts()
 
     def InstallStarship(self):
         """
@@ -211,13 +216,14 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
     # Neofetch was removed from fedora dnf database recently.
     # Adding it manually from copr...
     def install_neofetch_fedora(self):
-        architect = os.system('uname -m')
+        print("Installing neofetch for Fedora")
+        architect = subprocess.check_output('uname -m', shell=True, text=True)
         cmds = [
             "sudo dnf -y install dnf-plugins-core",
             "sudo dnf -y copr enable konimex/neofetch epel-7-{}".format(architect),
             "sudo dnf -y install neofetch" ]
             
-        self.Run(cmd='&&'.join(cmds))
+        self.Run(cmds)
 
     def install_prereq_ubuntu_20(self):
         self.install_with_apt()
