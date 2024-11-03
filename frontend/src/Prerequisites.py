@@ -204,6 +204,14 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         if exit_code != 0:
             print("There was an error with package installation!!")
             sys.exit(exit_code)
+            
+    def install_neofetch_fedora(self):
+        cmds = [
+            "sudo dnf -y install dnf-plugins-core",
+            "sudo dnf -y copr enable konimex/neofetch epel-7-{}".format(`uname -m`),
+            "sudo dnf -y install neofetch" ]
+            
+        self.Run(cmd='&&'.join(cmds))
 
     def install_prereq_ubuntu_20(self):
         self.install_with_apt()
@@ -267,7 +275,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
 
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
-        self.Run(f"sudo -H dnf -y install {' '.join(self.pkgs_to_install)}")
+        self.Run(f"sudo -H dnf -y install --skip-unavailable {' '.join(self.pkgs_to_install)}")
 
     def install_with_yum(self):
         self.Run("sudo -H yum -y update")
@@ -313,7 +321,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         )
         self.install_with_dnf()
 
-    def install_prereq_fedora_33(self):
+    def install_prereq_fedora(self):
         # print("Installing Fedora packages!!")
         cmds = [
             "sudo -H dnf -y update",
@@ -322,17 +330,37 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         self.Run(cmds)
         self.install_with_dnf()
 
+    def install_prereq_fedora_33(self):
+        self.install_prereq_fedora()
+
     def install_prereq_fedora_34(self):
-        self.install_prereq_fedora_33()
+        self.install_prereq_fedora()
 
     def install_prereq_fedora_35(self):
-        self.install_prereq_fedora_33()
+        self.install_prereq_fedora()
 
     def install_prereq_fedora_36(self):
-        self.install_prereq_fedora_33()
+        self.install_prereq_fedora()
 
     def install_prereq_fedora_37(self):
-        self.install_prereq_fedora_33()
+        self.install_prereq_fedora()
+
+    def install_prereq_fedora_38(self):
+        self.install_prereq_fedora()
+        
+    def install_prereq_fedora_39(self):
+        self.install_prereq_fedora()
+
+    def install_prereq_fedora_40(self):
+        self.install_prereq_fedora()
+
+    def install_prereq_fedora_41(self):
+        self.install_prereq_fedora()
+        # Some additional steps to install neofetch
+        self.install_neofetch_fedora()
+
+    def install_prereq_fedora_37(self):
+        self.install_prereq_fedora()
 
     def install_prereq_almalinux_8(self):
         # print("Almalinux detected! Activating CentOS repo!")

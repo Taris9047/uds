@@ -118,6 +118,7 @@ class DistroPkgMap(GetDistro):
                 "fedora_38": "fedora_38_pkgs",
                 "fedora_39": "fedora_39_pkgs",
                 "fedora_40": "fedora_40_pkgs",
+                "fedora_41": "fedora_41_pkgs"
             },
             "arch": {"rolling": "arch_pkgs"},
             "solus": {
