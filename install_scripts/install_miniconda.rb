@@ -45,8 +45,9 @@ class InstMiniconda < InstallStuff
 
     puts "Activating Conda"
     # Strangely, self.Run isn't possible here...
-    system("eval \"$(#{conda_install_path}/bin/conda shell.#{shell_name} hook)\"")
-    system("conda init")
+    system("#{conda_install_path}/etc/profile.d/conda.sh >> #{ENV['HOME']}/.bashrc")
+    #system("eval \"$(#{conda_install_path}/bin/conda shell.#{shell_name} hook)\"")
+    #system("conda init")
   end
 
 end # class InstMiniconda
