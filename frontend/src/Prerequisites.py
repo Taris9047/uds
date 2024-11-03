@@ -12,8 +12,11 @@ import sys
 import re
 import subprocess
 
+# Compatibility check
+# Ruby is kept version 2 for old OS'
+# 
 new_ruby_ver='2.7.4'
-new_git_ver='2.33.0'
+new_git_ver='2.47.0'
 
 Nerd_Fonts_To_Install = [
     "BitstreamVeraSansMono", 
@@ -204,11 +207,14 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         if exit_code != 0:
             print("There was an error with package installation!!")
             sys.exit(exit_code)
-            
+    
+    # Neofetch was removed from fedora dnf database recently.
+    # Adding it manually from copr...
     def install_neofetch_fedora(self):
+        architect = os.system('uname -m')
         cmds = [
             "sudo dnf -y install dnf-plugins-core",
-            "sudo dnf -y copr enable konimex/neofetch epel-7-{}".format(`uname -m`),
+            "sudo dnf -y copr enable konimex/neofetch epel-7-{}".format(architect),
             "sudo dnf -y install neofetch" ]
             
         self.Run(cmd='&&'.join(cmds))

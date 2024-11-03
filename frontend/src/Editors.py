@@ -98,10 +98,10 @@ class InstallEditors(GetDistro, RunCmd):
 
     def install_subl_dnf(self):
         if not program_exists("subl"):
-            print("Installilng Sublime Text ...")
+            print("Installing Sublime Text ...")
             cmds = [
                 "sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg",
-                "sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo",
+                "sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo",
                 "sudo dnf install -y sublime-text sublime-merge",
             ]
             self.Run(cmds)
@@ -199,7 +199,7 @@ class InstallEditors(GetDistro, RunCmd):
             print("Installilng Visual Studio Code ...")
             cmds = [
                 "sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc",
-                "sudo sh -c 'echo -e \"[vscode]\nname=packages.microsoft.com\nbaseurl=https://packages.microsoft.com/yumrepos/vscode/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc\nmetadata_expire=1h\" > /etc/yum.repos.d/vscode.repo'",
+                "secho "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null",
                 "sudo dnf -y check-update && sudo dnf -y update && sudo dnf -y install code",
             ]
 
