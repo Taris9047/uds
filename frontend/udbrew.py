@@ -35,6 +35,8 @@ class UDSBrew(RunCmd):
         self.find_out_version()
         self.fallback_ruby = "/usr/bin/ruby"  # Fallback. Does not work with many situations.
 
+        self.probe_architecture()
+
         print("Probing ruby...")
         self.system_ruby = subprocess.check_output("echo \"$(command -v ruby)\"", shell=True).decode('utf-8').rstrip()
 
@@ -170,6 +172,18 @@ class UDSBrew(RunCmd):
 
         print("\nDone!!\n")
         sys.exit(0)
+
+    def probe_architecture(self):
+        uname_m = self.RunSilent('uname -m')[0].rstrip()
+        if uname_m == 'aarch64' or 'arm' in uname_m:
+            print("The System seems to be ARM based...")
+
+        proc_cpu_model = self.RunSilent('cat /proc/cpuinfo | grep Model')[0].rstrip()
+        if 'raspberry' in proc_cpu_model.lower():
+            print("It looks like the platform is Raspberry Pi...")
+            print("You should rather run 'udbrew_pi'")
+            sys.exit(1)
+
 
     def parse_args(self):
         """
