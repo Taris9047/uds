@@ -34,3 +34,4 @@ libbz2-dev
 libncurses5-dev
 fonts-noto-color-emoji
 tmux
+libyaml-dev

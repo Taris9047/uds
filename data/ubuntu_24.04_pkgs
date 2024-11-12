@@ -89,3 +89,4 @@ openssh-server
 neovim
 nala
 gettext
+libyaml-dev
