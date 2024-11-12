@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-RB_VER='3.2.3'
+RB_VER='3.2.6'
 if [ ! -z "$1" ]; then
   printf 'Selecting ruby version as %s\n' "$1"
   RB_VER="$1"
