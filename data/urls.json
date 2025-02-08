@@ -21,16 +21,6 @@
     "script": "install_gcc.rb",
     "class": "InstGCCJit"
   },
-  "gcc-11": {
-    "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
-    "type": "tarball",
-    "alt-names": [
-      "gcc-latest"
-    ],
-    "dependency": [],
-    "script": "install_gcc.rb",
-    "class": "InstGCCLatest"
-  },
   "gcc-10": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-10.4.0/gcc-10.4.0.tar.xz",
     "type": "tarball",
@@ -40,6 +30,16 @@
     "dependency": [],
     "script": "install_gcc.rb",
     "class": "InstGCC"
+  },
+  "gcc-11": {
+    "url": "https://ftp.gnu.org/gnu/gcc/gcc-11.3.0/gcc-11.3.0.tar.xz",
+    "type": "tarball",
+    "alt-names": [
+      "gcc-latest"
+    ],
+    "dependency": [],
+    "script": "install_gcc.rb",
+    "class": "InstGCCLatest"
   },
   "gcc8": {
     "url": "https://ftp.gnu.org/gnu/gcc/gcc-8.5.0/gcc-8.5.0.tar.gz",
@@ -292,9 +292,7 @@
     "alt-names": [
       "root"
     ],
-    "dependency": [
-      "python3"
-    ],
+    "dependency": [],
     "script": "install_ROOT.rb",
     "class": "InstROOT"
   },

@@ -231,7 +231,7 @@
     "url": "https://github.com/root-project/root.git",
     "type": "git",
     "alt-names": ["root"],
-    "dependency": ["python3"],
+    "dependency": [],
     "script": "install_ROOT.rb",
     "class": "InstROOT"
   },
