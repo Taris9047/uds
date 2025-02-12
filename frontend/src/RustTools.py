@@ -6,6 +6,7 @@ import os
 
 Rust_packages = [
     "exa",
+    "eza",
     "bat",
     "rm-improved",
     "diskonaut",
@@ -25,7 +26,7 @@ Rust_packages = [
 ]
 
 Rust_packages_pi = [
-    "exa",
+    "eza",
     "bat",
     "rm-improved",
     "cargo-update",
