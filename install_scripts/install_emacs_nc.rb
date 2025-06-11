@@ -42,13 +42,11 @@ class InstEmacsNC < InstallStuff
       "--with-file-notification=inotify",
       "--with-x=yes",
       "--with-x-toolkit=gtk3",
-      "--with-xwidgets",
       "--with-lcms2",
       "--with-imagemagick",
       "--with-mailutils",
       "--with-pop",
-      "--with-native-compilation",
-      "--with-xwidgets",    # needs webkitgtk4-dev
+      "--with-native-compilation"
     ]
 
     # TODO: Implement more elegant way to find out jit enabled gcc
@@ -166,6 +164,7 @@ class InstEmacsNC < InstallStuff
       "./autogen.sh", "&&",
       "cd #{src_build_folder}", "&&",
       File.join(src_clone_folder, "configure"), opts.join(" "), "&&",
+      "make bootstrap", "&&",
       "nice make -j#{@Processors.to_s}", "&&",
       inst_cmd,
     ]

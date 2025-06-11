@@ -38,12 +38,10 @@ class InstEmacs < InstallStuff
       '--with-x=yes',
       '--with-x-toolkit=gtk3',
       '--with-lcms2',
-      '--with-json',
       '--with-imagemagick',
       '--with-gif=ifavailable',
       '--without-pop',
-      '--with-mailutils',
-      '--with-xwidgets'    # needs webkitgtk4-dev
+      '--with-mailutils'
     ]
     
     os_release_name=`grep -i 'name' /etc/*-release`
@@ -55,7 +53,7 @@ class InstEmacs < InstallStuff
       @conf_options += ['--without-imagemagick']
       @env = {
         "CC" => UTILS.which("gcc"),
-        "CFLAGS" => "-O3 -std=c99 -fomit-frame-pointer -march=native -pipe",
+        "CFLAGS" => "-O3 -fomit-frame-pointer -march=native -pipe",
         "CPPFLAGS" => "-I#{@prefix}/include",
         "LDFLAGS" => "-L#{@prefix}/lib",
         "PKG_CONFIG_PATH" => "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
@@ -64,7 +62,7 @@ class InstEmacs < InstallStuff
     
     puts @CC_VER.major
     if @CC_VER.major.to_i >= 11
-      @env["CFLAGS"] = "-O3 -std=c99 -fomit-frame-pointer -march=native -pipe"
+      @env["CFLAGS"] = "-O3 -fomit-frame-pointer -march=native -pipe"
       @env["PKG_CONFIG_PATH"] = "#{@prefix}/lib/pkgconfig:#{@prefix}/lib64/pkgconfig"
     end
 
@@ -116,6 +114,7 @@ class InstEmacs < InstallStuff
       "cd", src_build_folder, "&&",
       src_extract_folder+"/configure",
       opts.join(" "), "&&",
+#      "make bootstrap", "&&",
       "nice make -j", @Processors.to_s, "&&",
       inst_cmd
     ]
@@ -126,7 +125,7 @@ class InstEmacs < InstallStuff
   end
 
   def InstallSystemd
-  sd_txt = \
+    sd_txt = \
 %Q{[Unit]
 Description=Emacs: the extensible, self-documenting text editor
 
@@ -142,17 +141,17 @@ WorkingDirectory=%h
 WantedBy=multi-user.target
 }
   
-  systemd_dir = File.join(ENV["HOME"],'.config','systemd','user')
-  FileUtils.mkdir_p(systemd_dir)
-  File.write(File.join(systemd_dir, 'emacs.service'), sd_txt)
-  
-  inst_cmd = [
-    "systemctl --user daemon-reload",
-    "systemctl enable --user emacs",
-    "systemctl start --user emacs",
-  ]
-  
-  self.Run(cmd: inst_cmd)
+    systemd_dir = File.join(ENV["HOME"],'.config','systemd','user')
+    FileUtils.mkdir_p(systemd_dir)
+    File.write(File.join(systemd_dir, 'emacs.service'), sd_txt)
+    
+    inst_cmd = [
+      "systemctl --user daemon-reload",
+      "systemctl enable --user emacs",
+      "systemctl start --user emacs",
+    ]
+    
+    self.Run(cmd: inst_cmd)
   end
 
 end # class InstEmacs
