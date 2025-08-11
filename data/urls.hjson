@@ -259,7 +259,7 @@
     "url": "http://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.xz",
     "type": "tarball",
     "alt-names": ["Emacs", "EMAC"],
-    "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
+    "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libjansson", "imagemagick"],
     "script": "install_emacs.rb",
     "class": "InstEmacs"
   },
@@ -267,7 +267,7 @@
     "url": "git://git.savannah.gnu.org/emacs.git",
     "type": "git",
     "alt-names": ["GccEmacs", "emacs-native-compiler"],
-    "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libungif", "libjansson", "imagemagick"],
+    "dependency": ["gnutls","libpng", "libjpeg-turbo", "libtiff", "giflib", "libjansson", "imagemagick"],
     "script": "install_emacs_nc.rb",
     "class": "InstEmacsNC"
   },
