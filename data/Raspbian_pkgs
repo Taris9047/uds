@@ -39,3 +39,4 @@ picocom
 tio
 libssl-dev
 libncurses-dev
+texinfo
