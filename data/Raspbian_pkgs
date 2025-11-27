@@ -37,3 +37,5 @@ tmux
 libyaml-dev
 picocom
 tio
+libssl-dev
+libncurses-dev
