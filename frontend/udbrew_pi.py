@@ -282,17 +282,20 @@ class UDSBrewPi(RunCmd):
             Reference:
             https://lindevs.com/install-btop-on-raspberry-pi
 
+            Now btop can be compiled on Pi
+
         """
 
         if program_exists('btop'):
             return
 
         print("Installing BTop++")
-        self.Run("cd /tmp && wget -qO btop.tbz "
-                 "https://github.com/aristocratos/btop/releases/"
-                 "latest/download/btop-armv7l-linux-musleabihf.tbz "
-                 "&& sudo tar xf btop.tbz --strip-components=2 -C "
-                 "/usr/local ./btop/bin/btop")
+        # self.Run("cd /tmp && wget -qO btop.tbz "
+        #         "https://github.com/aristocratos/btop/releases/"
+        #        "latest/download/btop-armv7l-linux-musleabihf.tbz "
+        #         "&& sudo tar xf btop.tbz --strip-components=2 -C "
+        #         "/usr/local ./btop/bin/btop")
+        self.Run("cd /tmp && rm -rf ./btop && git clone https://github.com/aristocratos/btop.git && cd ./btop && make && make install")
 
     def InstallStarship(self):
         """
