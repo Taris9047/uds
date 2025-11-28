@@ -1,5 +1,4 @@
 vim
-neofetch
 figlet
 lolcat
 python3-pigpio
@@ -40,3 +39,5 @@ tio
 libssl-dev
 libncurses-dev
 texinfo
+ruby
+gem
