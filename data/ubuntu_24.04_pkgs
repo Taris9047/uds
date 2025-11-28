@@ -91,3 +91,5 @@ nala
 gettext
 libyaml-dev
 fzf
+figlet
+toilet
