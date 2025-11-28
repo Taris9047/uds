@@ -295,7 +295,7 @@ class UDSBrewPi(RunCmd):
         #        "latest/download/btop-armv7l-linux-musleabihf.tbz "
         #         "&& sudo tar xf btop.tbz --strip-components=2 -C "
         #         "/usr/local ./btop/bin/btop")
-        self.Run("cd /tmp && rm -rf ./btop && git clone https://github.com/aristocratos/btop.git && cd ./btop && make && make install")
+        self.Run("cd /tmp && rm -rf ./btop && git clone https://github.com/aristocratos/btop.git /tmp/btop && cd /tmp/btop && make && sudo make install")
 
     def InstallStarship(self):
         """
@@ -304,7 +304,6 @@ class UDSBrewPi(RunCmd):
         """
         if program_exists('starship'):
             return
-        
         print("\n\n\nInstalling Starship\n\n\n")
         self.Run("curl -sS https://starship.rs/install.sh | sh")
 
