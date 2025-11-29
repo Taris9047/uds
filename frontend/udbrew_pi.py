@@ -34,8 +34,9 @@ HomeBrewDir = os.path.join(os.environ['HOME'], '.local')
 
 # Golang and Duf
 #
-GoLangVersion = '1.23.2'
-GoLangTGTDir = os.path.join(HomeBrewDir, '.opt') + os.sep
+GoLangVersion = '1.25.4'
+#GoLangTGTDir = os.path.join(HomeBrewDir, '.opt') + os.sep
+GoLangTGTDir = '/usr/local/'
 DufGit = 'https://github.com/muesli/duf.git'
 
 # Essential programs to run this script. Obviously python is needed to 
