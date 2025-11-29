@@ -36,7 +36,7 @@ HomeBrewDir = os.path.join(os.environ['HOME'], '.local')
 #
 GoLangVersion = '1.25.4'
 #GoLangTGTDir = os.path.join(HomeBrewDir, '.opt') + os.sep
-GoLangTGTDir = '/usr/local/'
+GoLangTGTDir = '/opt/'
 DufGit = 'https://github.com/muesli/duf.git'
 
 # Essential programs to run this script. Obviously python is needed to 
@@ -204,7 +204,7 @@ class UDSBrewPi(RunCmd):
         install_cmds = [
             "cd /tmp",
             "wget {} -O {}".format(GoLangLink, GoLangBinArchName),
-            "tar xf {} -C {}".format(GoLangBinArchName, InstDir),
+            "sudo tar xf {} -C {}".format(GoLangBinArchName, InstDir),
             "cd -"
         ]
 
