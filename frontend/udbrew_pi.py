@@ -211,7 +211,7 @@ class UDSBrewPi(RunCmd):
         res = self.Run(cmd=' && '.join(install_cmds))[1]
         if res == 0:
             print("Make sure {} is in your path! And GOPATH".format(
-                os.path.join(InstDir, 'bin')))
+                os.path.join(InstDir, 'go/bin')))
         else:
             print("Golang installation failed!")
 
