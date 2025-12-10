@@ -97,6 +97,8 @@ class UDSBrewPi(RunCmd):
             self.InstallGolang()
         if self.p_args.duf:
             self.InstallDuf()
+        if self.p_args.btop:
+            self.InstallBTop()
 
     def ReadInPkgList(self):
         self.package_list = []
@@ -296,7 +298,10 @@ class UDSBrewPi(RunCmd):
         #        "latest/download/btop-armv7l-linux-musleabihf.tbz "
         #         "&& sudo tar xf btop.tbz --strip-components=2 -C "
         #         "/usr/local ./btop/bin/btop")
-        self.Run("cd /tmp && rm -rf ./btop && git clone https://github.com/aristocratos/btop.git /tmp/btop && cd /tmp/btop && make && sudo make install")
+        self.Run("cd /tmp && rm -rf ./btop && "
+                 "git clone https://github.com/aristocratos/btop.git /tmp/btop &&"
+                 "cd /tmp/btop &&"
+                 "make ADDFLAGS=-march=native && sudo make install")
 
     def InstallStarship(self):
         """
@@ -360,6 +365,14 @@ class UDSBrewPi(RunCmd):
             action='store_true',
             default=False,
             help='Installs Duf, a golang based disk space tool'
+        )
+
+        p.add_argument(
+            '-bt',
+            '--btop',
+            action='store_true',
+            default=False,
+            help='Installs btop++'
         )
 
         if len(self.args) > 1:
