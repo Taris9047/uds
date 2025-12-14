@@ -94,3 +94,5 @@ figlet
 toilet
 lowdown
 lua5.4
+gcc-14
+g++-14
