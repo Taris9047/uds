@@ -86,9 +86,10 @@ zsh
 tilix
 tmux
 openssh-server
-neovim
 nala
 gettext
 fzf
 toilet
 figlet
+lowdown
+lua5.4
