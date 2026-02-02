@@ -170,13 +170,19 @@ class UDSBrewPi(RunCmd):
             return
 
         print("Installing NodeJS")
+        # The deb method does not work anymore.. it seems...
+        self.Run("curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash")
+        self.Run(". ~/.bashrc")
         if inst_ver == 'LTS':
-            self.Run("curl -fsSL https://deb.nodesource.com/setup_lts.x "
-                     "| sudo -E bash -")
+            self.Run("nvm install --lts")
+            #    self.Run("curl -fsSL https://deb.nodesource.com/setup_lts.x "
+            #        "| sudo -E bash -")
+
         elif inst_ver == 'Current':
-            self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x "
+            self.Run("nvm install")
+            #self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x "
                      "| sudo -E bash -")
-        self.Run("sudo apt-get install nodejs")
+        #self.Run("sudo apt-get install nodejs")
 
     def InstallGolang(self, inst_ver=GoLangVersion):
         """
