@@ -180,9 +180,9 @@ class UDSBrewPi(RunCmd):
 
         elif inst_ver == 'Current':
             self.Run("nvm install")
-            #self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x "
-                     "| sudo -E bash -")
-        #self.Run("sudo apt-get install nodejs")
+            # self.Run("curl -fsSL https://deb.nodesource.com/setup_current.x "
+            #        "| sudo -E bash -")
+        # self.Run("sudo apt-get install nodejs")
 
     def InstallGolang(self, inst_ver=GoLangVersion):
         """
