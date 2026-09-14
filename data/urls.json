@@ -320,7 +320,7 @@
     "class": "InstHydra"
   },
   "emacs": {
-    "url": "http://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.xz",
+    "url": "http://ftp.gnu.org/gnu/emacs/emacs-31.1.tar.xz",
     "type": "tarball",
     "alt-names": [
       "Emacs",
@@ -625,7 +625,7 @@
     "class": "InstLibungif"
   },
   "imagemagick": {
-    "url": "https://imagemagick.org/archive/ImageMagick.tar.gz",
+    "url": "https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.2-31.tar.gz",
     "type": "tarball",
     "alt-names": [
       "Imagemagick",
