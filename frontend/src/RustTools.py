@@ -4,18 +4,22 @@
 from .Utils import RunCmd, program_exists
 import os
 
-Rust_packages = [
-    "exa",
+Rust_packages_pi = [
     "eza",
     "bat",
     "rm-improved",
+    "cargo-update",
+    "fd-find",
+    "zellij",
+    "du-dust"
+]
+
+Rust_packages = [
+    "exa",
     "diskonaut",
     "lsd",
-    "cargo-update",
     "tokei",
-    "fd-find",
     "procs",
-    "du-dust",
     "ripgrep",
     "hyperfine",
     "ddh",
@@ -23,15 +27,12 @@ Rust_packages = [
     "zoxide",
     "broot",
     "git-delta"
-]
+] + Rust_packages_pi
 
-Rust_packages_pi = [
-    "eza",
-    "bat",
-    "rm-improved",
-    "cargo-update",
-    "fd-find",
-    "du-dust"
+# Turns out that some packages needs --locked to get installed correctly.
+Locked_packages = [
+	"eza",
+	"zellij"
 ]
 
 
@@ -96,11 +97,10 @@ class InstallRustTools(RunCmd):
 
     def InstallPackages(self):
         self.Run(f"{self.rustup_exec} component add rust-src")
-        self.Run(f"{self.cargo_exec} install {' '.join(self.pkgs_to_install)}")
-        # Installing starship with '--locked' parameter
-        # self.Run(f"{self.cargo_exec} install starship --locked")
-        # Now we aren't particularily interested in the starship via 
-        # cargo installation. 
-        # We would rather use binary installation...
-
+        
+        for pkg in self.pkgs_to_install:
+        	install_cmd = f"{self.cargo_exec} install {pkg}"
+        	if pkg in Locked_packages:
+        		install_cmd += ' --locked'
+        	self.Run(install_cmd) 
 
