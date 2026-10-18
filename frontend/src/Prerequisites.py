@@ -35,19 +35,51 @@ Nerd_Fonts_To_Install = [
 ### Actually installs packages using proper package manager.
 ###
 class InstallPrereqPkgs(GetPackages, RunCmd):
+
+    OS_HANDLERS = {
+        # Ubuntu & Debian all route to apt
+        "ubuntu_18": "install_with_apt",
+        "ubuntu_20": "install_with_apt",
+        "ubuntu_21": "install_with_apt",
+        "ubuntu_22": "install_with_apt",
+        "ubuntu_24": "install_with_apt",
+        "ubuntu_26": "install_with_apt",
+        "debian_10": "install_with_apt",
+        # Downstream Ubuntu derivatives
+        "linuxmint_20": "install_with_apt",
+        "linuxmint_21": "install_with_apt",
+        "linuxmint_22": "install_with_apt",
+        "elementary_5": "install_with_apt",
+        "elementary_6": "install_with_apt",
+        "hamonikr_4": "install_with_apt",
+        "pop_20": "install_with_apt",
+        "pop_21": "install_with_apt",
+        "pop_22": "install_with_apt",
+        "pop_24": "install_with_apt",
+        # RHEL derivatives
+        "rocky_8": "install_prereq_centos_8",
+        "rocky_9": "install_prereq_centos_9",
+        "almalinux_8": "install_prereq_centos_8",
+        "almalinux_9": "install_prereq_centos_9",
+        # Solus
+        "solus_4": "install_prereq_solus_4dot2",
+        # Arch
+        "arch_N": "Install_with_pacman"
+    }
+    
     def __init__(self, verbose=True):
         GetPackages.__init__(self)
         RunCmd.__init__(self, shell_type="bash", verbose=verbose)
 
         self.base = self.BaseDistro()
+        self.distroID = self.ID()
         self.pkgs_to_install = self.GetPkgNames()
         # We don't really need whole version. Just major
         if self.base != "arch":
-            major_ver = self.Version().split(".")[0]
-            self.inst_pkg_func_name = f"install_prereq_{self.ID()}_{major_ver}"
+            self.VerMajor = self.Version().split(".")[0]
         else:
-            self.inst_pkg_func_name = "install_with_pacman"
-
+            self.VerMajor = 'N'
+        
         self.prefix = self.set_prefix()
 
         self.InstallPackages()
@@ -60,7 +92,7 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         return not os.access(os.environ.get("HOMEBREW"), os.W_OK)
 
     def InstallPackages(self):
-        self.switcher()
+        self.install_prereq(self.distroID, self.VerMajor)
 
     def Install_NerdFonts(self):
         nf = NerdFonts(NerdFontNames=Nerd_Fonts_To_Install)
@@ -194,10 +226,6 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         else:
             return '/usr/local'
 
-    def switcher(self):
-        self.inst_pkg_func_name = self.inst_pkg_func_name.replace("-", "_")
-        return getattr(self, self.inst_pkg_func_name)()
-
     # Installation methods...
     #
     def install_with_apt(self):
@@ -225,68 +253,14 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
             
         self.Run(cmds)
 
-    def install_prereq_ubuntu_20(self):
-        self.install_with_apt()
-
-    def install_prereq_ubuntu_21(self):
-        self.install_with_apt()
-
-    def install_prereq_ubuntu_22(self):
-        self.install_with_apt()
-
-    def install_prereq_ubuntu_24(self):
-        self.install_with_apt()
-
-    def install_prereq_ubuntu_18(self):
-        self.install_with_apt()
-
-    def install_prereq_debian_10(self):
-        self.install_with_apt()
-
-    def install_prereq_linuxmint_20(self):
-        self.install_prereq_ubuntu_20()
-
-    def install_prereq_linuxmint_21(self):
-        self.install_prereq_ubuntu_22()
-        
-    def install_prereq_linuxmint_22(self):
-        self.install_prereq_ubuntu_24()
-
-    def install_prereq_elementary_5(self):
-        self.install_prereq_ubuntu_18()
-
-    def install_prereq_elementary_6(self):
-        self.install_prereq_ubuntu_20()
-
-    def install_prereq_hamonikr_4(self):
-        self.install_prereq_ubuntu_20()
-
-    def install_prereq_pop_20(self):
-        self.install_prereq_ubuntu_20()
-
-    def install_prereq_pop_21(self):
-        self.install_prereq_ubuntu_21()
-
-    def install_prereq_pop_22(self):
-        self.install_prereq_ubuntu_22()
-
-    def install_prereq_pop_24(self):
-        self.install_prereq_ubuntu_24()
-
-    def install_prereq_solus_4(self):
-        self.install_prereq_solus_4dot2()
-
-    def install_prereq_rocky_8(self):
-        self.install_prereq_centos_8()
-
-    def install_prereq_rocky_9(self):
-        self.install_prereq_centos_9()
-
-    def install_prereq_almalinux_8(self):
-        self.install_prereq_centos_8()
-
-    def install_prereq_almalinux_9(self):
-        self.install_prereq_centos_9()
+    def install_prereq(self, distro: str, version: str | int):
+        key = f"{distro.lower()}_{version}"
+        handler_name = self.OS_HANDLERS.get(key)
+        if not handler_name:
+            raise NotImplementedError(
+                f"Prerequisites for {key} are not supported."
+            )
+        getattr(self, handler_name)()   
 
     def install_with_dnf(self):
         self.Run("sudo -H dnf -y update")
@@ -344,42 +318,6 @@ class InstallPrereqPkgs(GetPackages, RunCmd):
         ]
         self.Run(cmds)
         self.install_with_dnf()
-
-    def install_prereq_fedora_33(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_34(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_35(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_36(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_37(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_38(self):
-        self.install_prereq_fedora()
-        
-    def install_prereq_fedora_39(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_40(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_fedora_41(self):
-        self.install_prereq_fedora()
-        # Some additional steps to install neofetch
-        self.install_neofetch_fedora()
-
-    def install_prereq_fedora_37(self):
-        self.install_prereq_fedora()
-
-    def install_prereq_almalinux_8(self):
-        # print("Almalinux detected! Activating CentOS repo!")
-        self.install_prereq_centos_8()
 
     def install_with_zypper(self):
         print("Installing with zypper")

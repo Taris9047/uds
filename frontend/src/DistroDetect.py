@@ -80,6 +80,7 @@ class DistroPkgMap(GetDistro):
                 "pop_24.04": "ubuntu_24.04_pkgs",
             },
             "debian": {
+                "ubuntu_26.04": "ubuntu_26.04_pkgs",
                 "ubuntu_24.04": "ubuntu_24.04_pkgs",
                 "ubuntu_22.04": "ubuntu_22.04_pkgs",
                 "ubuntu_21.10": "ubuntu_21.10_pkgs",
