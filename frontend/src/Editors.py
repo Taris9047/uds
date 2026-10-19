@@ -248,7 +248,7 @@ class InstallEditors(GetDistro, RunCmd):
             
             print("Installing Jedit from jar file...")
 
-            jedit_download_link = "https://sourceforge.net/projects/jedit/files/jedit/5.6.0/jedit5.6.0install.jar/download"
+            jedit_download_link = "https://sourceforge.net/projects/jedit/files/jedit/5.7.0/jedit5.7.0install.jar/download"
             jedit_ver_str = jedit_download_link.split('/')[-3]
 
             def_inst_dir = os.path.join(os.getenv("HOME"),".local")
@@ -269,7 +269,7 @@ class InstallEditors(GetDistro, RunCmd):
 
             cmd_list = [
                 "cd /tmp",
-                "wget https://sourceforge.net/projects/jedit/files/jedit/5.6.0/jedit5.6.0install.jar/download -O jedit.jar",
+                f"wget {jedit_download_link} -O jedit.jar",
                 jedit_inst_cmd,
                 "cd -"
             ]
